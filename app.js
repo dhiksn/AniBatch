@@ -4,7 +4,7 @@ const express = require('express');
 const helmet  = require('helmet');
 const cors    = require('cors');
 const path    = require('path');
-  
+
 const { sendSuccess, sendError, AUTHOR } = require('./src/utils/response');
 
 const homeRouter              = require('./src/routes/home.routes');
@@ -142,15 +142,13 @@ app.use((err, req, res, next) => {
 });
 
 // ---------------------------------------------------------------------------
-// Start server (only in non-serverless env)
+// Start server
 // ---------------------------------------------------------------------------
 
-if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
-    console.log(`[Alqanime API] Server berjalan di http://localhost:${PORT}`);
-    console.log(`[Alqanime API] Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`[Alqanime API] Health check: http://localhost:${PORT}/api/health`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`[Alqanime API] Server berjalan di http://localhost:${PORT}`);
+  console.log(`[Alqanime API] Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`[Alqanime API] Health check: http://localhost:${PORT}/api/health`);
+});
 
 module.exports = app;
