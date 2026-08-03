@@ -21,7 +21,7 @@ const seasonsRouter           = require('./src/routes/seasons.routes');
 const castRouter              = require('./src/routes/cast.routes');
 
 const app  = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT || process.env.PORT || 3000;
 
 // ---------------------------------------------------------------------------
 // Security middleware
@@ -146,9 +146,9 @@ app.use((err, req, res, next) => {
 // ---------------------------------------------------------------------------
 
 app.listen(PORT, () => {
-  console.log(`[Alqanime API] Server berjalan di http://localhost:${PORT}`);
+  console.log(`[Alqanime API] Server berjalan di ${PORT}`);
   console.log(`[Alqanime API] Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`[Alqanime API] Health check: http://localhost:${PORT}/api/health`);
+  console.log(`[Alqanime API] Health check: ${PORT}/api/health`);
 });
 
 module.exports = app;
