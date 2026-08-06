@@ -101,6 +101,37 @@ app.get('/api/health', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// Image proxy — cegah browser langsung kontak alqanime.net
+// ---------------------------------------------------------------------------
+
+app.get('/api/img', async (req, res) => {
+  const url = req.query.url;
+  if (!url || !url.startsWith('http')) {
+    return res.status(400).json({ error: 'URL tidak valid' });
+  }
+  try {
+    const https = require('https');
+    const http  = require('http');
+    const lib   = url.startsWith('https') ? https : http;
+
+    lib.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Referer': 'https://alqanime.net/',
+      },
+      rejectUnauthorized: false,
+    }, (imgRes) => {
+      const ct = imgRes.headers['content-type'] || 'image/jpeg';
+      res.setHeader('Content-Type', ct);
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      imgRes.pipe(res);
+    }).on('error', () => res.status(502).end());
+  } catch (_) {
+    res.status(502).end();
+  }
+});
+
+// ---------------------------------------------------------------------------
 // API routes
 // ---------------------------------------------------------------------------
 
@@ -147,8 +178,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`[Alqanime API] Server berjalan di ${PORT}`);
-  console.log(`[Alqanime API] Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`[Alqanime API] Health check: ${PORT}/api/health`);
+  console.log(`[Alqanime API] Health check: http://0.0.0.0:${PORT}/api/health`);
 });
 
 module.exports = app;

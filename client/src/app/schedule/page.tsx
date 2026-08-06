@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/api";
+import { proxyImg } from "@/lib/image";
 import { CalendarBlank } from "@phosphor-icons/react";
 import Link from "next/link";
 
@@ -97,7 +98,7 @@ export default function SchedulePage() {
                         >
                           <div className="aspect-[2/3] w-full rounded-xl overflow-hidden bg-stone-900 border border-stone-800">
                             <img
-                              src={anime.thumbnail || '/img/no-image.svg'}
+                              src={proxyImg(anime.thumbnail)}
                               alt={anime.title}
                               className="w-full h-full object-cover transition-transform group-hover:scale-105"
                               loading="lazy"

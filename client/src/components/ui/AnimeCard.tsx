@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Star } from "@phosphor-icons/react";
+import { proxyImg } from "@/lib/image";
 
 interface AnimeCardProps {
   anime: {
@@ -25,7 +26,7 @@ export function AnimeCard({ anime }: AnimeCardProps) {
       >
         <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl bg-stone-900 border border-stone-800/50">
           <img
-            src={anime.thumbnail || '/img/no-image.svg'}
+            src={proxyImg(anime.thumbnail)}
             alt={anime.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"

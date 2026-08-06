@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchApi } from "@/lib/api";
+import { proxyImg } from "@/lib/image";
 import { Fire, CalendarBlank, Clock } from "@phosphor-icons/react";
 
 export function Sidebar({ showSchedule = true }: { showSchedule?: boolean }) {
@@ -66,7 +67,7 @@ function PopularWidget() {
               <div className={`w-6 text-center font-black text-sm ${i === 0 ? "text-yellow-500" : i === 1 ? "text-stone-300" : i === 2 ? "text-amber-600" : "text-stone-700"}`}>
                 {anime.rank}
               </div>
-              <img src={anime.thumbnail || '/img/no-image.svg'} alt={anime.title} className="w-12 h-16 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
+              <img src={proxyImg(anime.thumbnail)} alt={anime.title} className="w-12 h-16 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
               <div className="flex-1 min-w-0">
                 <h4 className="text-xs font-semibold text-stone-200 line-clamp-2 group-hover:text-brand-500 transition-colors">
                   {anime.title}
@@ -118,7 +119,7 @@ function TodayScheduleWidget() {
         ) : todayData.length > 0 ? (
           todayData.map((anime: any) => (
             <Link href={`/anime/${anime.slug}`} key={anime.slug} className="group flex gap-3 items-center">
-              <img src={anime.thumbnail || '/img/no-image.svg'} alt={anime.title} className="w-10 h-14 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
+              <img src={proxyImg(anime.thumbnail)} alt={anime.title} className="w-10 h-14 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
               <div className="flex-1 min-w-0">
                 <h4 className="text-xs font-medium text-stone-200 line-clamp-2 group-hover:text-brand-500 transition-colors">
                   {anime.title}

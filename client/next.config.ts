@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         destination: "http://node2.gervhosting.my.id:5056/api/:path*",
       },
+      {
+        source: "/img-proxy",
+        destination: "http://node2.gervhosting.my.id:5056/api/img",
+      },
     ];
   },
 };

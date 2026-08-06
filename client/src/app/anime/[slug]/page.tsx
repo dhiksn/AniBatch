@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Star, DownloadSimple, FilmStrip, Users, CalendarBlank, Sparkle } from "@phosphor-icons/react";
 import Link from "next/link";
 import { HeroSkeleton } from "@/components/ui/Skeletons";
+import { proxyImg } from "@/lib/image";
 
 export default function AnimeDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -53,7 +54,7 @@ export default function AnimeDetailPage() {
         <div className="flex flex-col md:flex-row gap-8 bg-stone-900/40 border border-stone-800/50 rounded-2xl p-6 sm:p-8">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full md:w-56 shrink-0">
             <div className="aspect-[2/3] w-full bg-stone-900 rounded-xl overflow-hidden border border-stone-800 shadow-2xl">
-              <img src={data.thumbnail || "/img/no-image.svg"} alt={data.title} className="w-full h-full object-cover" />
+              <img src={proxyImg(data.thumbnail)} alt={data.title} className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
