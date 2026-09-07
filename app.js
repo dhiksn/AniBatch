@@ -178,7 +178,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`[Alqanime API] Server berjalan di ${PORT}`);
-  console.log(`[Alqanime API] Health check: http://0.0.0.0:${PORT}/api/health`);
+  console.log(`[Alqanime API] Health check: http://localhost:${PORT}/api/health`);
 });
 
 module.exports = app;

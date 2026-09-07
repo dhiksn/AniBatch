@@ -1,6 +1,4 @@
-const API_BASE = typeof window !== 'undefined'
-  ? '/api'  // client-side: lewat Vercel proxy (next.config rewrites)
-  : (process.env.NEXT_PUBLIC_API_URL || 'http://node2.gervhosting.my.id:5056/api'); // server-side
+const API_BASE = '/api';
 
 export async function fetchApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_BASE}${endpoint}`);
