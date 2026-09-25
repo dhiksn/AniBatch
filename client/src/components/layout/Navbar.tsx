@@ -130,10 +130,10 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
-  // Debounced search - wait 2.5 seconds after user stops typing
+  // Debounced search - wait 1 second after user stops typing
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (query.trim().length >= 2) {
+      if (query.trim().length >= 3) {
         setLoading(true);
         try {
           const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
@@ -210,7 +210,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             </form>
 
             {/* Autocomplete results */}
-            {query.trim().length >= 2 && (
+            {query.trim().length >= 3 && (
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
                   <div className="px-5 py-8 text-center text-stone-500 text-sm">
