@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -10,17 +11,22 @@ import Link from "next/link";
 import { Fire, PlayCircle, CheckCircle, FilmStrip, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [latestPage, setLatestPage] = useState(1);
   const [latestLoading, setLatestLoading] = useState(false);
 
-  // Read initial page from URL
+  // Read page from URL params
+  const pageParam = searchParams.get("page");
+  const currentPage = parseInt(pageParam ?? "1") || 1;
+
+  // Fetch data when page changes
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const p = parseInt(params.get("page") ?? "1") || 1;
-    setLatestPage(p);
-    fetchApi<any>(`/home?page=${p}`)
+    setLoading(true);
+    setLatestPage(currentPage);
+    fetchApi<any>(`/home?page=${currentPage}`)
       .then((res) => {
         setData({ ...res.data, pagination: res.pagination });
         setLoading(false);
@@ -29,13 +35,13 @@ export default function HomePage() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [currentPage]);
 
   // Subsequent latest pages
   async function loadLatestPage(page: number) {
     setLatestPage(page);
     setLatestLoading(true);
-    window.history.pushState(null, '', page > 1 ? `/?page=${page}` : '/');
+    router.push(page > 1 ? `/?page=${page}` : '/');
     try {
       const res = await fetchApi<any>(`/home?page=${page}`);
       setData((prev: any) => ({
