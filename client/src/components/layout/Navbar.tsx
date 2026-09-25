@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { fetchApi } from "@/lib/api";
+import { proxyImg } from "@/lib/image";
 
 export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -64,12 +66,17 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (open) {
       setQuery("");
+      setResults([]);
+      setSelectedIndex(-1);
       const t = setTimeout(() => inputRef.current?.focus(), 100);
       return () => clearTimeout(t);
     }
@@ -78,10 +85,23 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex(prev => Math.max(prev - 1, -1));
+      }
+      if (e.key === "Enter" && selectedIndex >= 0) {
+        e.preventDefault();
+        router.push(`/anime/${results[selectedIndex].slug}`);
+        onClose();
+      }
     };
     if (open) document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [open, onClose]);
+  }, [open, onClose, results, selectedIndex, router]);
 
   useEffect(() => {
     if (open) {
@@ -92,12 +112,39 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (query.trim().length >= 2) {
+        setLoading(true);
+        try {
+          const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
+          setResults(res.data?.results || []);
+        } catch (err) {
+          console.error(err);
+          setResults([]);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
       onClose();
     }
+  };
+
+  const handleResultClick = (slug: string) => {
+    router.push(`/anime/${slug}`);
+    onClose();
   };
 
   return (
@@ -119,6 +166,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -8 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
+            layout
           >
             <form onSubmit={handleSearch} className="flex items-center gap-3 px-5 py-4 border-b border-stone-800/50">
               <MagnifyingGlass weight="bold" size={20} className="text-stone-500 shrink-0" />
@@ -126,7 +174,10 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                 ref={inputRef}
                 type="text"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setSelectedIndex(-1);
+                }}
                 placeholder="Cari anime..."
                 className="flex-1 bg-transparent text-base text-stone-100 placeholder:text-stone-500 focus:outline-none"
               />
@@ -140,7 +191,52 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </button>
             </form>
 
-            <div className="px-5 py-3 text-xs text-stone-500">
+            {/* Autocomplete results */}
+            {query.trim().length >= 2 && (
+              <div className="max-h-96 overflow-y-auto">
+                {loading ? (
+                  <div className="px-5 py-8 text-center text-stone-500 text-sm">
+                    Mencari...
+                  </div>
+                ) : results.length > 0 ? (
+                  <div className="py-2">
+                    {results.map((anime, index) => (
+                      <button
+                        key={anime.slug}
+                        type="button"
+                        onClick={() => handleResultClick(anime.slug)}
+                        className={`w-full flex items-center gap-3 px-5 py-3 transition-colors ${
+                          index === selectedIndex
+                            ? "bg-brand-500/10 text-brand-500"
+                            : "hover:bg-stone-800/50 text-stone-200"
+                        }`}
+                      >
+                        <div className="w-12 h-16 shrink-0 rounded overflow-hidden bg-stone-900">
+                          <img
+                            src={proxyImg(anime.thumbnail)}
+                            alt={anime.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <div className="text-sm font-medium line-clamp-1">{anime.title}</div>
+                          {anime.type && (
+                            <div className="text-xs text-stone-500 mt-0.5">{anime.type}</div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-5 py-8 text-center text-stone-500 text-sm">
+                    Tidak ditemukan
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="px-5 py-3 text-xs text-stone-500 border-t border-stone-800/50">
               Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari, atau{" "}
               <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup.
             </div>
