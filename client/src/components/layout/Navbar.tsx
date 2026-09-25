@@ -147,7 +147,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       } else {
         setResults([]);
       }
-    }, 2500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [query]);
@@ -155,8 +155,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      const encodedQuery = query.trim().replace(/\s+/g, '-');
-      router.push(`/search?q=${encodedQuery}`);
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       onClose();
     }
   };

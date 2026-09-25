@@ -22,8 +22,7 @@ export function SearchContent() {
   useEffect(() => {
     if (!q) return;
     setLoading(true);
-    const encodedQuery = q.replace(/\s+/g, '-');
-    fetchApi<any>(`/search?q=${encodedQuery}&page=${page}`)
+    fetchApi<any>(`/search?q=${encodeURIComponent(q)}&page=${page}`)
       .then((res) => {
         setData(res.data);
         setPagination(res.pagination);
@@ -39,8 +38,7 @@ export function SearchContent() {
 
   const handlePageChange = (newPage: number) => {
     if (!q) return;
-    const encodedQuery = q.replace(/\s+/g, '-');
-    router.push(newPage > 1 ? `/search?q=${encodedQuery}&page=${newPage}` : `/search?q=${encodedQuery}`);
+    router.push(newPage > 1 ? `/search?q=${encodeURIComponent(q)}&page=${newPage}` : `/search?q=${encodeURIComponent(q)}`);
   };
 
   return (
