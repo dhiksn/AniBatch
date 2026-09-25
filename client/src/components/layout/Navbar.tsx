@@ -119,7 +119,8 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         setLoading(true);
         try {
           const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
-          setResults(res.data?.results || []);
+          // API returns { data: [...], pagination: {...} }
+          setResults(res.data || []);
         } catch (err) {
           console.error(err);
           setResults([]);
