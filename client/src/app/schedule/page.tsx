@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/api";
-import { proxyImg } from "@/lib/image";
 import { CalendarBlank } from "@phosphor-icons/react";
 import Link from "next/link";
+import { AnimeCard } from "@/components/ui/AnimeCard";
 
 export default function SchedulePage() {
   const [data, setData] = useState<any[]>([]);
@@ -101,30 +101,9 @@ export default function SchedulePage() {
             </div>
 
             {activeDayObj && activeDayObj.animes.length > 0 ? (
-              <div className="p-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-3">
+              <div className="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {activeDayObj.animes.map((anime: any) => (
-                  <Link
-                    key={anime.slug}
-                    href={`/anime/${anime.slug}`}
-                    className="flex flex-col gap-2 group"
-                  >
-                    <div className="aspect-[3/4] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-800">
-                      <img
-                        src={proxyImg(anime.thumbnail)}
-                        alt={anime.title}
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-[11px] font-bold text-stone-200 line-clamp-2 group-hover:text-brand-500 transition-colors">
-                        {anime.title}
-                      </h3>
-                      <p className="text-[9px] text-stone-500 mt-0.5">
-                        {anime.episodeLabel || anime.type}
-                      </p>
-                    </div>
-                  </Link>
+                  <AnimeCard key={anime.slug} anime={anime} />
                 ))}
               </div>
             ) : (
