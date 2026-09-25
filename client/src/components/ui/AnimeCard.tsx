@@ -33,36 +33,34 @@ export function AnimeCard({ anime }: AnimeCardProps) {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
+
           {anime.status && (
-            <div className="absolute top-0 left-0 w-24 h-24 overflow-hidden z-10">
-              <div className="absolute top-2 left-0 w-32 h-8 bg-red-600 transform -rotate-45 origin-top-left flex items-center justify-center">
-                <span className="text-white text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
-                  {anime.status}
-                </span>
+            <div className="absolute top-0 left-0 w-24 h-24 overflow-hidden z-10 pointer-events-none">
+              <div className="absolute top-[18px] left-[-34px] w-[140px] -rotate-45 bg-red-600 text-white text-center text-[10px] font-bold uppercase tracking-wider py-1 shadow-md">
+                {anime.status}
               </div>
             </div>
           )}
-          
+
           {anime.score && (
             <div className="absolute top-2 right-2 bg-stone-950/80 backdrop-blur-md px-2 py-1 rounded-md text-[10px] font-bold text-yellow-500 flex items-center gap-1 border border-stone-800/50">
               <Star weight="fill" size={10} /> {anime.score}
             </div>
           )}
-          
+
           {anime.type && (
             <div className="absolute bottom-2 left-2 bg-brand-500 text-stone-50 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
               {anime.type}
             </div>
           )}
-          
+
           {anime.episodeLabel && (
             <div className="absolute bottom-2 right-2 bg-stone-950/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-stone-200 border border-stone-800/50">
               {anime.episodeLabel}
             </div>
           )}
         </div>
-        
+
         <div>
           <h3 className="text-sm font-semibold text-stone-200 line-clamp-2 leading-snug group-hover:text-brand-500 transition-colors">
             {anime.title}
