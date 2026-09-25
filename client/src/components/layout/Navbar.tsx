@@ -144,7 +144,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         } finally {
           setLoading(false);
         }
-      } else {
+      } else if (query.trim().length === 0) {
         setResults([]);
       }
     }, 1000);
