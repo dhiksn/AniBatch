@@ -90,8 +90,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   const goToFullSearch = () => {
     if (query.trim()) {
-      const encodedQuery = query.trim().replace(/\s+/g, '-');
-      router.push(`/search?q=${encodedQuery}`);
+      router.push(`/search?q=${encodeURIComponent(query)}`);
       onClose();
     }
   };
@@ -131,14 +130,13 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
-  // Debounced search
+  // Debounced search - wait 2.5 seconds after user stops typing
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (query.trim().length >= 2) {
         setLoading(true);
         try {
-          const encodedQuery = query.trim().replace(/\s+/g, '-');
-          const res = await fetchApi<any>(`/search?q=${encodedQuery}`);
+          const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
           setResults(res.data || []);
         } catch (err) {
           console.error(err);
@@ -149,7 +147,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       } else {
         setResults([]);
       }
-    }, 300);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, [query]);
