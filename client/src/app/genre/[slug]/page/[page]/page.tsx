@@ -9,20 +9,22 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { Tag, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 export default function GenreDetailPage() {
-  const { slug } = useParams<{ slug: string }>();
+  const params = useParams();
   const router = useRouter();
+  const slug = params.slug as string;
+  const pageParam = params.page as string;
+  const page = parseInt(pageParam || '1', 10) || 1;
+  
   const [data, setData] = useState<any[]>([]);
   const [genreInfo, setGenreInfo] = useState<any>(null);
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
 
   function load(p: number) {
     if (!slug) return;
     setLoading(true);
     setError(null);
-    router.push(p > 1 ? `/genre/${slug}/page/${p}` : `/genre/${slug}`);
     fetchApi<any>(`/genre/${slug}?page=${p}`)
       .then((res) => {
         setData(res.data);
@@ -38,6 +40,10 @@ export default function GenreDetailPage() {
   }
 
   useEffect(() => { load(page); }, [slug, page]);
+
+  const handlePageChange = (newPage: number) => {
+    router.push(newPage > 1 ? `/genre/${slug}/page/${newPage}` : `/genre/${slug}`);
+  };
 
   return (
     <main className="w-full">
@@ -60,13 +66,13 @@ export default function GenreDetailPage() {
           </div>
           {pagination && pagination.totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-12 mb-8">
-              <button onClick={() => setPage(page - 1)} disabled={!pagination.hasPrev} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretLeft weight="bold" size={16} />
               </button>
               <div className="text-sm font-medium text-stone-400">
                 Halaman <span className="text-stone-100">{pagination.page}</span> dari <span className="text-stone-100">{pagination.totalPages}</span>
               </div>
-              <button onClick={() => setPage(page + 1)} disabled={!pagination.hasNext} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretRight weight="bold" size={16} />
               </button>
             </div>

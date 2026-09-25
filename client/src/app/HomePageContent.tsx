@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -11,21 +11,19 @@ import Link from "next/link";
 import { Fire, PlayCircle, CheckCircle, FilmStrip, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 export function HomePageContent() {
-  const searchParams = useSearchParams();
+  const params = useParams();
   const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [latestPage, setLatestPage] = useState(1);
   const [latestLoading, setLatestLoading] = useState(false);
 
   // Read page from URL params
-  const pageParam = searchParams.get("page");
-  const currentPage = parseInt(pageParam ?? "1") || 1;
+  const pageParam = params.page as string;
+  const currentPage = parseInt(pageParam || '1', 10) || 1;
 
   // Fetch data when page changes
   useEffect(() => {
     setLoading(true);
-    setLatestPage(currentPage);
     fetchApi<any>(`/home?page=${currentPage}`)
       .then((res) => {
         setData({ ...res.data, pagination: res.pagination });
@@ -39,9 +37,8 @@ export function HomePageContent() {
 
   // Subsequent latest pages
   async function loadLatestPage(page: number) {
-    setLatestPage(page);
     setLatestLoading(true);
-    router.push(page > 1 ? `/?page=${page}` : '/');
+    router.push(page > 1 ? `/page/${page}` : '/');
     try {
       const res = await fetchApi<any>(`/home?page=${page}`);
       setData((prev: any) => ({
@@ -62,7 +59,7 @@ export function HomePageContent() {
       <main className="flex-1 min-w-0 flex flex-col gap-12">
 
         {/* Hot — only on page 1 */}
-        {latestPage === 1 && (
+        {currentPage === 1 && (
         <section>
           <div className="flex items-center gap-2 mb-6">
             <Fire weight="fill" className="text-brand-500 text-2xl" />
@@ -110,7 +107,7 @@ export function HomePageContent() {
           {!loading && data?.pagination && data.pagination.totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-10">
               <button
-                onClick={() => loadLatestPage(latestPage - 1)}
+                onClick={() => loadLatestPage(currentPage - 1)}
                 disabled={!data.pagination.hasPrev}
                 className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
               >
@@ -121,7 +118,7 @@ export function HomePageContent() {
                 <span className="text-stone-100">{data.pagination.totalPages}</span>
               </div>
               <button
-                onClick={() => loadLatestPage(latestPage + 1)}
+                onClick={() => loadLatestPage(currentPage + 1)}
                 disabled={!data.pagination.hasNext}
                 className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
               >
