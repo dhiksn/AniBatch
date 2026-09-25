@@ -13,6 +13,7 @@ interface AnimeCardProps {
     score?: string;
     type?: string;
     episodeLabel?: string;
+    status?: string;
   };
 }
 
@@ -32,6 +33,12 @@ export function AnimeCard({ anime }: AnimeCardProps) {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          {anime.status && (
+            <div className="absolute top-0 left-0 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider transform -rotate-45 origin-bottom-left shadow-lg z-10">
+              {anime.status}
+            </div>
+          )}
           
           {anime.score && (
             <div className="absolute top-2 right-2 bg-stone-950/80 backdrop-blur-md px-2 py-1 rounded-md text-[10px] font-bold text-yellow-500 flex items-center gap-1 border border-stone-800/50">

@@ -33,11 +33,8 @@ export function parseAnimeCard($, el) {
   const type =
     $el.find('.eggtype').first().text().trim() ||
     $el.find('.typez').first().text().trim() || '';
-  // Status badge — new badge format: <div class="status Completed">Completed</div>
-  const statusBadge = $el.find('.status').first();
-  const status = statusBadge.length > 0 ? statusBadge.text().trim() : '';
   const score = $el.find('.numscore, .score, .imdb, .rating').first().text().trim() || '';
-  return { title, slug, url: href, thumbnail, type, episodeLabel, status, score };
+  return { title, slug, url: href, thumbnail, type, episodeLabel, score };
 }
 
 export function parseAnimeDetail(html) {
@@ -153,7 +150,19 @@ export function parseHomePage(html) {
     const releasesClass = $box.find('.releases').first().attr('class') || '';
     const heading = $box.find('.releases h2, .releases h3').first().text().trim();
     if (releasesClass.includes('hothome')) hot = cardsFrom($box);
-    else if ($box.hasClass('latestdark') || releasesClass.includes('latesthome')) latest = cardsFrom($box).map(({ score, ...card }) => card);
+    else if ($box.hasClass('latestdark') || releasesClass.includes('latesthome')) {
+      // Rilisan Terbaru section - add status badge parsing
+      latest = [];
+      $box.find('article.bs').each((_, card) => {
+        const cardData = parseAnimeCard($, card);
+        // Add status badge for Rilisan Terbaru cards
+        const statusBadge = $(card).find('.status').first();
+        if (statusBadge.length > 0) {
+          cardData.status = statusBadge.text().trim();
+        }
+        latest.push(cardData);
+      });
+    }
     else if (heading.toLowerCase().includes('selesai')) completed = cardsFrom($box);
     else if (heading.toLowerCase().includes('film')) movies = cardsFrom($box);
   });
