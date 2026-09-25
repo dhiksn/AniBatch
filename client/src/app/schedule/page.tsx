@@ -72,7 +72,7 @@ export default function SchedulePage() {
                   {dayObj.day}
                   {isToday && (
                     <span
-                      className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ${
+                      className={`absolute top-0 -right-0.5 w-2.5 h-2.5 rounded-full ${
                         isActive ? "bg-stone-950" : "bg-yellow-400"
                       }`}
                     />
