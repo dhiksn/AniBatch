@@ -38,7 +38,15 @@ export async function getHome(page = 1) {
       const $box = $(el);
       const releasesClass = $box.find('.releases').first().attr('class') || '';
       if ($box.hasClass('latestdark') || releasesClass.includes('latesthome')) {
-        $box.find('article.bs').each((__, card) => latest.push(parseAnimeCard($, card)));
+        $box.find('article.bs').each((__, card) => {
+          const cardData = parseAnimeCard($, card);
+          // Add status badge for Rilisan Terbaru cards (same as page 1)
+          const statusBadge = $(card).find('.status').first();
+          if (statusBadge.length > 0) {
+            cardData.status = statusBadge.text().trim();
+          }
+          latest.push(cardData);
+        });
         grabbed = true;
       }
     });
