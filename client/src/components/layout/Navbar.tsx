@@ -90,7 +90,8 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   const goToFullSearch = () => {
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query)}`);
+      const encodedQuery = query.trim().replace(/\s+/g, '-');
+      router.push(`/search?q=${encodedQuery}`);
       onClose();
     }
   };
