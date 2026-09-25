@@ -36,7 +36,7 @@ export function AnimeCard({ anime }: AnimeCardProps) {
 
           {anime.status && (
             <div className="absolute top-0 left-0 w-20 h-20 overflow-hidden z-10 pointer-events-none">
-              <div className="absolute top-[13px] left-[-26px] w-[110px] -rotate-45 bg-red-600 text-white text-center text-[9px] font-bold uppercase tracking-wider py-[3px] shadow-md whitespace-nowrap">
+              <div className="absolute top-[17px] left-[-26px] w-[110px] -rotate-45 bg-red-600 text-white text-center text-[9px] font-bold uppercase tracking-wider py-[3px] shadow-md whitespace-nowrap">
                 {anime.status}
               </div>
             </div>
