@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { MagnifyingGlass, X, ArrowRight } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { fetchApi } from "@/lib/api";
@@ -64,6 +64,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
+const AUTOCOMPLETE_LIMIT = 5;
+
 function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
@@ -71,6 +73,10 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  // hasil yang ditampilkan di dropdown dibatasi, tapi "See all" tetap muncul kalau ada hasil
+  const visibleResults = results.slice(0, AUTOCOMPLETE_LIMIT);
+  const itemCount = visibleResults.length + (results.length > 0 ? 1 : 0); // +1 buat "lihat semua"
 
   useEffect(() => {
     if (open) {
@@ -82,12 +88,19 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
+  const goToFullSearch = () => {
+    if (query.trim()) {
+      router.push(`/search?q=${encodeURIComponent(query)}`);
+      onClose();
+    }
+  };
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+        setSelectedIndex(prev => Math.min(prev + 1, itemCount - 1));
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
@@ -95,13 +108,18 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       }
       if (e.key === "Enter" && selectedIndex >= 0) {
         e.preventDefault();
-        router.push(`/anime/${results[selectedIndex].slug}`);
-        onClose();
+        if (selectedIndex === visibleResults.length) {
+          // item terakhir = "lihat semua hasil"
+          goToFullSearch();
+        } else {
+          router.push(`/anime/${visibleResults[selectedIndex].slug}`);
+          onClose();
+        }
       }
     };
     if (open) document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [open, onClose, results, selectedIndex, router]);
+  }, [open, onClose, visibleResults, itemCount, selectedIndex, router, query]);
 
   useEffect(() => {
     if (open) {
@@ -119,7 +137,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         setLoading(true);
         try {
           const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
-          // API returns { data: [...], pagination: {...} }
           setResults(res.data || []);
         } catch (err) {
           console.error(err);
@@ -137,10 +154,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query)}`);
-      onClose();
-    }
+    goToFullSearch();
   };
 
   const handleResultClick = (slug: string) => {
@@ -201,7 +215,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                   </div>
                 ) : results.length > 0 ? (
                   <div className="py-2">
-                    {results.map((anime, index) => (
+                    {visibleResults.map((anime, index) => (
                       <button
                         key={anime.slug}
                         type="button"
@@ -228,6 +242,22 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                         </div>
                       </button>
                     ))}
+
+                    {/* Link ke halaman search penuh */}
+                    <button
+                      type="button"
+                      onClick={goToFullSearch}
+                      className={`w-full flex items-center justify-between gap-3 px-5 py-3 border-t border-stone-800/50 transition-colors ${
+                        selectedIndex === visibleResults.length
+                          ? "bg-brand-500/10 text-brand-500"
+                          : "text-brand-500 hover:bg-stone-800/50"
+                      }`}
+                    >
+                      <span className="text-sm font-semibold">
+                        Lihat semua hasil untuk &quot;{query}&quot;
+                      </span>
+                      <ArrowRight weight="bold" size={14} />
+                    </button>
                   </div>
                 ) : (
                   <div className="px-5 py-8 text-center text-stone-500 text-sm">
