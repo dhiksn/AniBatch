@@ -132,54 +132,58 @@ export function HomePageContent() {
         </section>
 
         {/* Completed */}
-        <section>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <CheckCircle weight="fill" className="text-brand-500 text-2xl" />
-                <h2 className="text-xl font-bold text-stone-100 tracking-tight">Selesai Tayang</h2>
+        {data?.completed && data.completed.length > 0 && (
+          <section>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <CheckCircle weight="fill" className="text-brand-500 text-2xl" />
+                  <h2 className="text-xl font-bold text-stone-100 tracking-tight">Selesai Tayang</h2>
+                </div>
+                <Link
+                  href="/advanced-search?status=completed&order=update"
+                  className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
+                >
+                  Lihat Semua
+                </Link>
               </div>
-              <Link
-                href="/advanced-search?status=completed&order=update"
-                className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
-              >
-                Lihat Semua
-              </Link>
-            </div>
-            {loading ? (
-              <CardGridSkeleton count={5} />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                {data?.completed?.slice(0, 5).map((anime: any) => (
-                  <AnimeCard key={anime.slug} anime={anime} />
-                ))}
-              </div>
-            )}
-          </section>
+              {loading ? (
+                <CardGridSkeleton count={5} />
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {data?.completed?.slice(0, 5).map((anime: any) => (
+                    <AnimeCard key={anime.slug} anime={anime} />
+                  ))}
+                </div>
+              )}
+            </section>
+        )}
 
         {/* Movies */}
-        <section>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <FilmStrip weight="fill" className="text-brand-500 text-2xl" />
-                <h2 className="text-xl font-bold text-stone-100 tracking-tight">Film Layar Lebar</h2>
+        {data?.movies && data.movies.length > 0 && (
+          <section>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <FilmStrip weight="fill" className="text-brand-500 text-2xl" />
+                  <h2 className="text-xl font-bold text-stone-100 tracking-tight">Film Layar Lebar</h2>
+                </div>
+                <Link
+                  href="/advanced-search?type[]=movie&order=update"
+                  className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
+                >
+                  Lihat Semua
+                </Link>
               </div>
-              <Link
-                href="/advanced-search?type[]=movie&order=update"
-                className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
-              >
-                Lihat Semua
-              </Link>
-            </div>
-            {loading ? (
-              <CardGridSkeleton count={5} />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                {data?.movies?.slice(0, 5).map((anime: any) => (
-                  <AnimeCard key={anime.slug} anime={anime} />
-                ))}
-              </div>
-            )}
-          </section>
+              {loading ? (
+                <CardGridSkeleton count={5} />
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {data?.movies?.slice(0, 5).map((anime: any) => (
+                    <AnimeCard key={anime.slug} anime={anime} />
+                  ))}
+                </div>
+              )}
+            </section>
+        )}
 
       </main>
 

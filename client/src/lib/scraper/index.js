@@ -33,26 +33,41 @@ export async function getHome(page = 1) {
   } else {
     const $ = cheerio.load(html);
     const latest = [];
-    let grabbed = false;
+    const completed = [];
+    const movies = [];
+    
     $('#content .bixbox').each((_, el) => {
       const $box = $(el);
       const releasesClass = $box.find('.releases').first().attr('class') || '';
-      if ($box.hasClass('latestdark') || releasesClass.includes('latesthome')) {
+      const heading = $box.find('.releases h2, .releases h3').first().text().trim();
+
+      if (releasesClass.includes('hothome')) {
+        $box.find('article.bs').each((__, card) => {
+          latest.push(parseAnimeCard($, card));
+        });
+      } else if ($box.hasClass('latestdark') || releasesClass.includes('latesthome')) {
         $box.find('article.bs').each((__, card) => {
           const cardData = parseAnimeCard($, card);
-          // Add status badge for Rilisan Terbaru cards (same as page 1)
+          // Add status badge for Rilisan Terbaru cards
           const statusBadge = $(card).find('.status').first();
           if (statusBadge.length > 0) {
             cardData.status = statusBadge.text().trim();
           }
           latest.push(cardData);
         });
-        grabbed = true;
+      } else if (heading.toLowerCase().includes('selesai')) {
+        $box.find('article.bs').each((__, card) => {
+          completed.push(parseAnimeCard($, card));
+        });
+      } else if (heading.toLowerCase().includes('film')) {
+        $box.find('article.bs').each((__, card) => {
+          movies.push(parseAnimeCard($, card));
+        });
       }
     });
-    if (!grabbed) $('article.bs').each((_, el) => latest.push(parseAnimeCard($, el)));
+    
     const pagination = parsePagination(html, page);
-    data = { hot: [], latest: latest.map(({ score, ...card }) => card), completed: [], movies: [], popular: null, pagination };
+    data = { hot: [], latest: latest.map(({ score, ...card }) => card), completed, movies, popular: null, pagination };
   }
   if (page === 1) {
     const $ = cheerio.load(html);
