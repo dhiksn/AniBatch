@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -9,10 +9,10 @@ import { CardGridSkeleton } from "@/components/ui/Skeletons";
 import { MagnifyingGlass, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 export default function SearchPage() {
-  const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const q = params.q as string;
-  const pageParam = params.page as string;
+  const q = searchParams.get("q");
+  const pageParam = searchParams.get("page");
   const page = parseInt(pageParam || '1', 10) || 1;
   
   const [data, setData] = useState<any[]>([]);
@@ -22,7 +22,8 @@ export default function SearchPage() {
   useEffect(() => {
     if (!q) return;
     setLoading(true);
-    fetchApi<any>(`/search?q=${encodeURIComponent(q)}&page=${page}`)
+    const encodedQuery = q.replace(/\s+/g, '-');
+    fetchApi<any>(`/search?q=${encodedQuery}&page=${page}`)
       .then((res) => {
         setData(res.data);
         setPagination(res.pagination);
@@ -37,7 +38,9 @@ export default function SearchPage() {
   }, [q, page]);
 
   const handlePageChange = (newPage: number) => {
-    router.push(newPage > 1 ? `/search/${encodeURIComponent(q)}/page/${newPage}` : `/search/${encodeURIComponent(q)}`);
+    if (!q) return;
+    const encodedQuery = q.replace(/\s+/g, '-');
+    router.push(newPage > 1 ? `/search?q=${encodedQuery}&page=${newPage}` : `/search?q=${encodedQuery}`);
   };
 
   return (

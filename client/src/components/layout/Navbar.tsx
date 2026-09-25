@@ -154,7 +154,11 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    goToFullSearch();
+    if (query.trim()) {
+      const encodedQuery = query.trim().replace(/\s+/g, '-');
+      router.push(`/search?q=${encodedQuery}`);
+      onClose();
+    }
   };
 
   const handleResultClick = (slug: string) => {
