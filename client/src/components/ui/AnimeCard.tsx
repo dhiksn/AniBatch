@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
 import { Star } from "@phosphor-icons/react";
 import { proxyImg } from "@/lib/image";
 
@@ -20,11 +19,7 @@ interface AnimeCardProps {
 export function AnimeCard({ anime }: AnimeCardProps) {
   return (
     <Link href={`/anime/${anime.slug}`}>
-      <motion.div
-        whileHover={{ y: -4 }}
-        whileTap={{ scale: 0.98 }}
-        className="group relative flex flex-col gap-3"
-      >
+      <div className="group relative flex flex-col gap-3">
         <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl bg-stone-900 border border-stone-800/50">
           <img
             src={proxyImg(anime.thumbnail)}
@@ -66,7 +61,7 @@ export function AnimeCard({ anime }: AnimeCardProps) {
             {anime.title}
           </h3>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }
