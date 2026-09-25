@@ -136,7 +136,8 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       if (query.trim().length >= 2) {
         setLoading(true);
         try {
-          const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
+          const encodedQuery = query.trim().replace(/\s+/g, '-');
+          const res = await fetchApi<any>(`/search?q=${encodedQuery}`);
           setResults(res.data || []);
         } catch (err) {
           console.error(err);
