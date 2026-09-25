@@ -35,8 +35,8 @@ export function AnimeCard({ anime }: AnimeCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {anime.status && (
-            <div className="absolute top-0 left-0 w-24 h-24 overflow-hidden z-10 pointer-events-none">
-              <div className="absolute top-[18px] left-[-34px] w-[140px] -rotate-45 bg-red-600 text-white text-center text-[10px] font-bold uppercase tracking-wider py-1 shadow-md">
+            <div className="absolute top-0 left-0 w-16 h-16 overflow-hidden z-10 pointer-events-none">
+              <div className="absolute top-[10px] left-[-22px] w-[90px] -rotate-45 bg-red-600 text-white text-center text-[8px] font-bold uppercase tracking-wider py-0.5 shadow-md">
                 {anime.status}
               </div>
             </div>
