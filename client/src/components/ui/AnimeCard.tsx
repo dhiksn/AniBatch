@@ -41,7 +41,7 @@ export function AnimeCard({ anime }: AnimeCardProps) {
               </div>
             </div>
           )}
-
+    
           {anime.score && (
             <div className="absolute top-2 right-2 bg-stone-950/80 backdrop-blur-md px-2 py-1 rounded-md text-[10px] font-bold text-yellow-500 flex items-center gap-1 border border-stone-800/50">
               <Star weight="fill" size={10} /> {anime.score}
