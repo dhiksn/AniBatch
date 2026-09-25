@@ -59,6 +59,7 @@ function urlToSlug(url) {
  *         <div class="limit">
  *           <div class="typez TV">TV</div>
  *           <div class="bt"><span class="epx">Ongoing</span></div>
+ *           <div class="status Completed">Completed</div>
  *           <img src="..." />
  *         </div>
  *         <div class="tt">
@@ -87,7 +88,7 @@ function urlToSlug(url) {
  *     </div>
  *   </article>
  *
- * (verified 2026-07-30)
+ * (verified 2026-07-30, updated 2026-09-25 for .status badge)
  *
  * @param {cheerio.CheerioAPI} $
  * @param {cheerio.Element} el   — article.bs
@@ -123,10 +124,14 @@ function parseAnimeCard($, el) {
     $el.find('.typez').first().text().trim() ||
     '';
 
+  // Status badge — new badge format: <div class="status Completed">Completed</div>
+  const statusBadge = $el.find('.status').first();
+  const status = statusBadge.length > 0 ? statusBadge.text().trim() : '';
+
   // Score / rating (present on search results)
   const score = $el.find('.numscore, .score, .imdb, .rating').first().text().trim() || '';
 
-  return { title, slug, url: href, thumbnail, type, episodeLabel, score };
+  return { title, slug, url: href, thumbnail, type, episodeLabel, status, score };
 }
 
 // ---------------------------------------------------------------------------

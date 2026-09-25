@@ -33,8 +33,11 @@ export function parseAnimeCard($, el) {
   const type =
     $el.find('.eggtype').first().text().trim() ||
     $el.find('.typez').first().text().trim() || '';
+  // Status badge — new badge format: <div class="status Completed">Completed</div>
+  const statusBadge = $el.find('.status').first();
+  const status = statusBadge.length > 0 ? statusBadge.text().trim() : '';
   const score = $el.find('.numscore, .score, .imdb, .rating').first().text().trim() || '';
-  return { title, slug, url: href, thumbnail, type, episodeLabel, score };
+  return { title, slug, url: href, thumbnail, type, episodeLabel, status, score };
 }
 
 export function parseAnimeDetail(html) {
