@@ -1,21 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { AnimeCard } from "@/components/ui/AnimeCard";
 import { CardGridSkeleton } from "@/components/ui/Skeletons";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { Tag, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
-export function GenreDetailContent({ slug }: { slug: string }) {
+export function GenreDetailContent({ slug: providedSlug }: { slug?: string }) {
+  const params = useParams();
   const router = useRouter();
+  const slug = providedSlug || (params.slug as string);
+  const pageParam = params.page as string;
+  const page = parseInt(pageParam || '1', 10) || 1;
+  
   const [data, setData] = useState<any[]>([]);
   const [genreInfo, setGenreInfo] = useState<any>(null);
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
 
   function load(p: number) {
     if (!slug) return;

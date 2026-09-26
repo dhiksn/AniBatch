@@ -8,10 +8,10 @@ import { AnimeCard } from "@/components/ui/AnimeCard";
 import { CardGridSkeleton } from "@/components/ui/Skeletons";
 import { MagnifyingGlass, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
-export function SearchContent() {
+export function SearchContent({ query }: { query?: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const q = searchParams.get("q");
+  const q = query || searchParams.get("q");
   const pageParam = searchParams.get("page");
   const page = parseInt(pageParam || '1', 10) || 1;
   

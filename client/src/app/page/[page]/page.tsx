@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { HomePageContent } from "../../HomePageContent";
 
-export default function HomePagePage() {
+export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
+  const { page } = await params;
+  const pageTitle = page && page !== '1' 
+    ? `Home — Page ${page} — AniBatch`
+    : `Home — AniBatch`;
+  
+  return {
+    title: pageTitle,
+    description: "Nonton dan download anime batch subtitle Indonesia di AniBatch",
+  };
+}
+
+export default function HomePagePage({ params }: { params: Promise<{ page: string }> }) {
   return (
     <Suspense fallback={<HomePageLoading />}>
       <HomePageContent />

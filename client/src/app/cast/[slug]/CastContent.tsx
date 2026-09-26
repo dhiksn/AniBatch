@@ -8,9 +8,10 @@ import { CardGridSkeleton } from "@/components/ui/Skeletons";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { Users, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
-export function CastContent({ slug }: { slug: string }) {
+export function CastContent({ slug: providedSlug }: { slug?: string }) {
   const params = useParams();
   const router = useRouter();
+  const slug = providedSlug || (params.slug as string);
   const pageParam = params.page as string;
   const page = parseInt(pageParam || '1', 10) || 1;
   
