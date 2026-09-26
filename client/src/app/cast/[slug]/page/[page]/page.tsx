@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CastContent } from "../../CastContent";
+import { CastContent } from "@/app/cast/[slug]/CastContent";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; page: string }> }): Promise<Metadata> {
   const { slug, page } = await params;

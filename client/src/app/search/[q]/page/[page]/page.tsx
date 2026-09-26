@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SearchContent } from "../../../../search/SearchContent";
+import { SearchContent } from "@/app/search/SearchContent";
 
 export async function generateMetadata({ params }: { params: Promise<{ q: string; page: string }> }): Promise<Metadata> {
   const { q, page } = await params;

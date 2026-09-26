@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PopularContent } from "../PopularContent";
+import { PopularContent } from "@/app/popular/PopularContent";
 
 export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
   const { page } = await params;
