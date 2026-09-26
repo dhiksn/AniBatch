@@ -167,7 +167,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (query.trim().length >= 3) {
+      if (query.trim().length >= 2) {
         setLoading(true);
         try {
           const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
@@ -181,7 +181,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       } else if (query.trim().length === 0) {
         setResults([]);
       }
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [query]);
@@ -243,7 +243,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </button>
             </form>
 
-            {query.trim().length >= 3 && (
+            {query.trim().length >= 2 && (
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
                   <div className="px-5 py-8 text-center text-stone-500 text-sm">
@@ -304,7 +304,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
             <div className="px-5 py-3 text-xs text-stone-500 border-t border-stone-800/50">
               Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari dan{" "}
-              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup
+              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup.
            </div>
           </motion.div>
         </div>
