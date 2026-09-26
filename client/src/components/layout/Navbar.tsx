@@ -63,55 +63,23 @@ export function Navbar() {
             <NavLink href="/schedule">Jadwal Rilis</NavLink>
           </div>
 
-          <SearchButton onClick={() => setSearchOpen(true)} />
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Cari anime"
+            className="shrink-0 flex items-center gap-2 w-40 sm:w-52 px-3 py-2 rounded-full bg-stone-900/60 border border-stone-800 text-stone-500 hover:border-stone-700 hover:bg-stone-900 transition-colors"
+          >
+            <MagnifyingGlass weight="bold" size={16} className="shrink-0" />
+            <span className="text-sm truncate">Cari anime...</span>
+            <kbd className="ml-auto shrink-0 px-1.5 py-0.5 text-[11px] font-mono rounded bg-stone-800 border border-stone-700 text-stone-400">
+              /
+            </kbd>
+          </button>
 
         </div>
       </nav>
 
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
-  );
-}
-
-function SearchButton({ onClick }: { onClick: () => void }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  return (
-    <div
-      className="relative shrink-0"
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-    >
-      <button
-        onClick={onClick}
-        aria-label="Cari anime"
-        className="w-9 h-9 flex items-center justify-center rounded-full text-stone-400 hover:text-brand-500 hover:bg-stone-800/50 transition-colors"
-      >
-        <MagnifyingGlass weight="bold" size={18} />
-      </button>
-
-      <AnimatePresence>
-        {showTooltip && (
-          <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.96 }}
-            transition={{ duration: 0.12, ease: "easeOut" }}
-            className="absolute right-0 top-full mt-2 z-50 whitespace-nowrap"
-          >
-            <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-stone-900 border border-stone-800 shadow-xl text-xs text-stone-300">
-              <span>Tekan</span>
-              <kbd className="px-1.5 py-0.5 bg-stone-800 border border-stone-700 rounded text-stone-200 font-mono text-[11px]">
-                /
-              </kbd>
-              <span>untuk mencari</span>
-            </div>
-            {/* Arrow */}
-            <div className="absolute -top-1 right-3 w-2 h-2 bg-stone-900 border-t border-l border-stone-800 rotate-45" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
   );
 }
 
@@ -335,9 +303,9 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             )}
 
             <div className="px-5 py-3 text-xs text-stone-500 border-t border-stone-800/50">
-              Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari,{" "}
-              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup, atau{" "}
-            </div>
+              Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari dan{" "}
+              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup
+           </div>
           </motion.div>
         </div>
       )}
