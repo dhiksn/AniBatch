@@ -5,8 +5,8 @@ import { HomePageContent } from "@/app/HomePageContent";
 export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
   const { page } = await params;
   const pageTitle = page && page !== '1' 
-    ? `Home — Page ${page} — AniBatch`
-    : `Home — AniBatch`;
+    ? `Home — Page ${page}`
+    : `Home`;
   
   return {
     title: pageTitle,

@@ -4,8 +4,8 @@ import { PopularContent } from "@/app/popular/PopularContent";
 export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
   const { page } = await params;
   const pageTitle = page && page !== '1' 
-    ? `Anime Populer — Page ${page} — AniBatch`
-    : `Anime Populer — AniBatch`;
+    ? `Anime Populer — Page ${page}`
+    : `Anime Populer`;
   
   return {
     title: pageTitle,

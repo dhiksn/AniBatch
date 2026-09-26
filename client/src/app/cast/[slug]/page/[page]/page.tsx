@@ -9,8 +9,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .join(' ');
   
   const pageTitle = page && page !== '1' 
-    ? `Cast: ${capitalizedSlug} — Page ${page} — AniBatch`
-    : `Cast: ${capitalizedSlug} — AniBatch`;
+    ? `Cast: ${capitalizedSlug} — Page ${page}`
+    : `Cast: ${capitalizedSlug}`;
   
   return {
     title: pageTitle,

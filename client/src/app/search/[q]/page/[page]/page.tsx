@@ -4,8 +4,8 @@ import { SearchContent } from "@/app/search/SearchContent";
 export async function generateMetadata({ params }: { params: Promise<{ q: string; page: string }> }): Promise<Metadata> {
   const { q, page } = await params;
   const pageTitle = page && page !== '1' 
-    ? `Pencarian: ${q} — Page ${page} — AniBatch`
-    : `Pencarian: ${q} — AniBatch`;
+    ? `Pencarian: ${q} — Page ${page}`
+    : `Pencarian: ${q}`;
   
   return {
     title: pageTitle,
