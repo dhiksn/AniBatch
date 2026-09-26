@@ -21,7 +21,6 @@ export function GenreDetailContent({ slug }: { slug: string }) {
     if (!slug) return;
     setLoading(true);
     setError(null);
-    router.push(p > 1 ? `/genre/${slug}/page/${p}` : `/genre/${slug}`);
     fetchApi<any>(`/genre/${slug}?page=${p}`)
       .then((res) => {
         setData(res.data);
@@ -37,6 +36,10 @@ export function GenreDetailContent({ slug }: { slug: string }) {
   }
 
   useEffect(() => { load(page); }, [slug, page]);
+
+  const handlePageChange = (newPage: number) => {
+    router.push(newPage > 1 ? `/genre/${slug}/page/${newPage}` : `/genre/${slug}`);
+  };
 
   return (
     <main className="w-full">
@@ -59,13 +62,13 @@ export function GenreDetailContent({ slug }: { slug: string }) {
           </div>
           {pagination && pagination.totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-12 mb-8">
-              <button onClick={() => setPage(page - 1)} disabled={!pagination.hasPrev} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretLeft weight="bold" size={16} />
               </button>
               <div className="text-sm font-medium text-stone-400">
                 Halaman <span className="text-stone-100">{pagination.page}</span> dari <span className="text-stone-100">{pagination.totalPages}</span>
               </div>
-              <button onClick={() => setPage(page + 1)} disabled={!pagination.hasNext} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretRight weight="bold" size={16} />
               </button>
             </div>

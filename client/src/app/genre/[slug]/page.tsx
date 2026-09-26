@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { GenreDetailContent } from "./GenreDetailContent";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   return {
-    title: `Genre: ${params.slug} — AniBatch`,
-    description: `Menampilkan anime dengan genre ${params.slug} di AniBatch`,
+    title: `Genre: ${slug} — AniBatch`,
+    description: `Menampilkan anime dengan genre ${slug} di AniBatch`,
   };
 }
 
-export default function GenreDetailPage({ params }: { params: { slug: string } }) {
-  return <GenreDetailContent slug={params.slug} />;
+export default async function GenreDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <GenreDetailContent slug={slug} />;
 }
