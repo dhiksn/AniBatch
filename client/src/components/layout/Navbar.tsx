@@ -7,11 +7,20 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { fetchApi } from "@/lib/api";
 import { proxyImg } from "@/lib/image";
-import { useScroll } from "./ScrollProvider";
 
 export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const { scrolled } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 8);
+    };
+
+    handleScroll(); // cek posisi awal (kalau reload di tengah halaman)
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,11 +41,13 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`transition-all duration-300 ${
-        scrolled 
-          ? "fixed top-0 z-50 w-full bg-stone-950/80 backdrop-blur-xl border-b border-stone-800/50" 
-          : "relative z-50 w-full bg-transparent border-transparent"
-      }`}>
+      <nav
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          scrolled
+            ? "bg-stone-950/80 backdrop-blur-xl border-b border-stone-800/50 shadow-lg shadow-black/20"
+            : "bg-transparent border-b border-transparent"
+        }`}
+      >
         <div className="relative max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
 
           <Link href="/" className="text-xl font-bold tracking-tight flex items-center shrink-0">
@@ -98,9 +109,8 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // hasil yang ditampilkan di dropdown dibatasi, tapi "See all" tetap muncul kalau ada hasil
   const visibleResults = results.slice(0, AUTOCOMPLETE_LIMIT);
-  const itemCount = visibleResults.length + (results.length > 0 ? 1 : 0); // +1 buat "lihat semua"
+  const itemCount = visibleResults.length + (results.length > 0 ? 1 : 0);
 
   useEffect(() => {
     if (open) {
@@ -133,7 +143,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       if (e.key === "Enter" && selectedIndex >= 0) {
         e.preventDefault();
         if (selectedIndex === visibleResults.length) {
-          // item terakhir = "lihat semua hasil"
           goToFullSearch();
         } else {
           router.push(`/anime/${visibleResults[selectedIndex].slug}`);
@@ -154,7 +163,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
-  // Debounced search - wait 1 second after user stops typing
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (query.trim().length >= 3) {
@@ -233,7 +241,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </button>
             </form>
 
-            {/* Autocomplete results */}
             {query.trim().length >= 3 && (
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
@@ -270,7 +277,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                       </button>
                     ))}
 
-                    {/* Link ke halaman search penuh */}
                     <button
                       type="button"
                       onClick={goToFullSearch}
