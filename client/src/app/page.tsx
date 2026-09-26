@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { HomePageContent } from "./HomePageContent";
+
+export const metadata: Metadata = {
+  title: "Home — AniBatch",
+  description: "Nonton dan download anime batch subtitle Indonesia di AniBatch",
+};
 
 export default function HomePage() {
   return (
