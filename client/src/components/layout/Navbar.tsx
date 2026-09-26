@@ -102,6 +102,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 }
 
 const AUTOCOMPLETE_LIMIT = 5;
+const MIN_QUERY_LENGTH = 2;
+const DEBOUNCE_MS = 250;
 
 function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
@@ -109,6 +111,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const router = useRouter();
 
   const visibleResults = results.slice(0, AUTOCOMPLETE_LIMIT);
@@ -165,23 +168,44 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
+  // Debounced search — lebih cepat trigger, cancel request lama biar nggak race condition
   useEffect(() => {
+    const trimmed = query.trim();
+
+    if (trimmed.length < MIN_QUERY_LENGTH) {
+      setResults([]);
+      setLoading(false);
+      abortRef.current?.abort();
+      return;
+    }
+
+    // langsung tampilkan status loading begitu user ngetik, bukan nunggu debounce selesai
+    setLoading(true);
+
     const timer = setTimeout(async () => {
-      if (query.trim().length >= 2) {
-        setLoading(true);
-        try {
-          const res = await fetchApi<any>(`/search?q=${encodeURIComponent(query)}`);
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      try {
+        const res = await fetchApi<any>(
+          `/search?q=${encodeURIComponent(trimmed)}`,
+          { signal: controller.signal }
+        );
+        if (!controller.signal.aborted) {
           setResults(res.data || []);
-        } catch (err) {
+        }
+      } catch (err: any) {
+        if (err?.name !== "AbortError") {
           console.error(err);
           setResults([]);
-        } finally {
+        }
+      } finally {
+        if (!controller.signal.aborted) {
           setLoading(false);
         }
-      } else if (query.trim().length === 0) {
-        setResults([]);
       }
-    }, 500);
+    }, DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [query]);
@@ -243,7 +267,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </button>
             </form>
 
-            {query.trim().length >= 2 && (
+            {query.trim().length >= MIN_QUERY_LENGTH && (
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
                   <div className="px-5 py-8 text-center text-stone-500 text-sm">
