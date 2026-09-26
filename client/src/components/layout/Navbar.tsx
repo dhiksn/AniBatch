@@ -7,13 +7,36 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { fetchApi } from "@/lib/api";
 import { proxyImg } from "@/lib/image";
+import { useScroll } from "./ScrollProvider";
 
 export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const { scrolled } = useScroll();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Open search with "/" key when not typing in an input
+      if (e.key === "/" && !searchOpen) {
+        const activeElement = document.activeElement;
+        const isInput = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement;
+        if (!isInput) {
+          e.preventDefault();
+          setSearchOpen(true);
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [searchOpen]);
 
   return (
     <>
-      <nav className="sticky top-0 z-50 w-full bg-stone-950/80 backdrop-blur-xl border-b border-stone-800/50">
+      <nav className={`transition-all duration-300 ${
+        scrolled 
+          ? "fixed top-0 z-50 w-full bg-stone-950/80 backdrop-blur-xl border-b border-stone-800/50" 
+          : "relative z-50 w-full bg-transparent border-transparent"
+      }`}>
         <div className="relative max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
 
           <Link href="/" className="text-xl font-bold tracking-tight flex items-center shrink-0">
@@ -34,6 +57,7 @@ export function Navbar() {
             onClick={() => setSearchOpen(true)}
             aria-label="Cari anime"
             className="shrink-0 w-9 h-9 flex items-center justify-center rounded-full text-stone-400 hover:text-brand-500 hover:bg-stone-800/50 transition-colors"
+            title="Tekan / untuk mencari"
           >
             <MagnifyingGlass weight="bold" size={18} />
           </button>
@@ -271,8 +295,9 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             )}
 
             <div className="px-5 py-3 text-xs text-stone-500 border-t border-stone-800/50">
-              Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari, atau{" "}
-              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup.
+              Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari,{" "}
+              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup, atau{" "}
+              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">/</kbd> untuk membuka pencarian di mana saja.
             </div>
           </motion.div>
         </div>
