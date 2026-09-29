@@ -21,6 +21,11 @@
   /* Dark mode locked */
   --background: var(--color-stone-950);
   --foreground: var(--color-stone-200);
+  --nav-h: 64px; /* Navbar height for sticky positioning */
+}
+
+html {
+  scroll-padding-top: var(--nav-h);
 }
 
 body {
