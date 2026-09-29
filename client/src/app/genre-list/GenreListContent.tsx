@@ -24,12 +24,12 @@ export function GenreListContent() {
   useEffect(() => { load(); }, []);
 
   return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-8 bg-stone-900/40 p-6 rounded-2xl border border-stone-800/50">
-          <Tag weight="fill" className="text-brand-500 text-3xl" />
-          <div>
-            <h1 className="text-2xl font-black text-stone-100 tracking-tight">Daftar Genre</h1>
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0">
+        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
+          <Tag weight="fill" className="text-brand-500 text-3xl shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Daftar Genre</h1>
             <p className="text-sm text-stone-400 mt-1">Jelajahi anime berdasarkan genre</p>
           </div>
         </div>

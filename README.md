@@ -1,8 +1,19 @@
 # AniBatch
 
-Platform streaming dan download anime batch subtitle Indonesia. Terdiri dari **REST API backend** (Node.js + Express) dan **frontend** (Next.js + Tailwind CSS).
+Platform streaming dan download anime batch subtitle Indonesia. Terdiri dari **REST API backend** (Node.js + Express) dan **frontend** (Next.js 16 + Tailwind CSS).
 
 Data diambil dari halaman publik [alqanime.net](https://alqanime.net) menggunakan **Cheerio**.
+
+---
+
+## Fitur
+
+- ✅ **SEO-Friendly URLs** - Pagination menggunakan path format (`/genre/drama/page/2`)
+- ✅ **Search Autocomplete** - Real-time search dengan debounce dan keyboard navigation
+- ✅ **Keyboard Shortcuts** - Tekan `/` untuk membuka search modal
+- ✅ **SEO Metadata** - Page-specific titles dan descriptions untuk setiap halaman
+- ✅ **Responsive Design** - Optimized untuk desktop dan mobile
+- ✅ **Dark Theme** - Tema gelap dengan stone color palette
 
 ---
 
@@ -14,16 +25,31 @@ anibatch/
 │   ├── controllers/
 │   ├── routes/
 │   ├── services/
-│   │   └── scraper.js
+│   │   └── scraper.js            # Web scraper dari alqanime.net
 │   └── utils/
-│       ├── http.js
-│       ├── parser.js
-│       └── response.js
+│       ├── http.js               # HTTP client
+│       ├── parser.js             # HTML parser dengan Cheerio
+│       └── response.js           # Response formatter
 ├── client/                       # Frontend Next.js
 │   ├── src/
 │   │   ├── app/                  # App Router pages
+│   │   │   ├── page/             # Homepage dengan pagination
+│   │   │   ├── anime/            # Anime detail
+│   │   │   ├── genre/            # Genre list & detail
+│   │   │   ├── cast/             # Cast detail
+│   │   │   ├── season/           # Season detail
+│   │   │   ├── search/           # Search results
+│   │   │   └── ...               # Lainnya
 │   │   ├── components/
+│   │   │   ├── ui/               # Reusable UI components
+│   │   │   │   ├── AnimeCard.tsx # Shared anime card
+│   │   │   │   └── ...
+│   │   │   └── layout/           # Layout components
+│   │   │       ├── Navbar.tsx    # Navigation bar
+│   │   │       └── Sidebar.tsx   # Sidebar
 │   │   └── lib/
+│   │       ├── api.ts            # API client helper
+│   │       └── image.ts          # Image proxy helper
 │   └── package.json
 ├── app.js
 ├── .env.example
@@ -95,12 +121,22 @@ Di production (Vercel), set `NEXT_PUBLIC_API_URL` ke URL backend.
 
 ## Deploy
 
-### Backend (Pterodactyl)
+### Backend
 
-1. Upload semua file kecuali `node_modules/` dan `client/`
-2. Set env variable `SERVER_PORT` sesuai port yang di-assign panel
-3. Install: `npm install`
-4. Start: `node app.js`
+Backend dapat di-deploy di:
+- **Cloudflare Workers** - Serverless dengan auto-scaling
+- **VPS/Server** - Menggunakan PM2 atau systemd
+- **Container** - Docker/Docker Compose
+
+Environment variables yang diperlukan:
+```bash
+SERVER_PORT=3000
+NODE_ENV=production
+BASE_URL=https://alqanime.net
+CORS_ORIGIN=*
+HTTP_TIMEOUT=12000
+HTTP_MAX_REDIRECTS=5
+```
 
 ### Frontend (Vercel)
 
@@ -118,19 +154,26 @@ Di production (Vercel), set `NEXT_PUBLIC_API_URL` ke URL backend.
 
 ## Halaman Frontend
 
-| Route               | Deskripsi                         |
-|---------------------|-----------------------------------|
-| `/`                 | Homepage + rilisan terbaru        |
-| `/anime/[slug]`     | Detail anime + download links     |
-| `/anime-list`       | Daftar semua anime A-Z            |
-| `/genre-list`       | Daftar semua genre                |
-| `/genre/[slug]`     | Anime berdasarkan genre           |
-| `/popular`          | Anime terpopuler                  |
-| `/advanced-search`  | Pencarian dengan filter           |
-| `/schedule`         | Jadwal rilis mingguan             |
-| `/season/[slug]`    | Anime berdasarkan musim           |
-| `/cast/[slug]`      | Anime berdasarkan cast            |
-| `/search`           | Hasil pencarian                   |
+| Route                           | Deskripsi                         |
+|---------------------------------|-----------------------------------|
+| `/`                             | Homepage + rilisan terbaru        |
+| `/page/2`                       | Homepage page 2, 3, dst          |
+| `/anime/[slug]`                 | Detail anime + download links     |
+| `/anime-list`                   | Daftar semua anime A-Z            |
+| `/genre-list`                   | Daftar semua genre                |
+| `/genre/[slug]`                 | Anime berdasarkan genre           |
+| `/genre/[slug]/page/2`          | Genre page 2, 3, dst             |
+| `/popular`                      | Anime terpopuler                  |
+| `/popular/page/2`               | Popular page 2, 3, dst           |
+| `/advanced-search`              | Pencarian dengan filter           |
+| `/schedule`                     | Jadwal rilis mingguan             |
+| `/season/[slug]`                | Anime berdasarkan musim           |
+| `/cast/[slug]`                  | Anime berdasarkan cast            |
+| `/cast/[slug]/page/2`           | Cast page 2, 3, dst              |
+| `/search?q=<query>`             | Hasil pencarian                   |
+| `/search?q=<query>&page=2`      | Search page 2, 3, dst            |
+
+**Catatan:** Pagination menggunakan path format untuk SEO (`/genre/drama/page/2`) kecuali search yang tetap pakai query parameters.
 
 ---
 

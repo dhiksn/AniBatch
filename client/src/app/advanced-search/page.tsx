@@ -13,8 +13,8 @@ export default function AdvancedSearchPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex gap-8 items-start">
-          <main className="flex-1 min-w-0">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+          <main className="w-full lg:flex-1 min-w-0">
             <div className="h-40 bg-stone-900/40 rounded-2xl animate-pulse border border-stone-800/50 mb-8" />
             <CardGridSkeleton count={20} />
           </main>

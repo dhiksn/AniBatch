@@ -8,7 +8,7 @@ import { Fire, CalendarBlank, Clock } from "@phosphor-icons/react";
 
 export function Sidebar({ showSchedule = true }: { showSchedule?: boolean }) {
   return (
-    <aside className="w-full lg:w-80 shrink-0 flex flex-col gap-6 hidden lg:flex">
+    <aside className="w-full lg:w-80 lg:shrink-0 flex flex-col gap-6 mt-4 lg:mt-0">
       <PopularWidget />
       {showSchedule && <TodayScheduleWidget />}
       <SeasonsWidget />
@@ -29,7 +29,7 @@ function PopularWidget() {
   }, []);
 
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-5">
+    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <Fire weight="fill" className="text-brand-500 text-lg" />
         <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Popular</h3>
@@ -40,7 +40,7 @@ function PopularWidget() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-3 py-1.5 text-xs font-medium capitalize transition-colors border-b-2 -mb-[1px] ${
+            className={`px-3 py-2.5 sm:py-1.5 text-xs font-medium capitalize transition-colors border-b-2 -mb-[1px] ${
               tab === t ? "border-brand-500 text-brand-500" : "border-transparent text-stone-400 hover:text-stone-200"
             }`}
           >
@@ -63,7 +63,7 @@ function PopularWidget() {
           ))
         ) : (
           data?.[tab]?.map((anime: any, i: number) => (
-            <Link href={`/anime/${anime.slug}`} key={anime.slug} className="group flex gap-3 items-center">
+            <Link href={`/anime/${anime.slug}`} key={anime.slug} className="group flex gap-3 items-center py-0.5">
               <div className={`w-6 text-center font-black text-sm ${i === 0 ? "text-yellow-500" : i === 1 ? "text-stone-300" : i === 2 ? "text-amber-600" : "text-stone-700"}`}>
                 {anime.rank}
               </div>
@@ -99,7 +99,7 @@ function TodayScheduleWidget() {
   }, []);
 
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-5">
+    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <Clock weight="fill" className="text-brand-500 text-lg" />
         <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Today's Schedule</h3>
@@ -132,7 +132,7 @@ function TodayScheduleWidget() {
           <div className="text-xs text-stone-500 text-center py-4">No schedule today</div>
         )}
       </div>
-      <Link href="/schedule" className="block text-center text-xs text-brand-500 hover:text-brand-400 mt-4 transition-colors">
+      <Link href="/schedule" className="block text-center text-xs text-brand-500 hover:text-brand-400 mt-4 py-2 transition-colors">
         View full schedule &rarr;
       </Link>
     </div>
@@ -151,13 +151,13 @@ function SeasonsWidget() {
   }, []);
 
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-5">
+    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <CalendarBlank weight="fill" className="text-brand-500 text-lg" />
         <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Seasons</h3>
       </div>
       
-      <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
+      <div className="flex flex-col gap-2 max-h-72 overflow-y-auto overscroll-contain pr-1">
         {loading ? (
           [...Array(6)].map((_, i) => (
             <div key={i} className="h-8 bg-stone-800 rounded animate-pulse w-full" />
@@ -168,7 +168,7 @@ function SeasonsWidget() {
               <Link 
                 href={`/season/${season.slug}`} 
                 key={season.slug} 
-                className="group flex justify-between items-center px-3 py-2 bg-stone-900 rounded-lg hover:bg-stone-800 transition-colors border border-stone-800"
+                className="group flex justify-between items-center gap-2 px-3 py-2.5 sm:py-2 bg-stone-900 rounded-lg hover:bg-stone-800 transition-colors border border-stone-800"
               >
                 <span className="text-xs font-medium text-stone-300 group-hover:text-brand-500 transition-colors line-clamp-1">{season.label}</span>
                 {season.count > 0 && (

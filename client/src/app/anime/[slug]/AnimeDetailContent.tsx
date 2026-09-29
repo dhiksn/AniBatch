@@ -25,15 +25,15 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
   }, [slug]);
 
   if (loading) return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0"><HeroSkeleton /></main>
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0"><HeroSkeleton /></main>
       <Sidebar />
     </div>
   );
 
   if (error || !data) return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0">
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl p-6 text-sm">
           ⚠️ {error || "Anime tidak ditemukan"}
         </div>
@@ -48,28 +48,28 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
     "bg-brand-500/10 text-brand-400 border-brand-500/20";
 
   return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0 flex flex-col gap-8">
-        <div className="flex flex-col md:flex-row gap-8 bg-stone-900/40 border border-stone-800/50 rounded-2xl p-6 sm:p-8">
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full md:w-56 shrink-0">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0 flex flex-col gap-8">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-8">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-40 sm:w-48 md:w-56 mx-auto md:mx-0 shrink-0">
             <div className="aspect-[2/3] w-full bg-stone-900 rounded-xl overflow-hidden border border-stone-800 shadow-2xl">
               <img src={proxyImg(data.thumbnail)} alt={data.title} className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
-          <div className="flex-1 flex flex-col gap-5">
+          <div className="flex-1 min-w-0 flex flex-col gap-5">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-stone-100">{data.title}</h1>
-              {data.alternativeTitle && <div className="text-sm font-medium text-stone-500 mt-1">{data.alternativeTitle}</div>}
+              <h1 className="text-xl sm:text-3xl font-black tracking-tight text-stone-100 break-words text-center md:text-left">{data.title}</h1>
+              {data.alternativeTitle && <div className="text-sm font-medium text-stone-500 mt-1 break-words text-center md:text-left">{data.alternativeTitle}</div>}
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center md:justify-start gap-2">
               {data.status && <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${statusStyle}`}>{data.status}</div>}
               {data.rating && <div className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-bold flex items-center gap-1"><Star weight="fill" size={11} /> {data.rating}</div>}
               {data.type && <div className="px-3 py-1 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-xs font-bold uppercase">{data.type}</div>}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 bg-stone-950/50 rounded-xl border border-stone-800/30">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 sm:gap-4 p-3 sm:p-4 bg-stone-950/50 rounded-xl border border-stone-800/30">
               <MetaItem icon={<FilmStrip />} label="Studio" value={data.studio} />
               <MetaItem icon={<CalendarBlank />} label="Rilis" value={data.released} />
               <MetaItem icon={<Sparkle />} label="Musim" value={data.season}>
@@ -97,7 +97,7 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
             {data.genres?.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {data.genres.map((g: any) => (
-                  <Link key={g.slug} href={`/genre/${g.slug}`} className="text-xs font-medium text-stone-300 bg-stone-800/50 hover:bg-brand-500 hover:text-stone-50 hover:border-brand-500 px-3 py-1.5 rounded-full border border-stone-700 transition-colors">
+                  <Link key={g.slug} href={`/genre/${g.slug}`} className="text-xs font-medium text-stone-300 bg-stone-800/50 hover:bg-brand-500 hover:text-stone-50 hover:border-brand-500 px-3 py-2 sm:py-1.5 rounded-full border border-stone-700 transition-colors">
                     {g.name}
                   </Link>
                 ))}
@@ -130,7 +130,7 @@ function SynopsisSection({ description }: { description: string }) {
           )}
         </AnimatePresence>
       </motion.div>
-      <button onClick={() => setIsExpanded(!isExpanded)} className="text-xs font-bold text-brand-500 hover:text-brand-400 mt-2 transition-colors bg-stone-900 border border-stone-800 px-3 py-1.5 rounded-full hover:bg-stone-800">
+      <button onClick={() => setIsExpanded(!isExpanded)} className="text-xs font-bold text-brand-500 hover:text-brand-400 mt-2 transition-colors bg-stone-900 border border-stone-800 px-4 py-2 sm:px-3 sm:py-1.5 rounded-full hover:bg-stone-800">
         {isExpanded ? "Tutup ringkasan" : "Baca selengkapnya..."}
       </button>
     </div>
@@ -142,7 +142,7 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
   if (!downloads?.length) return null;
   return (
     <section className="bg-stone-900/40 border border-stone-800/50 rounded-2xl overflow-hidden mt-2">
-      <div className="flex items-center gap-2 px-6 py-4 border-b border-stone-800/60 bg-stone-950/20">
+      <div className="flex items-center gap-2 px-4 sm:px-6 py-4 border-b border-stone-800/60 bg-stone-950/20">
         <DownloadSimple weight="fill" className="text-brand-500 text-xl" />
         <h2 className="text-base font-bold text-stone-100 tracking-tight">Download Links</h2>
       </div>
@@ -151,23 +151,23 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
           const isOpen = openIndex === i;
           return (
             <div key={i} className={`transition-colors duration-300 ${isOpen ? "bg-stone-950/40" : ""}`}>
-              <button onClick={() => setOpenIndex(isOpen ? null : i)} className="w-full flex items-center justify-between px-6 py-4 text-left group">
-                <span className={`text-sm font-bold transition-colors ${isOpen ? "text-brand-500" : "text-stone-300 group-hover:text-stone-100"}`}>{dl.episode}</span>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? "bg-brand-500/10 text-brand-500 rotate-45" : "bg-stone-800/50 text-stone-400 group-hover:bg-stone-700"}`}>
+              <button onClick={() => setOpenIndex(isOpen ? null : i)} className="w-full flex items-center justify-between gap-3 px-4 sm:px-6 py-4 text-left group min-h-14">
+                <span className={`text-sm font-bold break-words min-w-0 transition-colors ${isOpen ? "text-brand-500" : "text-stone-300 group-hover:text-stone-100"}`}>{dl.episode}</span>
+                <div className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? "bg-brand-500/10 text-brand-500 rotate-45" : "bg-stone-800/50 text-stone-400 group-hover:bg-stone-700"}`}>
                   <span className="text-lg font-light leading-none mb-0.5">+</span>
                 </div>
               </button>
               <motion.div initial={false} animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                <div className="px-6 pb-5 pt-1 flex flex-col gap-3">
+                <div className="px-3 sm:px-6 pb-5 pt-1 flex flex-col gap-3">
                   {dl.qualities?.map((q: any, j: number) => (
-                    <div key={j} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-2 px-4 rounded-xl bg-stone-900/50 border border-stone-800/50">
+                    <div key={j} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-3 sm:py-2 px-3 sm:px-4 rounded-xl bg-stone-900/50 border border-stone-800/50">
                       <div className="flex items-center gap-2 sm:w-20 shrink-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-brand-500" />
                         <span className="text-xs font-bold text-stone-300">{q.resolution}</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {q.mirrors?.map((m: any, k: number) => (
-                          <a key={k} href={m.url} target="_blank" rel="noopener noreferrer" className="text-xs font-medium bg-stone-800/80 hover:bg-brand-500 text-stone-300 hover:text-white px-3.5 py-1.5 rounded-lg border border-stone-700/50 hover:border-brand-500 transition-all duration-200">
+                          <a key={k} href={m.url} target="_blank" rel="noopener noreferrer" className="text-xs font-medium bg-stone-800/80 hover:bg-brand-500 active:bg-brand-500 text-stone-300 hover:text-white active:text-white px-4 py-2.5 sm:px-3.5 sm:py-1.5 rounded-lg border border-stone-700/50 hover:border-brand-500 transition-all duration-200">
                             {m.label}
                           </a>
                         ))}
@@ -187,9 +187,9 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
 function MetaItem({ icon, label, value, children }: { icon: React.ReactNode; label: string; value?: string; children?: React.ReactNode }) {
   if (!value && !children) return null;
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 min-w-0">
       <div className="text-[10px] uppercase font-bold text-stone-500 flex items-center gap-1">{icon} {label}</div>
-      {children ?? <div className="text-xs font-medium text-stone-200">{value}</div>}
+      {children ?? <div className="text-xs font-medium text-stone-200 break-words">{value}</div>}
     </div>
   );
 }

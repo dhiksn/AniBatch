@@ -1,6 +1,8 @@
 {
   "name": "AniBatch",
   "short_name": "AniBatch",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

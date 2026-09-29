@@ -13,6 +13,7 @@ export function AnimeListContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const letterBarRef = useRef<HTMLDivElement>(null);
 
   function load() {
     setLoading(true);
@@ -39,23 +40,28 @@ export function AnimeListContent() {
   function scrollToLetter(letter: string) {
     const el = sectionRefs.current[letter];
     if (!el) return;
-    const offset = 64 + 60 + 16;
+    // tinggi navbar (+ safe area) dibaca dari scroll-padding-top, plus tinggi bar huruf yang sticky
+    const navH = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 64;
+    const offset = navH + (letterBarRef.current?.offsetHeight ?? 60) + 8;
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
   }
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-2 mb-6 bg-stone-900/40 p-6 rounded-2xl border border-stone-800/50">
-        <ListBullets weight="fill" className="text-brand-500 text-3xl" />
-        <div>
-          <h1 className="text-2xl font-black text-stone-100 tracking-tight">Daftar Anime</h1>
+      <div className="flex items-center gap-3 mb-6 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
+        <ListBullets weight="fill" className="text-brand-500 text-3xl shrink-0" />
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Daftar Anime</h1>
           <p className="text-sm text-stone-400 mt-1">Semua anime diurutkan berdasarkan huruf</p>
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-1.5 mb-8 sticky top-16 z-10 bg-stone-950/90 backdrop-blur py-3">
+      <div
+        ref={letterBarRef}
+        className="flex flex-nowrap overflow-x-auto hide-scrollbar sm:flex-wrap sm:justify-center gap-1.5 mb-6 sm:mb-8 sticky top-[var(--nav-h)] z-10 bg-stone-950/90 backdrop-blur py-3 -mx-4 px-4 sm:mx-0 sm:px-0"
+      >
         {LETTERS.map((l) => (
-          <button key={l} onClick={() => scrollToLetter(l)} className="w-9 h-9 rounded-lg text-sm font-bold bg-stone-900 border border-stone-800 text-stone-400 hover:border-brand-500 hover:text-brand-500 transition-colors">
+          <button key={l} onClick={() => scrollToLetter(l)} className="w-10 h-10 sm:w-9 sm:h-9 shrink-0 rounded-lg text-sm font-bold bg-stone-900 border border-stone-800 text-stone-400 hover:border-brand-500 hover:text-brand-500 transition-colors">
             {l}
           </button>
         ))}
@@ -72,9 +78,9 @@ export function AnimeListContent() {
           {groups.map((group) => (
             <div key={group.letter} ref={(el) => { sectionRefs.current[group.letter] = el; }}>
               <div className="text-base font-black text-stone-300 mb-3 pb-2 border-b border-stone-700">{group.letter}</div>
-              <div className="columns-2 gap-x-10">
+              <div className="columns-1 sm:columns-2 gap-x-10">
                 {group.animes.map((anime: any) => (
-                  <Link key={anime.slug} href={`/anime/${anime.slug}`} className="flex items-start gap-2 py-1 text-sm text-stone-400 transition-colors group break-inside-avoid">
+                  <Link key={anime.slug} href={`/anime/${anime.slug}`} className="flex items-start gap-2 py-2 sm:py-1 text-sm text-stone-400 transition-colors group break-inside-avoid">
                     <span className="text-stone-600 shrink-0 mt-0.5">•</span>
                     <span className="leading-snug group-hover:text-brand-500 transition-colors">{anime.title}</span>
                   </Link>

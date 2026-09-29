@@ -55,8 +55,8 @@ export function HomePageContent() {
   }
 
   return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0 flex flex-col gap-12">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0 flex flex-col gap-12">
 
         {/* Hot — only on page 1 */}
         {currentPage === 1 && (
@@ -68,7 +68,7 @@ export function HomePageContent() {
           {loading ? (
             <CardGridSkeleton count={5} />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {data?.hot?.slice(0, 5).map((anime: any, i: number) => (
                 <motion.div
                   key={anime.slug}
@@ -96,7 +96,7 @@ export function HomePageContent() {
           {loading || latestLoading ? (
             <CardGridSkeleton count={12} />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {data?.latest?.map((anime: any) => (
                 <AnimeCard key={anime.slug} anime={anime} />
               ))}
@@ -109,7 +109,7 @@ export function HomePageContent() {
               <button
                 onClick={() => loadLatestPage(currentPage - 1)}
                 disabled={!data.pagination.hasPrev}
-                className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
               >
                 <CaretLeft weight="bold" size={16} />
               </button>
@@ -120,7 +120,7 @@ export function HomePageContent() {
               <button
                 onClick={() => loadLatestPage(currentPage + 1)}
                 disabled={!data.pagination.hasNext}
-                className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
               >
                 <CaretRight weight="bold" size={16} />
               </button>
@@ -146,7 +146,7 @@ export function HomePageContent() {
               {loading ? (
                 <CardGridSkeleton count={5} />
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
                   {data?.completed?.slice(0, 5).map((anime: any) => (
                     <AnimeCard key={anime.slug} anime={anime} />
                   ))}
@@ -173,7 +173,7 @@ export function HomePageContent() {
               {loading ? (
                 <CardGridSkeleton count={5} />
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
                   {data?.movies?.slice(0, 5).map((anime: any) => (
                     <AnimeCard key={anime.slug} anime={anime} />
                   ))}

@@ -52,7 +52,7 @@ function Select({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
+        className={`flex items-center gap-2 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium border transition-colors ${
           value
             ? "bg-brand-500/10 border-brand-500/40 text-brand-400"
             : "bg-stone-900 border-stone-800 text-stone-300 hover:border-stone-700"
@@ -63,13 +63,13 @@ function Select({
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute top-full left-0 mt-1 z-20 bg-stone-900 border border-stone-800 rounded-xl shadow-xl overflow-hidden min-w-[150px]">
+          <div className="fixed inset-0 z-[70] bg-stone-950/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-stone-900 border-t border-stone-800 rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:overflow-hidden sm:max-h-none sm:min-w-[150px]">
             {options.map((o) => (
               <button
                 key={o.value}
                 onClick={() => { onChange(o.value); setOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-xs transition-colors ${
+                className={`w-full text-left px-5 sm:px-4 py-3.5 sm:py-2 text-sm sm:text-xs transition-colors ${
                   o.value === value
                     ? "text-brand-500 bg-brand-500/10 font-semibold"
                     : "text-stone-300 hover:bg-stone-800"
@@ -104,7 +104,7 @@ function MultiSelect({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
+        className={`flex items-center gap-2 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium border transition-colors ${
           count > 0
             ? "bg-brand-500/10 border-brand-500/40 text-brand-400"
             : "bg-stone-900 border-stone-800 text-stone-300 hover:border-stone-700"
@@ -115,20 +115,20 @@ function MultiSelect({
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute top-full left-0 mt-1 z-20 bg-stone-900 border border-stone-800 rounded-xl shadow-xl overflow-hidden min-w-[180px] max-h-64 overflow-y-auto">
+          <div className="fixed inset-0 z-[70] bg-stone-950/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-stone-900 border-t border-stone-800 rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:min-w-[180px] sm:max-h-64">
             {options.map((o) => {
               const active = selected.has(o.value);
               return (
                 <button
                   key={o.value}
                   onClick={() => onToggle(o.value)}
-                  className={`w-full text-left px-4 py-2 text-xs transition-colors flex items-center justify-between gap-2 ${
+                  className={`w-full text-left px-5 sm:px-4 py-3.5 sm:py-2 text-sm sm:text-xs transition-colors flex items-center justify-between gap-2 ${
                     active ? "text-brand-500 bg-brand-500/10" : "text-stone-300 hover:bg-stone-800"
                   }`}
                 >
                   {o.label}
-                  {active && <Check size={11} weight="bold" />}
+                  {active && <Check size={14} weight="bold" />}
                 </button>
               );
             })}
@@ -253,15 +253,15 @@ export function AdvancedSearchContent() {
   }
 
   return (
-    <div className="flex gap-8 items-start">
-      <main className="flex-1 min-w-0">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+      <main className="w-full lg:flex-1 min-w-0">
 
         {/* Filter bar */}
-        <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-5 mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <MagnifyingGlass weight="bold" className="text-brand-500 text-3xl" />
-            <div>
-              <h1 className="text-2xl font-black text-stone-100 tracking-tight">Advanced Search</h1>
+        <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <MagnifyingGlass weight="bold" className="text-brand-500 text-3xl shrink-0" />
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Advanced Search</h1>
               <p className="text-sm text-stone-400 mt-1">Cari anime dengan filter status, tipe, genre, dan musim</p>
             </div>
           </div>
@@ -291,7 +291,7 @@ export function AdvancedSearchContent() {
             {hasFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-300 border border-stone-800 hover:border-stone-700 transition-colors"
+                className="flex items-center gap-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-300 border border-stone-800 hover:border-stone-700 transition-colors"
               >
                 <X size={11} weight="bold" /> Reset
               </button>
@@ -299,7 +299,7 @@ export function AdvancedSearchContent() {
 
             <button
               onClick={() => doSearch(1)}
-              className="ml-auto flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-bold bg-brand-500 hover:bg-brand-400 text-stone-50 transition-colors"
+              className="ml-auto flex items-center justify-center gap-2 px-5 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-brand-500 hover:bg-brand-400 text-stone-50 transition-colors"
             >
               <MagnifyingGlass weight="bold" size={13} /> Cari
             </button>
@@ -311,7 +311,7 @@ export function AdvancedSearchContent() {
           <CardGridSkeleton count={20} />
         ) : data.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {data.map((anime: any) => (
                 <AnimeCard key={anime.slug} anime={anime} />
               ))}
@@ -322,7 +322,7 @@ export function AdvancedSearchContent() {
                 <button
                   onClick={() => doSearch(page - 1)}
                   disabled={!pagination.hasPrev}
-                  className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
                 >
                   <CaretLeft weight="bold" size={16} />
                 </button>
@@ -333,7 +333,7 @@ export function AdvancedSearchContent() {
                 <button
                   onClick={() => doSearch(page + 1)}
                   disabled={!pagination.hasNext}
-                  className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
                 >
                   <CaretRight weight="bold" size={16} />
                 </button>

@@ -46,6 +46,21 @@ body {
   background: var(--color-stone-700);
 }
 
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* iOS Safari zoom otomatis ke input yang font-nya < 16px */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 @layer utilities {
   .hide-scrollbar {
     -ms-overflow-style: none;

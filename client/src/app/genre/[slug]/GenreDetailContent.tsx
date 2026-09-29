@@ -47,10 +47,10 @@ export function GenreDetailContent({ slug: providedSlug }: { slug?: string }) {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-2 mb-8 bg-stone-900/40 p-6 rounded-2xl border border-stone-800/50">
-        <Tag weight="fill" className="text-brand-500 text-3xl" />
-        <div>
-          <h1 className="text-2xl font-black text-stone-100 tracking-tight">
+      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
+        <Tag weight="fill" className="text-brand-500 text-3xl shrink-0" />
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">
             Genre: <span className="text-brand-500">{genreInfo?.name || slug}</span>
           </h1>
           <p className="text-sm text-stone-400 mt-1">Menampilkan anime dengan genre {genreInfo?.name || slug}</p>
@@ -61,18 +61,18 @@ export function GenreDetailContent({ slug: providedSlug }: { slug?: string }) {
         <ErrorState message={error} onRetry={() => load(page)} />
       ) : data.length > 0 ? (
         <>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
             {data.map((anime: any) => <AnimeCard key={anime.slug} anime={anime} />)}
           </div>
           {pagination && pagination.totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-12 mb-8">
-              <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretLeft weight="bold" size={16} />
               </button>
               <div className="text-sm font-medium text-stone-400">
                 Halaman <span className="text-stone-100">{pagination.page}</span> dari <span className="text-stone-100">{pagination.totalPages}</span>
               </div>
-              <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
                 <CaretRight weight="bold" size={16} />
               </button>
             </div>

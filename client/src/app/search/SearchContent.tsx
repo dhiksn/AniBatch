@@ -43,10 +43,10 @@ export function SearchContent({ query }: { query?: string }) {
 
   return (
     <main className="w-full max-w-5xl mx-auto">
-        <div className="flex items-center gap-2 mb-8 bg-stone-900/40 p-6 rounded-2xl border border-stone-800/50">
-          <MagnifyingGlass weight="bold" className="text-brand-500 text-3xl" />
-          <div>
-            <h1 className="text-2xl font-black text-stone-100 tracking-tight">
+        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
+          <MagnifyingGlass weight="bold" className="text-brand-500 text-3xl shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">
               Pencarian
             </h1>
             <p className="text-sm text-stone-400 mt-1">
@@ -63,7 +63,7 @@ export function SearchContent({ query }: { query?: string }) {
           <CardGridSkeleton count={10} />
         ) : data.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {data.map((anime: any) => (
                 <AnimeCard key={anime.slug} anime={anime} />
               ))}
@@ -75,7 +75,7 @@ export function SearchContent({ query }: { query?: string }) {
                 <button
                   onClick={() => handlePageChange(page - 1)}
                   disabled={!pagination.hasPrev}
-                  className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
                 >
                   <CaretLeft weight="bold" size={16} />
                 </button>
@@ -85,7 +85,7 @@ export function SearchContent({ query }: { query?: string }) {
                 <button
                   onClick={() => handlePageChange(page + 1)}
                   disabled={!pagination.hasNext}
-                  className="p-2 rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
                 >
                   <CaretRight weight="bold" size={16} />
                 </button>

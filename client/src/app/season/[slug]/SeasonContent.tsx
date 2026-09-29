@@ -36,10 +36,10 @@ export function SeasonContent({ slug }: { slug: string }) {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-2 mb-8 bg-stone-900/40 p-6 rounded-2xl border border-stone-800/50">
-        <CalendarBlank weight="fill" className="text-brand-500 text-3xl" />
-        <div>
-          <h1 className="text-2xl font-black text-stone-100 tracking-tight">
+      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
+        <CalendarBlank weight="fill" className="text-brand-500 text-3xl shrink-0" />
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">
             Musim: <span className="text-brand-500">{seasonName || slug}</span>
           </h1>
           <p className="text-sm text-stone-400 mt-1">Daftar anime yang rilis pada musim {seasonName || slug}</p>
@@ -49,7 +49,7 @@ export function SeasonContent({ slug }: { slug: string }) {
       {loading ? <CardGridSkeleton count={20} /> : error ? (
         <ErrorState message={error} onRetry={load} />
       ) : data.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
           {data.map((anime: any) => <AnimeCard key={anime.slug} anime={anime} />)}
         </div>
       ) : (
