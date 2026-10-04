@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MagnifyingGlass, X, ArrowRight, List } from "@phosphor-icons/react";
+import { MagnifyingGlass, X, ArrowRight, List, SpinnerGap } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { fetchApi } from "@/lib/api";
@@ -216,244 +216,226 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
-const AUTOCOMPLETE_LIMIT = 5;
+const AUTOCOMPLETE_LIMIT = 6;
 const MIN_QUERY_LENGTH = 2;
-const DEBOUNCE_MS = 250;
+const DEBOUNCE_MS = 300;
 
 function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const abortRef = useRef<AbortController | null>(null);
-  const router = useRouter();
+  const [query, setQuery]               = useState("");
+  const [results, setResults]           = useState<any[]>([]);
+  const [loading, setLoading]           = useState(false);
+  const [activeIdx, setActiveIdx]       = useState(-1);
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const abortRef  = useRef<AbortController | null>(null);
+  const itemRefs  = useRef<(HTMLLIElement | null)[]>([]);
+  const router    = useRouter();
 
-  const visibleResults = results.slice(0, AUTOCOMPLETE_LIMIT);
-  const itemCount = visibleResults.length + (results.length > 0 ? 1 : 0);
+  const visible = results.slice(0, AUTOCOMPLETE_LIMIT);
 
+  // Auto-scroll active item
   useEffect(() => {
-    if (open) {
-      setQuery("");
-      setResults([]);
-      setSelectedIndex(-1);
-      const t = setTimeout(() => inputRef.current?.focus(), 100);
-      return () => clearTimeout(t);
-    }
+    if (activeIdx >= 0) itemRefs.current[activeIdx]?.scrollIntoView({ block: "nearest" });
+  }, [activeIdx]);
+
+  // Focus & reset on open
+  useEffect(() => {
+    if (!open) return;
+    setQuery(""); setResults([]); setActiveIdx(-1); itemRefs.current = [];
+    const t = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const goToFullSearch = () => {
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query)}`);
-      onClose();
-    }
-  };
-
+  // Lock scroll
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  // Keyboard
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, itemCount - 1));
+        setActiveIdx(i => Math.min(i + 1, visible.length)); // +1 for "lihat semua"
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex(prev => Math.max(prev - 1, -1));
+        setActiveIdx(i => Math.max(i - 1, -1));
       }
-      if (e.key === "Enter" && selectedIndex >= 0) {
+      if (e.key === "Enter" && activeIdx >= 0) {
         e.preventDefault();
-        if (selectedIndex === visibleResults.length) {
-          goToFullSearch();
+        if (activeIdx === visible.length) {
+          goSearch();
         } else {
-          router.push(`/anime/${visibleResults[selectedIndex].slug}`);
+          router.push(`/anime/${visible[activeIdx].slug}`);
           onClose();
         }
       }
     };
-    if (open) document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [open, onClose, visibleResults, itemCount, selectedIndex, router, query]);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, activeIdx, visible]);
 
+  // Debounced fetch
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "";
-      };
+    const q = query.trim();
+    if (q.length < MIN_QUERY_LENGTH) {
+      setResults([]); setLoading(false); abortRef.current?.abort(); return;
     }
-  }, [open]);
-
-  // Debounced search — lebih cepat trigger, cancel request lama biar nggak race condition
-  useEffect(() => {
-    const trimmed = query.trim();
-
-    if (trimmed.length < MIN_QUERY_LENGTH) {
-      setResults([]);
-      setLoading(false);
-      abortRef.current?.abort();
-      return;
-    }
-
-    // langsung tampilkan status loading begitu user ngetik, bukan nunggu debounce selesai
     setLoading(true);
-
-    const timer = setTimeout(async () => {
+    const t = setTimeout(async () => {
       abortRef.current?.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
-
+      const ctrl = new AbortController();
+      abortRef.current = ctrl;
       try {
-        const res = await fetchApi<any>(
-          `/search?q=${encodeURIComponent(trimmed)}`,
-          { signal: controller.signal }
-        );
-        if (!controller.signal.aborted) {
-          setResults(res.data || []);
-        }
+        const res = await fetchApi<any>(`/search?q=${encodeURIComponent(q)}`, { signal: ctrl.signal });
+        if (!ctrl.signal.aborted) { setResults(res.data || []); setActiveIdx(-1); }
       } catch (err: any) {
-        if (err?.name !== "AbortError") {
-          console.error(err);
-          setResults([]);
-        }
+        if (err?.name !== "AbortError") setResults([]);
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        if (!ctrl.signal.aborted) setLoading(false);
       }
     }, DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
+    return () => clearTimeout(t);
   }, [query]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-      onClose();
-    }
-  };
-
-  const handleResultClick = (slug: string) => {
-    router.push(`/anime/${slug}`);
+  function goSearch() {
+    const q = query.trim();
+    if (!q) return;
+    router.push(`/search?q=${encodeURIComponent(q)}`);
     onClose();
-  };
+  }
+
+  if (!open) return null;
 
   return (
-    <AnimatePresence>
-      {open && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[calc(env(safe-area-inset-top)+0.75rem)] sm:pt-24 px-3 sm:px-4">
-          <motion.div
-            className="absolute inset-0 bg-stone-950/70 backdrop-blur-sm"
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          />
+    <div
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-[12vh] px-4"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
-          <motion.div
-            className="relative w-full max-w-xl bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden"
-            initial={{ opacity: 0, scale: 0.96, y: -8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: -8 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            layout
-          >
-            <form onSubmit={handleSearch} className="flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-stone-800/50">
-              <MagnifyingGlass weight="bold" size={20} className="text-stone-500 shrink-0" />
-              <input
-                ref={inputRef}
-                type="text"
-                inputMode="search"
-                enterKeyHint="search"
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setSelectedIndex(-1);
-                }}
-                placeholder="Cari anime..."
-                className="flex-1 min-w-0 bg-transparent text-base text-stone-100 placeholder:text-stone-500 focus:outline-none"
-              />
+      {/* Dialog */}
+      <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden">
+
+        {/* Input row */}
+        <form onSubmit={e => { e.preventDefault(); goSearch(); }} className="flex items-center gap-3 px-4 h-14 border-b border-stone-800/50">
+          {loading
+            ? <SpinnerGap size={18} className="text-stone-500 shrink-0 animate-spin" />
+            : <MagnifyingGlass size={18} className="text-stone-500 shrink-0" />
+          }
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={e => { setQuery(e.target.value); setActiveIdx(-1); }}
+            placeholder="Cari anime..."
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            className="flex-1 bg-transparent text-sm text-stone-100 placeholder:text-stone-500 outline-none"
+          />
+          <div className="flex items-center gap-1.5">
+            {query && (
               <button
                 type="button"
-                onClick={onClose}
-                aria-label="Tutup"
-                className="shrink-0 w-10 h-10 sm:w-7 sm:h-7 -mr-2 sm:mr-0 flex items-center justify-center rounded-full text-stone-500 hover:text-stone-200 hover:bg-stone-800 transition-colors"
+                onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus(); }}
+                className="p-1 rounded-md hover:bg-stone-800 transition-colors text-stone-500"
               >
-                <X weight="bold" size={14} />
+                <X size={14} weight="bold" />
               </button>
-            </form>
-
-            {query.trim().length >= MIN_QUERY_LENGTH && (
-              <div className="max-h-[50dvh] sm:max-h-96 overflow-y-auto overscroll-contain">
-                {loading ? (
-                  <div className="px-5 py-8 text-center text-stone-500 text-sm">
-                    Mencari...
-                  </div>
-                ) : results.length > 0 ? (
-                  <div className="py-2">
-                    {visibleResults.map((anime, index) => (
-                      <button
-                        key={anime.slug}
-                        type="button"
-                        onClick={() => handleResultClick(anime.slug)}
-                        className={`w-full flex items-center gap-3 px-4 sm:px-5 py-3 transition-colors ${
-                          index === selectedIndex
-                            ? "bg-brand-500/10 text-brand-500"
-                            : "hover:bg-stone-800/50 text-stone-200"
-                        }`}
-                      >
-                        <div className="w-12 h-16 shrink-0 rounded overflow-hidden bg-stone-900">
-                          <img
-                            src={proxyImg(anime.thumbnail)}
-                            alt={anime.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0 text-left">
-                          <div className="text-sm font-medium line-clamp-2 sm:line-clamp-1">{anime.title}</div>
-                          {anime.type && (
-                            <div className="text-xs text-stone-500 mt-0.5">{anime.type}</div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-
-                    <button
-                      type="button"
-                      onClick={goToFullSearch}
-                      className={`w-full flex items-center justify-between gap-3 px-4 sm:px-5 py-3.5 sm:py-3 border-t border-stone-800/50 transition-colors ${
-                        selectedIndex === visibleResults.length
-                          ? "bg-brand-500/10 text-brand-500"
-                          : "text-brand-500 hover:bg-stone-800/50"
-                      }`}
-                    >
-                      <span className="text-sm font-semibold">
-                        Lihat semua hasil untuk &quot;{query}&quot;
-                      </span>
-                      <ArrowRight weight="bold" size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="px-5 py-8 text-center text-stone-500 text-sm">
-                    Tidak ditemukan
-                  </div>
-                )}
-              </div>
             )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="hidden sm:flex items-center justify-center h-5 px-1.5 rounded border border-stone-700 bg-stone-800 text-[10px] font-mono text-stone-400 hover:bg-stone-700 transition-colors"
+            >
+              Esc
+            </button>
+          </div>
+        </form>
 
-            <div className="hidden sm:block px-5 py-3 text-xs text-stone-500 border-t border-stone-800/50">
-              Tekan <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Enter</kbd> untuk mencari dan{" "}
-              <kbd className="px-1.5 py-0.5 bg-stone-800 rounded text-stone-300 font-mono">Esc</kbd> untuk menutup.
-           </div>
-          </motion.div>
+        {/* Results */}
+        {results.length > 0 && (
+          <>
+            <ul className="max-h-80 overflow-y-auto divide-y divide-stone-800/40 py-1">
+              {visible.map((anime, i) => (
+                <li key={anime.slug} ref={el => { itemRefs.current[i] = el; }}>
+                  <button
+                    type="button"
+                    onClick={() => { router.push(`/anime/${anime.slug}`); onClose(); }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
+                      i === activeIdx
+                        ? "bg-brand-500/10 text-brand-500"
+                        : "hover:bg-stone-800/60 text-stone-200"
+                    }`}
+                  >
+                    <div className="shrink-0 w-10 h-14 rounded overflow-hidden bg-stone-800">
+                      <img
+                        src={proxyImg(anime.thumbnail)}
+                        alt={anime.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0 text-left">
+                      <p className="font-medium truncate">{anime.title}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        {anime.type  && <span className="text-[11px] text-stone-500">{anime.type}</span>}
+                        {anime.score && <span className="text-[11px] text-yellow-500">★ {anime.score}</span>}
+                      </div>
+                    </div>
+                    <span className="text-stone-600 text-xs shrink-0">↵</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            {/* Lihat semua */}
+            <button
+              type="button"
+              onClick={goSearch}
+              className={`w-full flex items-center justify-between px-4 py-2.5 text-xs border-t border-stone-800/40 transition-colors group ${
+                activeIdx === visible.length
+                  ? "bg-brand-500/10 text-brand-500"
+                  : "text-stone-400 hover:text-brand-500 hover:bg-stone-800/40"
+              }`}
+            >
+              <span>Lihat semua hasil untuk <span className="font-medium text-stone-200">&quot;{query}&quot;</span></span>
+              <ArrowRight size={13} weight="bold" />
+            </button>
+          </>
+        )}
+
+        {/* Empty state */}
+        {!loading && query.trim().length >= MIN_QUERY_LENGTH && results.length === 0 && (
+          <div className="px-4 py-6 text-center text-sm text-stone-500">
+            Tidak ada hasil untuk <span className="font-medium text-stone-300">&quot;{query}&quot;</span>
+          </div>
+        )}
+
+        {/* Footer hints */}
+        <div className="flex items-center gap-4 px-4 py-2 border-t border-stone-800/40 text-[11px] text-stone-600">
+          <span className="flex items-center gap-1">
+            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-stone-700 bg-stone-800 font-mono text-stone-400">↑↓</kbd>
+            navigasi
+          </span>
+          <span className="flex items-center gap-1">
+            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-stone-700 bg-stone-800 font-mono text-stone-400">↵</kbd>
+            buka
+          </span>
+          <span className="flex items-center gap-1">
+            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-stone-700 bg-stone-800 font-mono text-stone-400">Esc</kbd>
+            tutup
+          </span>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }
