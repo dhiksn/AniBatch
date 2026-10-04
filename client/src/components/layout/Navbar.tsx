@@ -397,19 +397,21 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               ))}
             </ul>
 
-            {/* Lihat semua */}
-            <button
-              type="button"
-              onClick={goSearch}
-              className={`w-full flex items-center justify-between px-4 py-2.5 text-xs border-t border-stone-800/40 transition-colors group ${
-                activeIdx === visible.length
-                  ? "bg-brand-500/10 text-brand-500"
-                  : "text-stone-400 hover:text-brand-500 hover:bg-stone-800/40"
-              }`}
-            >
-              <span>Lihat semua hasil untuk <span className="font-medium text-stone-200">&quot;{query}&quot;</span></span>
-              <ArrowRight size={13} weight="bold" />
-            </button>
+            {/* Lihat semua — hanya muncul kalau hasil > limit */}
+            {results.length > AUTOCOMPLETE_LIMIT && (
+              <button
+                type="button"
+                onClick={goSearch}
+                className={`w-full flex items-center justify-between px-4 py-2.5 text-xs border-t border-stone-800/40 transition-colors group ${
+                  activeIdx === visible.length
+                    ? "bg-brand-500/10 text-brand-500"
+                    : "text-stone-400 hover:text-brand-500 hover:bg-stone-800/40"
+                }`}
+              >
+                <span>Lihat semua hasil untuk <span className="font-medium text-stone-200">&quot;{query}&quot;</span></span>
+                <ArrowRight size={13} weight="bold" />
+              </button>
+            )}
           </>
         )}
 
