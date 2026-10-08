@@ -315,7 +315,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center pt-[12vh] px-4"
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-4 sm:pt-[12vh] px-4"
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Backdrop */}
@@ -364,7 +364,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         {/* Results */}
         {results.length > 0 && (
           <>
-            <ul className="max-h-80 overflow-y-auto divide-y divide-stone-800/40 py-1">
+            <ul className="max-h-[40dvh] sm:max-h-80 overflow-y-auto divide-y divide-stone-800/40 py-1">
               {visible.map((anime, i) => (
                 <li key={anime.slug} ref={el => { itemRefs.current[i] = el; }}>
                   <button
