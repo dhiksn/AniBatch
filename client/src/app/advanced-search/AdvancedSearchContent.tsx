@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -141,20 +141,15 @@ function MultiSelect({
 
 /* ── main content ── */
 export function AdvancedSearchContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [status, setStatus] = useState(searchParams.get("status") ?? "");
-  const [type, setType] = useState(searchParams.get("type[]") ?? searchParams.get("type") ?? "");
-  const [order, setOrder] = useState(searchParams.get("order") ?? "");
-  const [title, setTitle] = useState(searchParams.get("title") ?? "");
-  const [genres, setGenres] = useState<Set<string>>(
-    new Set(searchParams.getAll("genre[]"))
-  );
-  const [seasons, setSeasons] = useState<Set<string>>(
-    new Set(searchParams.getAll("season[]"))
-  );
-  const [page, setPage] = useState(parseInt(searchParams.get("page") ?? "1") || 1);
+  const [status, setStatus]   = useState("");
+  const [type, setType]       = useState("");
+  const [order, setOrder]     = useState("");
+  const [title, setTitle]     = useState("");
+  const [genres, setGenres]   = useState<Set<string>>(new Set());
+  const [seasons, setSeasons] = useState<Set<string>>(new Set());
+  const [page, setPage]       = useState(1);
 
   const [genreOptions, setGenreOptions] = useState<{ value: string; label: string }[]>([]);
   const [seasonOptions, setSeasonOptions] = useState<{ value: string; label: string }[]>([]);
@@ -212,9 +207,26 @@ export function AdvancedSearchContent() {
 
   const initialized = useRef(false);
 
-  // Initial load — baca dari URL, jangan update URL
+  // Initial load — baca dari window.location (reliable di client)
   useEffect(() => {
-    fetchSearch(page, status, type, order, title, genres, seasons, false);
+    const sp = new URLSearchParams(window.location.search);
+    const initStatus  = sp.get("status") ?? "";
+    const initType    = sp.get("type[]") ?? sp.get("type") ?? "";
+    const initOrder   = sp.get("order") ?? "";
+    const initTitle   = sp.get("title") ?? "";
+    const initGenres  = new Set(sp.getAll("genre[]"));
+    const initSeasons = new Set(sp.getAll("season[]"));
+    const initPage    = parseInt(sp.get("page") ?? "1") || 1;
+
+    setStatus(initStatus);
+    setType(initType);
+    setOrder(initOrder);
+    setTitle(initTitle);
+    setGenres(initGenres);
+    setSeasons(initSeasons);
+    setPage(initPage);
+
+    fetchSearch(initPage, initStatus, initType, initOrder, initTitle, initGenres, initSeasons, false);
     initialized.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
