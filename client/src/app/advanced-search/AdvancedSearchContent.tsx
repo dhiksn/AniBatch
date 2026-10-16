@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -141,8 +140,6 @@ function MultiSelect({
 
 /* ── main content ── */
 export function AdvancedSearchContent() {
-  const router = useRouter();
-
   const [status, setStatus]   = useState("");
   const [type, setType]       = useState("");
   const [order, setOrder]     = useState("");
@@ -183,8 +180,9 @@ export function AdvancedSearchContent() {
   function fetchSearch(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>, updateUrl = true) {
     setPage(pg);
     const qs = buildQs(pg, s, ty, o, t, g, se);
+    const newUrl = `/advanced-search${qs ? "?" + qs : ""}`;
     if (updateUrl) {
-      router.replace(`/advanced-search${qs ? "?" + qs : ""}`, { scroll: false });
+      window.history.replaceState(null, "", newUrl);
     }
     setLoading(true);
     fetchApi<any>(`/advanced-search?${qs}`)
