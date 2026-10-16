@@ -154,6 +154,9 @@ export function AdvancedSearchContent() {
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+  // id request terakhir — respons dari request lama diabaikan
+  const reqId = useRef(0);
+
   // Load genre & season options once
   useEffect(() => {
     fetchApi<any>("/genre").then((res) =>
@@ -180,19 +183,21 @@ export function AdvancedSearchContent() {
   function fetchSearch(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>, updateUrl = true) {
     setPage(pg);
     const qs = buildQs(pg, s, ty, o, t, g, se);
-    const newUrl = `/advanced-search${qs ? "?" + qs : ""}`;
     if (updateUrl) {
-      window.history.replaceState(null, "", newUrl);
+      window.history.replaceState(null, "", `/advanced-search${qs ? "?" + qs : ""}`);
     }
+    const id = ++reqId.current;
     setLoading(true);
     fetchApi<any>(`/advanced-search?${qs}`)
       .then((res) => {
+        if (id !== reqId.current) return; // abaikan respons usang
         setData(res.data ?? []);
         setPagination(res.pagination ?? null);
         setLoading(false);
         window.scrollTo({ top: 0, behavior: "smooth" });
       })
       .catch((err) => {
+        if (id !== reqId.current) return;
         console.error(err);
         setData([]);
         setLoading(false);
@@ -203,10 +208,7 @@ export function AdvancedSearchContent() {
     fetchSearch(pg, status, type, order, title, genres, seasons, true);
   }
 
-  const initialized = useRef(false);
-  const skipNextAuto = useRef(true); // skip auto-search akibat setState di initial load
-
-  // Initial load
+  // Initial load — baca dari window.location, URL dari user tidak ditimpa
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search);
     const initStatus  = sp.get("status") ?? "";
@@ -229,30 +231,34 @@ export function AdvancedSearchContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-search saat filter berubah
-  useEffect(() => {
-    if (skipNextAuto.current) {
-      skipNextAuto.current = false; // run pertama (mount) dilewati
-      return;
-    }
-    fetchSearch(1, status, type, order, title, genres, seasons, true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, type, order, genres, seasons]);
+  /* ── handler filter: set state + langsung search (tanpa effect) ── */
+  function changeStatus(v: string) {
+    setStatus(v);
+    fetchSearch(1, v, type, order, title, genres, seasons);
+  }
+
+  function changeType(v: string) {
+    setType(v);
+    fetchSearch(1, status, v, order, title, genres, seasons);
+  }
+
+  function changeOrder(v: string) {
+    setOrder(v);
+    fetchSearch(1, status, type, v, title, genres, seasons);
+  }
 
   function toggleGenre(slug: string) {
-    setGenres((prev) => {
-      const next = new Set(prev);
-      next.has(slug) ? next.delete(slug) : next.add(slug);
-      return next;
-    });
+    const next = new Set(genres);
+    next.has(slug) ? next.delete(slug) : next.add(slug);
+    setGenres(next);
+    fetchSearch(1, status, type, order, title, next, seasons);
   }
 
   function toggleSeason(slug: string) {
-    setSeasons((prev) => {
-      const next = new Set(prev);
-      next.has(slug) ? next.delete(slug) : next.add(slug);
-      return next;
-    });
+    const next = new Set(seasons);
+    next.has(slug) ? next.delete(slug) : next.add(slug);
+    setSeasons(next);
+    fetchSearch(1, status, type, order, title, genres, next);
   }
 
   const hasFilters = status || type || order || genres.size > 0 || seasons.size > 0;
@@ -280,9 +286,9 @@ export function AdvancedSearchContent() {
 
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2">
-            <Select value={status} options={STATUS_OPTIONS} onChange={setStatus} />
-            <Select value={type} options={TYPE_OPTIONS} onChange={setType} />
-            <Select value={order} options={ORDER_OPTIONS} onChange={setOrder} />
+            <Select value={status} options={STATUS_OPTIONS} onChange={changeStatus} />
+            <Select value={type} options={TYPE_OPTIONS} onChange={changeType} />
+            <Select value={order} options={ORDER_OPTIONS} onChange={changeOrder} />
             {genreOptions.length > 0 && (
               <MultiSelect
                 label="Genre"
