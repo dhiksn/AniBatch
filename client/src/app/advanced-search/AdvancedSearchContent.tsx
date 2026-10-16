@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { AnimeCard } from "@/components/ui/AnimeCard";
@@ -140,6 +141,7 @@ function MultiSelect({
 
 /* ── main content ── */
 export function AdvancedSearchContent() {
+  const pathname = usePathname();
   const [status, setStatus]   = useState("");
   const [type, setType]       = useState("");
   const [order, setOrder]     = useState("");
@@ -208,8 +210,9 @@ export function AdvancedSearchContent() {
     fetchSearch(pg, status, type, order, title, genres, seasons, true);
   }
 
-  // Initial load — baca dari window.location, URL dari user tidak ditimpa
+  // Re-init setiap kali user navigasi ke halaman ini (pathname change ke /advanced-search)
   useEffect(() => {
+    if (!pathname.startsWith("/advanced-search")) return;
     const sp = new URLSearchParams(window.location.search);
     const initStatus  = sp.get("status") ?? "";
     const initType    = sp.get("type[]") ?? sp.get("type") ?? "";
@@ -229,7 +232,7 @@ export function AdvancedSearchContent() {
 
     fetchSearch(initPage, initStatus, initType, initOrder, initTitle, initGenres, initSeasons, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   /* ── handler filter: set state + langsung search (tanpa effect) ── */
   function changeStatus(v: string) {
