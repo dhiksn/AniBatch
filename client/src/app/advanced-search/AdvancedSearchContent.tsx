@@ -204,8 +204,9 @@ export function AdvancedSearchContent() {
   }
 
   const initialized = useRef(false);
+  const skipNextAuto = useRef(true); // skip auto-search akibat setState di initial load
 
-  // Initial load — baca dari window.location (reliable di client)
+  // Initial load
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search);
     const initStatus  = sp.get("status") ?? "";
@@ -225,13 +226,15 @@ export function AdvancedSearchContent() {
     setPage(initPage);
 
     fetchSearch(initPage, initStatus, initType, initOrder, initTitle, initGenres, initSeasons, false);
-    initialized.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-search saat filter berubah (bukan initial load)
+  // Auto-search saat filter berubah
   useEffect(() => {
-    if (!initialized.current) return;
+    if (skipNextAuto.current) {
+      skipNextAuto.current = false; // run pertama (mount) dilewati
+      return;
+    }
     fetchSearch(1, status, type, order, title, genres, seasons, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, type, order, genres, seasons]);
