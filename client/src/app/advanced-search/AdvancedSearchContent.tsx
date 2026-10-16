@@ -173,28 +173,21 @@ export function AdvancedSearchContent() {
     ).catch(console.error);
   }, []);
 
-  function buildQs(overridePage?: number, overrides?: { status?: string; type?: string; order?: string; title?: string; genres?: Set<string>; seasons?: Set<string> }) {
+  function buildQs(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>) {
     const p = new URLSearchParams();
-    const t  = overrides?.title   !== undefined ? overrides.title   : title;
-    const s  = overrides?.status  !== undefined ? overrides.status  : status;
-    const ty = overrides?.type    !== undefined ? overrides.type    : type;
-    const o  = overrides?.order   !== undefined ? overrides.order   : order;
-    const g  = overrides?.genres  !== undefined ? overrides.genres  : genres;
-    const se = overrides?.seasons !== undefined ? overrides.seasons : seasons;
     if (t)  p.set("title", t);
     if (s)  p.set("status", s);
     if (ty) p.append("type[]", ty);
     if (o)  p.set("order", o);
     g.forEach((v) => p.append("genre[]", v));
     se.forEach((v) => p.append("season[]", v));
-    const pg = overridePage ?? page;
     if (pg > 1) p.set("page", String(pg));
     return p.toString();
   }
 
-  function doSearch(pg = 1, overrides?: { status?: string; type?: string; order?: string; title?: string; genres?: Set<string>; seasons?: Set<string> }) {
+  function fetchSearch(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>) {
     setPage(pg);
-    const qs = buildQs(pg, overrides);
+    const qs = buildQs(pg, s, ty, o, t, g, se);
     router.replace(`/advanced-search${qs ? "?" + qs : ""}`, { scroll: false });
     setLoading(true);
     fetchApi<any>(`/advanced-search?${qs}`)
@@ -211,19 +204,23 @@ export function AdvancedSearchContent() {
       });
   }
 
+  function doSearch(pg = 1) {
+    fetchSearch(pg, status, type, order, title, genres, seasons);
+  }
+
   const initialized = useRef(false);
 
+  // Initial load — baca semua dari URL termasuk page
   useEffect(() => {
-    // Initial load only
-    doSearch(page);
+    fetchSearch(page, status, type, order, title, genres, seasons);
     initialized.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-search whenever any filter changes (after initial load)
+  // Auto-search saat filter berubah (bukan initial load)
   useEffect(() => {
     if (!initialized.current) return;
-    doSearch(1);
+    fetchSearch(1, status, type, order, title, genres, seasons);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, type, order, genres, seasons]);
 
@@ -246,10 +243,10 @@ export function AdvancedSearchContent() {
   const hasFilters = status || type || order || genres.size > 0 || seasons.size > 0;
 
   function clearFilters() {
-    const empty = { status: "", type: "", order: "", title: "", genres: new Set<string>(), seasons: new Set<string>() };
+    const empty = new Set<string>();
     setStatus(""); setType(""); setOrder(""); setTitle("");
-    setGenres(new Set()); setSeasons(new Set()); setPage(1);
-    doSearch(1, empty);
+    setGenres(empty); setSeasons(empty); setPage(1);
+    fetchSearch(1, "", "", "", "", empty, empty);
   }
 
   return (
