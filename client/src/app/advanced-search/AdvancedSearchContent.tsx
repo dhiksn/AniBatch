@@ -185,10 +185,12 @@ export function AdvancedSearchContent() {
     return p.toString();
   }
 
-  function fetchSearch(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>) {
+  function fetchSearch(pg: number, s: string, ty: string, o: string, t: string, g: Set<string>, se: Set<string>, updateUrl = true) {
     setPage(pg);
     const qs = buildQs(pg, s, ty, o, t, g, se);
-    router.replace(`/advanced-search${qs ? "?" + qs : ""}`, { scroll: false });
+    if (updateUrl) {
+      router.replace(`/advanced-search${qs ? "?" + qs : ""}`, { scroll: false });
+    }
     setLoading(true);
     fetchApi<any>(`/advanced-search?${qs}`)
       .then((res) => {
@@ -205,14 +207,14 @@ export function AdvancedSearchContent() {
   }
 
   function doSearch(pg = 1) {
-    fetchSearch(pg, status, type, order, title, genres, seasons);
+    fetchSearch(pg, status, type, order, title, genres, seasons, true);
   }
 
   const initialized = useRef(false);
 
-  // Initial load — baca semua dari URL termasuk page
+  // Initial load — baca dari URL, jangan update URL
   useEffect(() => {
-    fetchSearch(page, status, type, order, title, genres, seasons);
+    fetchSearch(page, status, type, order, title, genres, seasons, false);
     initialized.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -220,7 +222,7 @@ export function AdvancedSearchContent() {
   // Auto-search saat filter berubah (bukan initial load)
   useEffect(() => {
     if (!initialized.current) return;
-    fetchSearch(1, status, type, order, title, genres, seasons);
+    fetchSearch(1, status, type, order, title, genres, seasons, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, type, order, genres, seasons]);
 
@@ -246,7 +248,7 @@ export function AdvancedSearchContent() {
     const empty = new Set<string>();
     setStatus(""); setType(""); setOrder(""); setTitle("");
     setGenres(empty); setSeasons(empty); setPage(1);
-    fetchSearch(1, "", "", "", "", empty, empty);
+    fetchSearch(1, "", "", "", "", empty, empty, true);
   }
 
   return (
