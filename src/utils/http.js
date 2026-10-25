@@ -11,7 +11,12 @@
 
 const https = require('https');
 const zlib  = require('zlib');
+const dns   = require('dns');
 require('dotenv').config();
+
+// Bypass internet positif — pakai DNS publik Google & Cloudflare
+dns.setDefaultResultOrder('ipv4first');
+dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1']);
 
 const BASE_URL          = process.env.BASE_URL || 'https://alqanime.net';
 const TIMEOUT_MS        = parseInt(process.env.HTTP_TIMEOUT, 10)       || 12000;
@@ -119,7 +124,23 @@ function _rawGet(path, redirectCount = 0) {
         } catch (_) {
           // decompression failed; use raw bytes
         }
-        resolve(body.toString('utf-8'));
+        const html = body.toString('utf-8');
+
+        // Deteksi internet positif / ISP transparent proxy
+        if (
+          res.headers['access-control-allow-origin']?.includes('internetbaik') ||
+          html.includes('Internet Baik') ||
+          html.includes('internet-positif') ||
+          html.includes('internetpositif.net') ||
+          html.includes('Telkomsel')
+        ) {
+          const e = new Error('Akses ke website target diblokir oleh ISP (Internet Positif). Gunakan VPN atau server di luar Indonesia.');
+          e.statusCode = 503;
+          e.code = 'SERVICE_UNAVAILABLE';
+          return reject(e);
+        }
+
+        resolve(html);
       });
     });
 

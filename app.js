@@ -23,6 +23,9 @@ const castRouter              = require('./src/routes/cast.routes');
 const app  = express();
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000;
 
+// Mengatur spasi indentasi JSON (2 spasi)
+app.set('json spaces', 2);
+
 // ---------------------------------------------------------------------------
 // Security middleware
 // ---------------------------------------------------------------------------
