@@ -127,6 +127,8 @@ app.get('/api/img', async (req, res) => {
       const ct = imgRes.headers['content-type'] || 'image/jpeg';
       res.setHeader('Content-Type', ct);
       res.setHeader('Cache-Control', 'public, max-age=86400');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
       imgRes.pipe(res);
     }).on('error', () => res.status(502).end());
   } catch (_) {
