@@ -20,9 +20,9 @@ export function AnimeCard({ anime }: AnimeCardProps) {
   return (
     <Link
       href={`/anime/${anime.slug}`}
-      className="group flex flex-col gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-xl"
+      className="group flex flex-col gap-2.5 focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-0"
     >
-      <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl bg-paper-2 border border-rule transition-[border-color,box-shadow] duration-200 group-hover:border-muted group-hover:shadow-lg">
+      <div className="relative aspect-[2/3] w-full overflow-hidden rounded-none bg-paper-2 border border-rule transition-[border-color,box-shadow] duration-200 group-hover:border-muted group-hover:shadow-[0_0_0_1px_var(--color-accent)]">
         <img
           src={proxyImg(anime.thumbnail)}
           alt={anime.title}
@@ -33,14 +33,14 @@ export function AnimeCard({ anime }: AnimeCardProps) {
 
         {anime.status && (
           <div className="absolute top-2 left-2 z-10">
-            <span className="inline-block px-2 py-0.5 rounded-full bg-paper/90 border border-rule text-[11px] font-medium text-ink-2">
+            <span className="inline-block px-2 py-0.5 rounded-none bg-paper/90 border border-rule text-[11px] font-medium text-ink-2">
               {anime.status}
             </span>
           </div>
         )}
 
         {anime.score && (
-          <div className="absolute top-2 right-2 bg-paper/90 px-2 py-0.5 rounded-full text-[11px] font-medium text-accent flex items-center gap-1 border border-rule">
+          <div className="absolute top-2 right-2 bg-paper/90 px-2 py-0.5 rounded-none text-[11px] font-medium text-accent flex items-center gap-1 border border-rule">
             <Star weight="fill" size={10} className="shrink-0" />
             <span className="num">{anime.score}</span>
           </div>
@@ -48,13 +48,13 @@ export function AnimeCard({ anime }: AnimeCardProps) {
 
         <div className="absolute bottom-2 inset-x-2 flex items-center justify-between gap-1 z-10">
           {anime.type ? (
-            <span className="px-2 py-0.5 rounded-full bg-accent text-accent-ink text-[11px] font-medium">
+            <span className="px-2 py-0.5 rounded-none bg-accent text-accent-ink text-[11px] font-medium">
               {anime.type}
             </span>
           ) : <span />}
 
           {anime.episodeLabel && (
-            <span className="px-2 py-0.5 rounded-full bg-paper/90 text-ink-2 text-[11px] font-medium border border-rule truncate max-w-[65%]">
+            <span className="px-2 py-0.5 rounded-none bg-paper/90 text-ink-2 text-[11px] font-medium border border-rule truncate max-w-[65%]">
               {anime.episodeLabel}
             </span>
           )}

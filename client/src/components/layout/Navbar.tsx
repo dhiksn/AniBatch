@@ -59,8 +59,8 @@ export function Navbar() {
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3 sm:gap-6">
 
-          <Link href="/" className="flex items-center gap-1.5 shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-sm">
-            <span className="font-serif text-2xl font-bold tracking-tight text-ink">
+          <Link href="/" className="flex items-center gap-1.5 shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-none">
+            <span className="font-display text-2xl text-ink">
               <span className="text-accent">Ani</span>Batch
             </span>
           </Link>
@@ -76,11 +76,11 @@ export function Navbar() {
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Cari anime"
-              className="hidden sm:flex shrink-0 items-center gap-2 w-52 px-3 py-1.5 rounded-full bg-paper-2 border border-rule text-muted hover:text-ink hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="hidden sm:flex shrink-0 items-center gap-2 w-52 px-3 py-1.5 rounded-none bg-paper-2 border border-rule text-muted hover:text-ink hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <MagnifyingGlass weight="bold" size={15} className="shrink-0 text-muted" />
               <span className="text-sm truncate">Cari anime…</span>
-              <kbd className="ml-auto shrink-0 px-1.5 py-0.5 text-[11px] rounded bg-paper-3 border border-rule text-muted">
+              <kbd className="ml-auto shrink-0 px-1.5 py-0.5 text-[11px] rounded-none bg-paper-3 border border-rule text-muted">
                 /
               </kbd>
             </button>
@@ -89,7 +89,7 @@ export function Navbar() {
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Cari anime"
-              className="sm:hidden w-11 h-11 flex items-center justify-center rounded-full text-ink-2 hover:text-ink active:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="sm:hidden w-11 h-11 flex items-center justify-center rounded-none text-ink-2 hover:text-ink active:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <MagnifyingGlass weight="bold" size={20} />
             </button>
@@ -98,7 +98,7 @@ export function Navbar() {
               onClick={() => setMenuOpen(true)}
               aria-label="Buka menu"
               aria-expanded={menuOpen}
-              className="md:hidden w-11 h-11 flex items-center justify-center rounded-full text-ink-2 hover:text-ink active:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="md:hidden w-11 h-11 flex items-center justify-center rounded-none text-ink-2 hover:text-ink active:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <List weight="bold" size={22} />
             </button>
@@ -159,13 +159,13 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
           >
             <div className="h-16 shrink-0 px-5 flex items-center justify-between border-b border-rule">
-              <span className="font-serif text-xl font-bold tracking-tight text-ink">
+              <span className="font-display text-xl text-ink">
                 <span className="text-accent">Ani</span>Batch
               </span>
               <button
                 onClick={onClose}
                 aria-label="Tutup menu"
-                className="w-10 h-10 -mr-2 flex items-center justify-center rounded-full text-muted hover:text-ink active:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="w-10 h-10 -mr-2 flex items-center justify-center rounded-none text-muted hover:text-ink active:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <X weight="bold" size={18} />
               </button>
@@ -178,7 +178,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center min-h-11 px-3.5 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
+                    className={`flex items-center min-h-11 px-3.5 rounded-none text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
                       isActive
                         ? "text-accent bg-paper-3 font-semibold"
                         : "text-ink-2 hover:text-ink hover:bg-paper"
@@ -203,7 +203,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
+      className={`px-3 py-1.5 text-sm font-medium rounded-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
         isActive
           ? "text-accent bg-paper-2"
           : "text-muted hover:text-ink hover:bg-paper-2"
@@ -312,7 +312,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     >
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
 
-      <div className="relative w-full max-w-lg bg-paper-2 border border-rule rounded-xl shadow-lg overflow-hidden">
+      <div className="relative w-full max-w-lg bg-paper-2 border border-rule rounded-none shadow-lg overflow-hidden">
         <form onSubmit={e => { e.preventDefault(); goSearch(); }} className="flex items-center gap-3 px-4 h-14 border-b border-rule">
           {loading
             ? <SpinnerGap size={18} className="text-muted shrink-0 animate-spin" />
@@ -334,7 +334,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               <button
                 type="button"
                 onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus(); }}
-                className="p-1 rounded hover:bg-paper-3 transition-colors text-muted hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                className="p-1 rounded-none hover:bg-paper-3 transition-colors text-muted hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
               >
                 <X size={14} weight="bold" />
               </button>
@@ -342,7 +342,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             <button
               type="button"
               onClick={onClose}
-              className="hidden sm:flex items-center justify-center h-5 px-1.5 rounded border border-rule bg-paper-3 text-[11px] text-muted hover:text-ink transition-colors"
+              className="hidden sm:flex items-center justify-center h-5 px-1.5 rounded-none border border-rule bg-paper-3 text-[11px] text-muted hover:text-ink transition-colors"
             >
               Esc
             </button>
@@ -363,7 +363,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                         : "hover:bg-paper text-ink"
                     }`}
                   >
-                    <div className="shrink-0 w-10 h-14 rounded overflow-hidden bg-paper-3 border border-rule">
+                    <div className="shrink-0 w-10 h-14 rounded-none overflow-hidden bg-paper-3 border border-rule">
                       <img
                         src={proxyImg(anime.thumbnail)}
                         alt={anime.title}
@@ -409,15 +409,15 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
         <div className="flex items-center gap-4 px-4 py-2 border-t border-rule text-[11px] text-muted">
           <span className="flex items-center gap-1">
-            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-rule bg-paper-3 text-muted">↑↓</kbd>
+            <kbd className="flex items-center justify-center h-4 px-1 rounded-none border border-rule bg-paper-3 text-muted">↑↓</kbd>
             navigasi
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-rule bg-paper-3 text-muted">↵</kbd>
+            <kbd className="flex items-center justify-center h-4 px-1 rounded-none border border-rule bg-paper-3 text-muted">↵</kbd>
             buka
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="flex items-center justify-center h-4 px-1 rounded border border-rule bg-paper-3 text-muted">Esc</kbd>
+            <kbd className="flex items-center justify-center h-4 px-1 rounded-none border border-rule bg-paper-3 text-muted">Esc</kbd>
             tutup
           </span>
         </div>

@@ -35,10 +35,10 @@ function PopularWidget() {
   };
 
   return (
-    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-none p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <Fire weight="fill" className="text-accent text-lg" />
-        <h3 className="font-serif text-base font-medium text-ink">Anime populer</h3>
+        <h3 className="font-display text-base text-ink">Anime populer</h3>
       </div>
       
       <div className="flex gap-1 border-b border-rule mb-4">
@@ -59,11 +59,11 @@ function PopularWidget() {
         {loading ? (
           [...Array(5)].map((_, i) => (
             <div key={i} className="flex gap-3 animate-pulse">
-              <div className="w-6 h-6 bg-paper-3 rounded" />
-              <div className="w-12 h-16 bg-paper-3 rounded flex-shrink-0" />
+              <div className="w-6 h-6 bg-paper-3 rounded-none" />
+              <div className="w-12 h-16 bg-paper-3 rounded-none flex-shrink-0" />
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-3 bg-paper-3 rounded w-3/4" />
-                <div className="h-2 bg-paper-3 rounded w-1/2" />
+                <div className="h-3 bg-paper-3 rounded-none w-3/4" />
+                <div className="h-2 bg-paper-3 rounded-none w-1/2" />
               </div>
             </div>
           ))
@@ -72,15 +72,15 @@ function PopularWidget() {
             <Link
               href={`/anime/${anime.slug}`}
               key={anime.slug}
-              className="group flex gap-3 items-center py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-md"
+              className="group flex gap-3 items-center py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-none"
             >
-              <div className={`w-6 text-center font-serif text-sm num ${i === 0 ? "text-accent font-bold" : i === 1 ? "text-ink font-semibold" : i === 2 ? "text-muted font-medium" : "text-muted/60"}`}>
+              <div className={`w-6 text-center font-display text-sm num ${i === 0 ? "text-accent font-bold" : i === 1 ? "text-ink font-semibold" : i === 2 ? "text-muted font-medium" : "text-muted/60"}`}>
                 {anime.rank}
               </div>
               <img
                 src={proxyImg(anime.thumbnail)}
                 alt={anime.title}
-                className="w-12 h-16 object-cover rounded bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
+                className="w-12 h-16 object-cover rounded-none bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
               />
               <div className="flex-1 min-w-0">
                 <h4 className="text-xs font-medium text-ink line-clamp-2 group-hover:text-accent transition-colors">
@@ -113,20 +113,20 @@ function TodayScheduleWidget() {
   }, []);
 
   return (
-    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-none p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <Clock weight="fill" className="text-accent text-lg" />
-        <h3 className="font-serif text-base font-medium text-ink">Jadwal hari ini</h3>
+        <h3 className="font-display text-base text-ink">Jadwal hari ini</h3>
       </div>
       
       <div className="flex flex-col gap-3">
         {loading ? (
           [...Array(3)].map((_, i) => (
             <div key={i} className="flex gap-3 animate-pulse">
-              <div className="w-10 h-14 bg-paper-3 rounded flex-shrink-0" />
+              <div className="w-10 h-14 bg-paper-3 rounded-none flex-shrink-0" />
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-3 bg-paper-3 rounded w-full" />
-                <div className="h-2 bg-paper-3 rounded w-1/3" />
+                <div className="h-3 bg-paper-3 rounded-none w-full" />
+                <div className="h-2 bg-paper-3 rounded-none w-1/3" />
               </div>
             </div>
           ))
@@ -135,12 +135,12 @@ function TodayScheduleWidget() {
             <Link
               href={`/anime/${anime.slug}`}
               key={anime.slug}
-              className="group flex gap-3 items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-md"
+              className="group flex gap-3 items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-none"
             >
               <img
                 src={proxyImg(anime.thumbnail)}
                 alt={anime.title}
-                className="w-10 h-14 object-cover rounded bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
+                className="w-10 h-14 object-cover rounded-none bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
               />
               <div className="flex-1 min-w-0">
                 <h4 className="text-xs font-medium text-ink line-clamp-2 group-hover:text-accent transition-colors">
@@ -156,7 +156,7 @@ function TodayScheduleWidget() {
       </div>
       <Link
         href="/schedule"
-        className="block text-center text-xs font-medium text-accent hover:underline mt-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded"
+        className="block text-center text-xs font-medium text-accent hover:underline mt-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-none"
       >
         Lihat jadwal rilis lengkap
       </Link>
@@ -176,16 +176,16 @@ function SeasonsWidget() {
   }, []);
 
   return (
-    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-none p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
         <CalendarBlank weight="fill" className="text-accent text-lg" />
-        <h3 className="font-serif text-base font-medium text-ink">Arsip musim</h3>
+        <h3 className="font-display text-base text-ink">Arsip musim</h3>
       </div>
       
       <div className="flex flex-col gap-2 max-h-72 overflow-y-auto overscroll-contain pr-1">
         {loading ? (
           [...Array(6)].map((_, i) => (
-            <div key={i} className="h-8 bg-paper-3 rounded animate-pulse w-full" />
+            <div key={i} className="h-8 bg-paper-3 rounded-none animate-pulse w-full" />
           ))
         ) : seasons.length > 0 ? (
           <div className="grid grid-cols-2 gap-2">
@@ -193,11 +193,11 @@ function SeasonsWidget() {
               <Link 
                 href={`/season/${season.slug}`} 
                 key={season.slug} 
-                className="group flex justify-between items-center gap-2 px-3 py-2 bg-paper rounded-lg hover:bg-paper-3 transition-colors border border-rule focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                className="group flex justify-between items-center gap-2 px-3 py-2 bg-paper rounded-none hover:bg-paper-3 transition-colors border border-rule focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
               >
                 <span className="text-xs font-medium text-ink-2 group-hover:text-accent transition-colors line-clamp-1">{season.label}</span>
                 {season.count > 0 && (
-                  <span className="text-[10px] text-muted bg-paper-3 px-1.5 py-0.5 rounded num">{season.count}</span>
+                  <span className="text-[10px] text-muted bg-paper-3 px-1.5 py-0.5 rounded-none num">{season.count}</span>
                 )}
               </Link>
             ))}

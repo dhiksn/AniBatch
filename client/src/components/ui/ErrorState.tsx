@@ -18,7 +18,7 @@ export function ErrorState({ message = "Gagal memuat data", onRetry }: ErrorStat
       {onRetry && (
         <button
           onClick={onRetry}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-paper-2 hover:bg-paper-3 text-ink text-sm font-medium transition-colors border border-rule focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          className="flex items-center gap-2 px-4 py-2 rounded-none bg-paper-2 hover:bg-paper-3 text-ink text-sm font-medium transition-colors border border-rule focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           <ArrowClockwise weight="bold" size={14} />
           Coba lagi

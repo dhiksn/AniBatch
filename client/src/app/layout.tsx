@@ -53,7 +53,7 @@ export default function RootLayout({
     >
       <head>
         <link
-          href="https://api.fontshare.com/v2/css?f[]=boska@500,600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@700;900&display=swap"
           rel="stylesheet"
         />
       </head>
