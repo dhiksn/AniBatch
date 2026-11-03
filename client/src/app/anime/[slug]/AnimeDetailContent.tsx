@@ -159,7 +159,7 @@ function SynopsisSection({ description }: { description: string }) {
   if (!isLong) return <p className="text-sm text-ink-2 leading-relaxed mt-1">{description}</p>;
   return (
     <div className="mt-1 flex flex-col items-start w-full">
-      <motion.div initial={false} animate={{ height: isExpanded ? "auto" : "4.5rem" }} transition={{ duration: 0.25 }} className="relative overflow-hidden w-full">
+      <motion.div initial={false} animate={{ height: isExpanded ? "auto" : "4.5rem" }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className="relative overflow-hidden w-full">
         <div className="text-sm text-ink-2 leading-relaxed pb-1">{description}</div>
         <AnimatePresence>
           {!isExpanded && (
@@ -175,7 +175,7 @@ function SynopsisSection({ description }: { description: string }) {
       </motion.div>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="text-xs font-medium text-accent hover:underline mt-2 transition-colors bg-paper-3 border border-rule px-3.5 py-1.5 rounded-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+        className="text-xs font-medium text-accent mt-2 transition-colors bg-paper-3 border border-rule px-3.5 py-1.5 rounded-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
       >
         {isExpanded ? "Tutup ringkasan" : "Baca selengkapnya…"}
       </button>
