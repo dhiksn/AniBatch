@@ -1,20 +1,27 @@
 const AUTHOR = 'dhiksn';
 
+function jsonResponse(body: unknown, statusCode = 200) {
+  return new Response(JSON.stringify(body, null, 2), {
+    status: statusCode,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 export function successResponse(data: unknown, statusCode = 200, extra: Record<string, unknown> = {}) {
   const { pagination, ...rest } = extra;
-  return Response.json({
+  return jsonResponse({
     success: true,
     author: AUTHOR,
     ...rest,
     data,
     ...(pagination !== undefined ? { pagination } : {}),
-  }, { status: statusCode });
+  }, statusCode);
 }
 
 export function errorResponse(statusCode: number, code: string, message: string) {
-  return Response.json(
+  return jsonResponse(
     { success: false, author: AUTHOR, error: { code, message } },
-    { status: statusCode }
+    statusCode
   );
 }
 
