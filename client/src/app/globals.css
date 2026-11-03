@@ -1,34 +1,28 @@
-/* Hallmark · v2.0.0 · Darkroom · atmospheric · restyle · colourway:orange · font-slot:--font-display */
+/* Hallmark · Vantage · blue-black · lime · Momo Trust Display · Geologica */
 
+@import url('https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap');
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./base.css" layer(base);
 
 @theme static {
-  --color-paper: oklch(12% 0.014 40);
-  --color-paper-2: oklch(16% 0.018 40);
-  --color-paper-3: oklch(21% 0.02 40);
-  --color-ink: oklch(93% 0.018 80);
-  --color-ink-2: oklch(82% 0.022 70);
-  --color-muted: oklch(68% 0.028 60);
-  --color-rule: oklch(96% 0.01 80 / 0.10);
-  --color-accent: oklch(68% 0.19 48);
-  --color-accent-ink: oklch(13% 0.02 40);
-  --color-focus: oklch(74% 0.18 52);
+  --color-paper: oklch(13.5% 0.012 235);
+  --color-paper-2: oklch(17% 0.014 235);
+  --color-paper-3: oklch(22% 0.016 235);
+  --color-ink: oklch(94% 0.008 235);
+  --color-ink-2: oklch(80% 0.012 235);
+  --color-muted: oklch(62% 0.016 235);
+  --color-rule: oklch(94% 0.008 235 / 0.10);
+  --color-accent: oklch(89% 0.19 126);
+  --color-accent-ink: oklch(13% 0.02 126);
+  --color-focus: oklch(89% 0.19 126);
   --color-error: oklch(72% 0.15 27);
   --color-success: oklch(76% 0.13 150);
 
-  --heat-0: oklch(11% 0.012 40);
-  --heat-1: oklch(22% 0.07 22);
-  --heat-2: oklch(40% 0.16 27);
-  --heat-3: oklch(60% 0.21 36);
-  --heat-4: oklch(74% 0.18 52);
-  --heat-5: oklch(88% 0.13 75);
-  --heat-6: oklch(97% 0.04 90);
-
-  --font-display: "Sofia Sans Extra Condensed", "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-geist-sans), "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  --font-display: "Momo Trust Display", "Geologica", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geologica", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --radius-card: 0px;
   --radius-well: 0px;
@@ -53,60 +47,70 @@ html {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-body, "Geologica", ui-sans-serif, system-ui, sans-serif);
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar matching Darkroom palette */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-paper);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-paper-3);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-muted);
+/* Momo Trust Display utility */
+.momo-trust-display-regular {
+  font-family: "Momo Trust Display", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-a,
-button,
-[role="button"] {
-  touch-action: manipulation;
-}
+/* Custom scrollbar matching Vantage palette */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--color-paper); }
+::-webkit-scrollbar-thumb { background: var(--color-paper-3); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
 
-/* Input font size for mobile zoom prevention */
+a, button, [role="button"] { touch-action: manipulation; }
+
 @media (max-width: 767px) {
-  input,
-  select,
-  textarea {
-    font-size: 16px;
-  }
+  input, select, textarea { font-size: 16px; }
 }
 
 @layer utilities {
-  .nowrap,
-  .whitespace-nowrap {
-    white-space: nowrap;
-  }
+  .nowrap, .whitespace-nowrap { white-space: nowrap; }
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
   .font-display {
     font-family: var(--font-display);
-    font-weight: var(--display-weight, 700);
+    font-weight: var(--display-weight, 400);
     letter-spacing: var(--tracking-display);
-    text-transform: uppercase;
   }
   .font-serif {
     font-family: var(--font-display);
+    font-weight: var(--display-weight, 400);
+  }
+  /* Corner-tick frame utility (Vantage hairline corners) */
+  .corner-tick {
+    position: relative;
+  }
+  .corner-tick::before,
+  .corner-tick::after {
+    content: '';
+    position: absolute;
+    width: var(--tick, 10px);
+    height: var(--tick, 10px);
+    border-color: var(--color-accent);
+    border-style: solid;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .corner-tick::before {
+    top: -1px;
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .corner-tick::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1px 1px 0;
   }
 }

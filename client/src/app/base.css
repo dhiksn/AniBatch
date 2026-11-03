@@ -8,14 +8,15 @@ body {
   margin: 0;
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-body);
+  font-family: "Geologica", var(--font-body), ui-sans-serif, system-ui, sans-serif;
   font-size: var(--text-md);
+  font-weight: 300;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   caret-color: var(--color-accent);
 }
 ::selection {
-  background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  background: color-mix(in oklab, var(--color-accent) 30%, transparent);
 }
 :focus-visible {
   outline: 2px solid var(--color-focus);
@@ -28,15 +29,14 @@ a {
 }
 h1, h2, h3 {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: var(--display-weight, 700);
+  font-family: "Momo Trust Display", "Geologica", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
   font-synthesis: none;
   letter-spacing: var(--tracking-display);
   line-height: 1.05;
   overflow-wrap: break-word;
   min-width: 0;
   text-wrap: balance;
-  text-transform: uppercase;
 }
 h1 { font-size: var(--text-display); }
 h2 { font-size: var(--text-section); }

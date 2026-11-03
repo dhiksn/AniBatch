@@ -47,10 +47,10 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-none border border-rule">
         <Users weight="fill" className="text-accent text-3xl shrink-0" />
         <div className="min-w-0">
-          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">
+          <h1 className="font-serif text-2xl sm:text-3xl text-ink tracking-tight break-words">
             Pemeran: <span className="text-accent">{castInfo?.name || slug}</span>
           </h1>
           <p className="text-sm text-muted mt-1">Daftar anime yang dibintangi oleh {castInfo?.name || slug}</p>
@@ -70,7 +70,7 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
                 onClick={() => handlePageChange(page - 1)}
                 disabled={!pagination.hasPrev}
                 aria-label="Halaman sebelumnya"
-                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretLeft weight="bold" size={16} />
               </button>
@@ -82,7 +82,7 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
                 onClick={() => handlePageChange(page + 1)}
                 disabled={!pagination.hasNext}
                 aria-label="Halaman berikutnya"
-                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretRight weight="bold" size={16} />
               </button>
@@ -90,7 +90,7 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
           )}
         </>
       ) : (
-        <div className="text-center py-20 text-muted border border-dashed border-rule rounded-xl">
+        <div className="text-center py-20 text-muted border border-dashed border-rule rounded-none">
           Tidak ada anime ditemukan untuk pemeran ini.
         </div>
       )}

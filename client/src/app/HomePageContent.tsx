@@ -17,7 +17,6 @@ import {
   CaretRight,
   Star,
   ArrowRight,
-  Sparkle,
 } from "@phosphor-icons/react";
 
 export function HomePageContent() {
@@ -75,9 +74,9 @@ export function HomePageContent() {
         {currentPage === 1 && (
           <section className="flex flex-col gap-6">
             {loading ? (
-              <div className="w-full h-80 sm:h-96 rounded-2xl bg-paper-2 border border-rule animate-pulse" />
+              <div className="w-full h-80 sm:h-96 rounded-none bg-paper-2 border border-rule animate-pulse" />
             ) : spotlightAnime ? (
-              <div className="relative overflow-hidden rounded-2xl border border-rule bg-paper-2">
+              <div className="relative overflow-hidden rounded-none border border-rule bg-paper-2">
                 {/* Ambient backdrop poster */}
                 <div className="absolute inset-0 z-0">
                   <img
@@ -85,15 +84,15 @@ export function HomePageContent() {
                     alt={spotlightAnime.title}
                     className="w-full h-full object-cover opacity-20 filter blur-xl scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-paper-2 via-paper-2/85 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-paper-2 via-paper-2/70 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-paper via-paper/85 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/70 to-transparent" />
                 </div>
 
                 {/* Spotlight Content */}
                 <div className="relative z-10 p-6 sm:p-10 flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center">
                   <Link
                     href={`/anime/${spotlightAnime.slug}`}
-                    className="w-36 sm:w-44 shrink-0 aspect-[2/3] rounded-xl overflow-hidden border border-rule group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus mx-auto md:mx-0"
+                    className="corner-tick w-36 sm:w-44 shrink-0 aspect-[2/3] rounded-none overflow-hidden border border-rule group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus mx-auto md:mx-0"
                   >
                     <img
                       src={proxyImg(spotlightAnime.thumbnail)}
@@ -104,23 +103,24 @@ export function HomePageContent() {
 
                   <div className="flex-1 min-w-0 flex flex-col gap-3.5 text-center md:text-left">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-accent/20 border border-accent/40 text-accent text-[11px] font-medium">
-                        <Sparkle weight="fill" size={11} /> Sorotan Sinema
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-rule bg-paper-3 text-ink-2 text-[11px] font-medium">
+                        <span className="w-1.5 h-1.5 bg-accent inline-block shrink-0" />
+                        Sorotan Sinema
                       </span>
                       {spotlightAnime.type && (
-                        <span className="px-2 py-0.5 rounded-full bg-paper-3 border border-rule text-ink text-[11px] font-medium">
+                        <span className="px-2 py-0.5 rounded-none bg-paper-3 border border-rule text-ink-2 text-[11px] font-medium">
                           {spotlightAnime.type}
                         </span>
                       )}
                       {spotlightAnime.score && (
-                        <span className="px-2 py-0.5 rounded-full bg-paper-3 border border-rule text-accent text-[11px] font-medium flex items-center gap-1">
-                          <Star weight="fill" size={10} />
+                        <span className="px-2 py-0.5 rounded-none bg-paper-3 border border-rule text-ink-2 text-[11px] font-medium flex items-center gap-1">
+                          <Star weight="fill" size={10} className="text-accent" />
                           <span className="num">{spotlightAnime.score}</span>
                         </span>
                       )}
                     </div>
 
-                    <h1 className="font-serif text-2xl sm:text-4xl font-medium text-ink tracking-tight line-clamp-2 leading-tight">
+                    <h1 className="font-serif text-2xl sm:text-4xl text-ink tracking-tight line-clamp-2 leading-tight">
                       {spotlightAnime.title}
                     </h1>
 
@@ -133,14 +133,14 @@ export function HomePageContent() {
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
                       <Link
                         href={`/anime/${spotlightAnime.slug}`}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-ink font-medium text-sm hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none bg-accent text-accent-ink font-medium text-sm hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                       >
                         Nonton &amp; Unduh Batch
                         <ArrowRight size={14} weight="bold" />
                       </Link>
                       <Link
                         href={`/anime/${spotlightAnime.slug}`}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-paper-3 border border-rule text-ink-2 font-medium text-sm hover:text-ink hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-none bg-paper-3 border border-rule text-ink-2 font-medium text-sm hover:text-ink hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                       >
                         Detail Sinopsis
                       </Link>
@@ -156,7 +156,7 @@ export function HomePageContent() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Fire weight="fill" className="text-accent text-lg" />
-                    <h2 className="font-serif text-lg font-medium text-ink">
+                    <h2 className="font-serif text-lg text-ink">
                       Kurasi Hangat Minggu Ini
                     </h2>
                   </div>
@@ -177,7 +177,7 @@ export function HomePageContent() {
             <div className="flex items-center gap-2.5">
               <PlayCircle weight="fill" className="text-accent text-2xl" />
               <div>
-                <h2 className="font-serif text-2xl font-medium text-ink tracking-tight">
+                <h2 className="font-serif text-2xl text-ink tracking-tight">
                   Rilisan Terbaru
                 </h2>
                 <p className="text-xs text-muted mt-0.5">
@@ -204,7 +204,7 @@ export function HomePageContent() {
                 onClick={() => loadLatestPage(currentPage - 1)}
                 disabled={!data.pagination.hasPrev}
                 aria-label="Halaman sebelumnya"
-                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretLeft weight="bold" size={16} />
               </button>
@@ -216,7 +216,7 @@ export function HomePageContent() {
                 onClick={() => loadLatestPage(currentPage + 1)}
                 disabled={!data.pagination.hasNext}
                 aria-label="Halaman berikutnya"
-                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretRight weight="bold" size={16} />
               </button>
@@ -231,7 +231,7 @@ export function HomePageContent() {
               <div className="flex items-center gap-2.5">
                 <CheckCircle weight="fill" className="text-accent text-2xl" />
                 <div>
-                  <h2 className="font-serif text-2xl font-medium text-ink tracking-tight">
+                  <h2 className="font-serif text-2xl text-ink tracking-tight">
                     Arsip Seri Tamat
                   </h2>
                   <p className="text-xs text-muted mt-0.5">
@@ -241,7 +241,7 @@ export function HomePageContent() {
               </div>
               <Link
                 href="/advanced-search?status=completed&order=update"
-                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-full hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus shrink-0"
+                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-none hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus shrink-0"
               >
                 Jelajahi semua
               </Link>
@@ -265,7 +265,7 @@ export function HomePageContent() {
               <div className="flex items-center gap-2.5">
                 <FilmStrip weight="fill" className="text-accent text-2xl" />
                 <div>
-                  <h2 className="font-serif text-2xl font-medium text-ink tracking-tight">
+                  <h2 className="font-serif text-2xl text-ink tracking-tight">
                     Film Layar Lebar
                   </h2>
                   <p className="text-xs text-muted mt-0.5">
@@ -275,7 +275,7 @@ export function HomePageContent() {
               </div>
               <Link
                 href="/advanced-search?type[]=movie&order=update"
-                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-full hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus shrink-0"
+                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-none hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus shrink-0"
               >
                 Jelajahi semua
               </Link>

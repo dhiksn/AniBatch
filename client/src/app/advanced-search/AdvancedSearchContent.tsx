@@ -52,9 +52,9 @@ function Select({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
           value
-            ? "bg-accent/15 border-accent/40 text-accent"
+            ? "bg-paper-3 border-accent text-accent"
             : "bg-paper-3 border-rule text-ink-2 hover:border-muted"
         }`}
       >
@@ -64,7 +64,7 @@ function Select({
       {open && (
         <>
           <div className="fixed inset-0 z-[70] bg-black/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
-          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:overflow-hidden sm:max-h-none sm:min-w-[160px]">
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-none shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-none sm:shadow-xl sm:overflow-hidden sm:max-h-none sm:min-w-[160px]">
             {options.map((o) => (
               <button
                 key={o.value}
@@ -104,9 +104,9 @@ function MultiSelect({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-none text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
           count > 0
-            ? "bg-accent/15 border-accent/40 text-accent"
+            ? "bg-paper-3 border-accent text-accent"
             : "bg-paper-3 border-rule text-ink-2 hover:border-muted"
         }`}
       >
@@ -116,7 +116,7 @@ function MultiSelect({
       {open && (
         <>
           <div className="fixed inset-0 z-[70] bg-black/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
-          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:min-w-[190px] sm:max-h-64">
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-none shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-none sm:shadow-xl sm:min-w-[190px] sm:max-h-64">
             {options.map((o) => {
               const active = selected.has(o.value);
               return (
@@ -274,11 +274,11 @@ export function AdvancedSearchContent() {
       <main className="w-full lg:flex-1 min-w-0">
 
         {/* Filter bar */}
-        <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5 mb-6 sm:mb-8">
+        <div className="bg-paper-2 border border-rule rounded-none p-4 sm:p-5 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
             <MagnifyingGlass weight="bold" className="text-accent text-2xl shrink-0" />
             <div className="min-w-0">
-              <h1 className="font-serif text-2xl font-medium text-ink tracking-tight break-words">Pencarian lanjutan</h1>
+              <h1 className="font-serif text-2xl text-ink tracking-tight break-words">Pencarian lanjutan</h1>
               <p className="text-sm text-muted mt-1">Cari anime dengan filter status, tipe, genre, dan musim</p>
             </div>
           </div>
@@ -308,7 +308,7 @@ export function AdvancedSearchContent() {
             {hasFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium text-muted hover:text-ink border border-rule hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                className="flex items-center gap-1 px-3 py-2 rounded-none text-xs font-medium text-muted hover:text-ink border border-rule hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
               >
                 <X size={11} weight="bold" /> Reset
               </button>
@@ -316,7 +316,7 @@ export function AdvancedSearchContent() {
 
             <button
               onClick={() => doSearch(1)}
-              className="ml-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium bg-accent text-accent-ink hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="ml-auto flex items-center justify-center gap-2 px-4 py-2 rounded-none text-xs font-medium bg-accent text-accent-ink hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <MagnifyingGlass weight="bold" size={13} /> Cari
             </button>
@@ -340,7 +340,7 @@ export function AdvancedSearchContent() {
                   onClick={() => doSearch(page - 1)}
                   disabled={!pagination.hasPrev}
                   aria-label="Halaman sebelumnya"
-                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretLeft weight="bold" size={16} />
                 </button>
@@ -352,7 +352,7 @@ export function AdvancedSearchContent() {
                   onClick={() => doSearch(page + 1)}
                   disabled={!pagination.hasNext}
                   aria-label="Halaman berikutnya"
-                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretRight weight="bold" size={16} />
                 </button>
@@ -360,7 +360,7 @@ export function AdvancedSearchContent() {
             )}
           </>
         ) : !loading ? (
-          <div className="text-center py-20 text-muted border border-dashed border-rule rounded-xl">
+          <div className="text-center py-20 text-muted border border-dashed border-rule rounded-none">
             Tidak ada hasil ditemukan. Coba ubah filter atau kata kunci.
           </div>
         ) : null}

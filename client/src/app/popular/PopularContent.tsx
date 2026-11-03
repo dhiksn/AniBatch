@@ -45,10 +45,10 @@ export function PopularContent() {
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-none border border-rule">
           <Fire weight="fill" className="text-accent text-3xl shrink-0" />
           <div className="min-w-0">
-            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">Anime populer</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl text-ink tracking-tight break-words">Anime populer</h1>
             <p className="text-sm text-muted mt-1">Daftar anime paling populer sepanjang masa</p>
           </div>
         </div>
@@ -66,7 +66,7 @@ export function PopularContent() {
                   onClick={() => handlePageChange(page - 1)}
                   disabled={!pagination.hasPrev}
                   aria-label="Halaman sebelumnya"
-                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretLeft weight="bold" size={16} />
                 </button>
@@ -78,7 +78,7 @@ export function PopularContent() {
                   onClick={() => handlePageChange(page + 1)}
                   disabled={!pagination.hasNext}
                   aria-label="Halaman berikutnya"
-                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-none bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretRight weight="bold" size={16} />
                 </button>

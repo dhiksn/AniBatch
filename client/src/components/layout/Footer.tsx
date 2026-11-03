@@ -9,8 +9,8 @@ export function Footer() {
           {/* Brand & Editorial Description */}
           <div className="md:col-span-5 flex flex-col gap-4">
             <Link href="/" className="inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus w-fit">
-              <span className="font-serif text-2xl font-bold tracking-tight text-ink">
-                <span className="text-accent">Ani</span>Batch
+              <span className="font-serif text-2xl tracking-tight text-ink">
+                AniBatch
               </span>
             </Link>
             <p className="text-sm text-muted leading-relaxed max-w-sm">

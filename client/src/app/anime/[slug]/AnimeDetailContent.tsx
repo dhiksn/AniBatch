@@ -34,7 +34,7 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
   if (error || !data) return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0">
-        <div className="bg-paper-2 border border-error/30 text-error rounded-xl p-6 text-sm flex items-center gap-3">
+        <div className="bg-paper-2 border border-error/30 text-error rounded-none p-6 text-sm flex items-center gap-3">
           <WarningCircle size={20} className="shrink-0" />
           <span>{error || "Anime tidak ditemukan"}</span>
         </div>
@@ -44,14 +44,14 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
   );
 
   const statusStyle =
-    data.status?.toLowerCase().includes("completed") ? "bg-paper-3 text-ink-2 border-rule" :
-    data.status?.toLowerCase().includes("ongoing")   ? "bg-accent/15 text-accent border-accent/30" :
-    "bg-paper-3 text-ink-2 border-rule";
+    data.status?.toLowerCase().includes("ongoing")
+      ? "bg-paper-3 text-accent border-accent/30"
+      : "bg-paper-3 text-ink-2 border-rule";
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0 flex flex-col gap-8">
-        <div className="relative overflow-hidden flex flex-col md:flex-row gap-6 md:gap-8 bg-paper-2 border border-rule rounded-xl p-4 sm:p-8">
+        <div className="relative overflow-hidden flex flex-col md:flex-row gap-6 md:gap-8 bg-paper-2 border border-rule rounded-none p-4 sm:p-8">
           {/* Ambient backdrop poster */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <img
@@ -64,14 +64,14 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
           </div>
 
           <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.25 }} className="relative z-10 w-40 sm:w-48 md:w-56 mx-auto md:mx-0 shrink-0">
-            <div className="aspect-[2/3] w-full bg-paper-3 rounded-xl overflow-hidden border border-rule shadow-md">
+            <div className="corner-tick aspect-[2/3] w-full bg-paper-3 rounded-none overflow-hidden border border-rule shadow-md">
               <img src={proxyImg(data.thumbnail)} alt={data.title} className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
           <div className="relative z-10 flex-1 min-w-0 flex flex-col gap-5">
             <div>
-              <h1 className="font-serif text-2xl sm:text-4xl font-medium tracking-tight text-ink break-words text-center md:text-left">
+              <h1 className="font-serif text-2xl sm:text-4xl tracking-tight text-ink break-words text-center md:text-left">
                 {data.title}
               </h1>
               {data.alternativeTitle && (
@@ -83,24 +83,24 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
 
             <div className="flex flex-wrap justify-center md:justify-start gap-2">
               {data.status && (
-                <div className={`px-3 py-1 rounded-full text-xs font-medium border ${statusStyle}`}>
+                <div className={`px-3 py-1 rounded-none text-xs font-medium border ${statusStyle}`}>
                   {data.status}
                 </div>
               )}
               {data.rating && (
-                <div className="px-3 py-1 rounded-full bg-paper-3 text-accent border border-rule text-xs font-medium flex items-center gap-1">
-                  <Star weight="fill" size={12} />
+                <div className="px-3 py-1 rounded-none bg-paper-3 text-ink-2 border border-rule text-xs font-medium flex items-center gap-1">
+                  <Star weight="fill" size={12} className="text-accent" />
                   <span className="num">{data.rating}</span>
                 </div>
               )}
               {data.type && (
-                <div className="px-3 py-1 rounded-full bg-paper-3 text-ink border border-rule text-xs font-medium">
+                <div className="px-3 py-1 rounded-none bg-paper-3 text-ink-2 border border-rule text-xs font-medium">
                   {data.type}
                 </div>
               )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 sm:gap-4 p-3 sm:p-4 bg-paper rounded-lg border border-rule">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3 sm:gap-4 p-3 sm:p-4 bg-paper rounded-none border border-rule">
               <MetaItem icon={<FilmStrip />} label="Studio" value={data.studio} />
               <MetaItem icon={<CalendarBlank />} label="Rilis" value={data.released} />
               <MetaItem icon={<Sparkle />} label="Musim" value={data.season}>
@@ -134,7 +134,7 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
                   <Link
                     key={g.slug}
                     href={`/genre/${g.slug}`}
-                    className="text-xs font-medium text-muted bg-paper-3 hover:text-ink hover:border-muted px-3 py-1.5 rounded-full border border-rule transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                    className="text-xs font-medium text-ink-2 bg-paper-3 hover:text-ink hover:border-muted px-3 py-1.5 rounded-none border border-rule transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
                   >
                     {g.name}
                   </Link>
@@ -175,7 +175,7 @@ function SynopsisSection({ description }: { description: string }) {
       </motion.div>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="text-xs font-medium text-accent hover:underline mt-2 transition-colors bg-paper-3 border border-rule px-3.5 py-1.5 rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+        className="text-xs font-medium text-accent hover:underline mt-2 transition-colors bg-paper-3 border border-rule px-3.5 py-1.5 rounded-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
       >
         {isExpanded ? "Tutup ringkasan" : "Baca selengkapnya…"}
       </button>
@@ -187,10 +187,10 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   if (!downloads?.length) return null;
   return (
-    <section className="bg-paper-2 border border-rule rounded-xl overflow-hidden mt-2">
+    <section className="bg-paper-2 border border-rule rounded-none overflow-hidden mt-2">
       <div className="flex items-center gap-2 px-4 sm:px-6 py-4 border-b border-rule bg-paper">
         <DownloadSimple weight="fill" className="text-accent text-xl" />
-        <h2 className="font-serif text-lg font-medium text-ink">Tautan unduh batch & episode</h2>
+        <h2 className="font-serif text-lg text-ink">Tautan unduh batch &amp; episode</h2>
       </div>
       <div className="flex flex-col divide-y divide-rule">
         {downloads.map((dl: any, i: number) => {
@@ -204,16 +204,16 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
                 <span className={`text-sm font-medium break-words min-w-0 transition-colors ${isOpen ? "text-accent" : "text-ink group-hover:text-ink-2"}`}>
                   {dl.episode}
                 </span>
-                <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center transition-[transform,background-color,color] duration-200 ${isOpen ? "bg-accent/15 text-accent rotate-45" : "bg-paper-3 text-muted group-hover:text-ink"}`}>
+                <div className={`w-6 h-6 shrink-0 rounded-none flex items-center justify-center transition-[transform,background-color,color] duration-200 ${isOpen ? "bg-paper-3 text-accent rotate-45" : "bg-paper-3 text-muted group-hover:text-ink"}`}>
                   <span className="text-base font-normal leading-none">+</span>
                 </div>
               </button>
               <motion.div initial={false} animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
                 <div className="px-3 sm:px-6 pb-5 pt-1 flex flex-col gap-3">
                   {dl.qualities?.map((q: any, j: number) => (
-                    <div key={j} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-3 sm:py-2.5 px-3 sm:px-4 rounded-lg bg-paper border border-rule">
+                    <div key={j} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-3 sm:py-2.5 px-3 sm:px-4 rounded-none bg-paper border border-rule">
                       <div className="flex items-center gap-2 sm:w-20 shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                        <div className="w-1.5 h-1.5 rounded-none bg-accent" />
                         <span className="text-xs font-semibold text-ink num">{q.resolution}</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -223,7 +223,7 @@ function DownloadSection({ downloads }: { downloads: any[] }) {
                             href={m.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-medium bg-paper-3 hover:bg-accent hover:text-accent-ink text-ink-2 px-3.5 py-1.5 rounded-md border border-rule transition-[background-color,color,border-color] duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                            className="text-xs font-medium bg-paper-3 hover:bg-accent hover:text-accent-ink text-ink-2 px-3.5 py-1.5 rounded-none border border-rule transition-[background-color,color,border-color] duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
                           >
                             {m.label}
                           </a>

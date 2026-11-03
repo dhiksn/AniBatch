@@ -53,7 +53,7 @@ export function Navbar() {
       <nav
         className={`sticky top-0 z-[var(--z-sticky-nav)] w-full pt-[env(safe-area-inset-top)] transition-[background-color,border-color] duration-200 ${
           scrolled
-            ? "bg-paper/95 border-b border-rule shadow-sm"
+            ? "bg-paper/95 border-b border-rule"
             : "bg-paper border-b border-transparent"
         }`}
       >
@@ -61,7 +61,7 @@ export function Navbar() {
 
           <Link href="/" className="flex items-center gap-1.5 shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-none">
             <span className="font-display text-2xl text-ink">
-              <span className="text-accent">Ani</span>Batch
+              AniBatch
             </span>
           </Link>
 
@@ -160,7 +160,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           >
             <div className="h-16 shrink-0 px-5 flex items-center justify-between border-b border-rule">
               <span className="font-display text-xl text-ink">
-                <span className="text-accent">Ani</span>Batch
+                AniBatch
               </span>
               <button
                 onClick={onClose}
@@ -180,7 +180,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                     href={item.href}
                     className={`flex items-center min-h-11 px-3.5 rounded-none text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
                       isActive
-                        ? "text-accent bg-paper-3 font-semibold"
+                        ? "text-accent"
                         : "text-ink-2 hover:text-ink hover:bg-paper"
                     }`}
                   >
@@ -205,7 +205,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
       href={href}
       className={`px-3 py-1.5 text-sm font-medium rounded-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
         isActive
-          ? "text-accent bg-paper-2"
+          ? "text-accent border-b border-accent"
           : "text-muted hover:text-ink hover:bg-paper-2"
       }`}
     >
