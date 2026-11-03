@@ -19,7 +19,7 @@ export function HomePageContent() {
 
   // Read page from URL params
   const pageParam = params.page as string;
-  const currentPage = parseInt(pageParam || '1', 10) || 1;
+  const currentPage = parseInt(pageParam || "1", 10) || 1;
 
   // Fetch data when page changes
   useEffect(() => {
@@ -38,7 +38,7 @@ export function HomePageContent() {
   // Subsequent latest pages
   async function loadLatestPage(page: number) {
     setLatestLoading(true);
-    router.push(page > 1 ? `/page/${page}` : '/');
+    router.push(page > 1 ? `/page/${page}` : "/");
     try {
       const res = await fetchApi<any>(`/home?page=${page}`);
       setData((prev: any) => ({
@@ -60,41 +60,41 @@ export function HomePageContent() {
 
         {/* Hot — only on page 1 */}
         {currentPage === 1 && (
-        <section>
-          <div className="flex items-center gap-2 mb-6">
-            <Fire weight="fill" className="text-brand-500 text-2xl" />
-            <h2 className="text-xl font-bold text-stone-100 tracking-tight">Lagi Hangat</h2>
-          </div>
-          {loading ? (
-            <CardGridSkeleton count={5} />
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-              {data?.hot?.slice(0, 5).map((anime: any, i: number) => (
-                <motion.div
-                  key={anime.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.4 }}
-                >
-                  <AnimeCard anime={anime} />
-                </motion.div>
-              ))}
+          <section>
+            <div className="flex items-center gap-2 mb-6">
+              <Fire weight="fill" className="text-accent text-xl" />
+              <h2 className="font-serif text-2xl font-medium text-ink">Lagi hangat</h2>
             </div>
-          )}
-        </section>
+            {loading ? (
+              <CardGridSkeleton count={5} />
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                {data?.hot?.slice(0, 5).map((anime: any, i: number) => (
+                  <motion.div
+                    key={anime.slug}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
+                  >
+                    <AnimeCard anime={anime} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </section>
         )}
 
         {/* Latest */}
         <section id="sec-latest">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              <PlayCircle weight="fill" className="text-brand-500 text-2xl" />
-              <h2 className="text-xl font-bold text-stone-100 tracking-tight">Rilisan Terbaru</h2>
+              <PlayCircle weight="fill" className="text-accent text-xl" />
+              <h2 className="font-serif text-2xl font-medium text-ink">Rilisan terbaru</h2>
             </div>
           </div>
 
           {loading || latestLoading ? (
-            <CardGridSkeleton count={12} />
+            <CardGridSkeleton count={10} />
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {data?.latest?.map((anime: any) => (
@@ -109,18 +109,20 @@ export function HomePageContent() {
               <button
                 onClick={() => loadLatestPage(currentPage - 1)}
                 disabled={!data.pagination.hasPrev}
-                className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                aria-label="Halaman sebelumnya"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretLeft weight="bold" size={16} />
               </button>
-              <div className="text-sm font-medium text-stone-400">
-                Halaman <span className="text-stone-100">{data.pagination.page}</span> dari{" "}
-                <span className="text-stone-100">{data.pagination.totalPages}</span>
+              <div className="text-sm font-medium text-muted num">
+                Halaman <span className="text-ink font-semibold">{data.pagination.page}</span> dari{" "}
+                <span className="text-ink font-semibold">{data.pagination.totalPages}</span>
               </div>
               <button
                 onClick={() => loadLatestPage(currentPage + 1)}
                 disabled={!data.pagination.hasNext}
-                className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                aria-label="Halaman berikutnya"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <CaretRight weight="bold" size={16} />
               </button>
@@ -131,55 +133,55 @@ export function HomePageContent() {
         {/* Completed */}
         {data?.completed && data.completed.length > 0 && (
           <section>
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <CheckCircle weight="fill" className="text-brand-500 text-2xl" />
-                  <h2 className="text-xl font-bold text-stone-100 tracking-tight">Selesai Tayang</h2>
-                </div>
-                <Link
-                  href="/advanced-search?status=completed&order=update"
-                  className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
-                >
-                  Lihat Semua
-                </Link>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <CheckCircle weight="fill" className="text-accent text-xl" />
+                <h2 className="font-serif text-2xl font-medium text-ink">Selesai tayang</h2>
               </div>
-              {loading ? (
-                <CardGridSkeleton count={5} />
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-                  {data?.completed?.slice(0, 5).map((anime: any) => (
-                    <AnimeCard key={anime.slug} anime={anime} />
-                  ))}
-                </div>
-              )}
-            </section>
+              <Link
+                href="/advanced-search?status=completed&order=update"
+                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-full hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+              >
+                Lihat semua
+              </Link>
+            </div>
+            {loading ? (
+              <CardGridSkeleton count={5} />
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                {data?.completed?.slice(0, 5).map((anime: any) => (
+                  <AnimeCard key={anime.slug} anime={anime} />
+                ))}
+              </div>
+            )}
+          </section>
         )}
 
         {/* Movies */}
         {data?.movies && data.movies.length > 0 && (
           <section>
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <FilmStrip weight="fill" className="text-brand-500 text-2xl" />
-                  <h2 className="text-xl font-bold text-stone-100 tracking-tight">Film Layar Lebar</h2>
-                </div>
-                <Link
-                  href="/advanced-search?type[]=movie&order=update"
-                  className="text-xs font-medium text-brand-500 hover:text-brand-400 px-3 py-1.5 border border-brand-500/30 rounded-full hover:bg-brand-500/10 transition-colors"
-                >
-                  Lihat Semua
-                </Link>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <FilmStrip weight="fill" className="text-accent text-xl" />
+                <h2 className="font-serif text-2xl font-medium text-ink">Film layar lebar</h2>
               </div>
-              {loading ? (
-                <CardGridSkeleton count={5} />
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-                  {data?.movies?.slice(0, 5).map((anime: any) => (
-                    <AnimeCard key={anime.slug} anime={anime} />
-                  ))}
-                </div>
-              )}
-            </section>
+              <Link
+                href="/advanced-search?type[]=movie&order=update"
+                className="text-xs font-medium text-muted hover:text-ink px-3 py-1 border border-rule rounded-full hover:bg-paper-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+              >
+                Lihat semua
+              </Link>
+            </div>
+            {loading ? (
+              <CardGridSkeleton count={5} />
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                {data?.movies?.slice(0, 5).map((anime: any) => (
+                  <AnimeCard key={anime.slug} anime={anime} />
+                ))}
+              </div>
+            )}
+          </section>
         )}
 
       </main>

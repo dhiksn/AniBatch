@@ -36,13 +36,13 @@ export function SeasonContent({ slug }: { slug: string }) {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-        <CalendarBlank weight="fill" className="text-brand-500 text-3xl shrink-0" />
+      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+        <CalendarBlank weight="fill" className="text-accent text-3xl shrink-0" />
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">
-            Musim: <span className="text-brand-500">{seasonName || slug}</span>
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">
+            Musim: <span className="text-accent">{seasonName || slug}</span>
           </h1>
-          <p className="text-sm text-stone-400 mt-1">Daftar anime yang rilis pada musim {seasonName || slug}</p>
+          <p className="text-sm text-muted mt-1">Daftar anime yang rilis pada musim {seasonName || slug}</p>
         </div>
       </div>
 
@@ -53,7 +53,9 @@ export function SeasonContent({ slug }: { slug: string }) {
           {data.map((anime: any) => <AnimeCard key={anime.slug} anime={anime} />)}
         </div>
       ) : (
-        <div className="text-center py-20 text-stone-500">Tidak ada anime ditemukan untuk musim ini.</div>
+        <div className="text-center py-20 text-muted border border-dashed border-rule rounded-xl">
+          Tidak ada anime ditemukan untuk musim ini.
+        </div>
       )}
     </main>
   );

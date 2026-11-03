@@ -13,7 +13,7 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
   const router = useRouter();
   const slug = providedSlug || (params.slug as string);
   const pageParam = params.page as string;
-  const page = parseInt(pageParam || '1', 10) || 1;
+  const page = parseInt(pageParam || "1", 10) || 1;
   
   const [data, setData] = useState<any[]>([]);
   const [castInfo, setCastInfo] = useState<any>(null);
@@ -47,13 +47,13 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-        <Users weight="fill" className="text-brand-500 text-3xl shrink-0" />
+      <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+        <Users weight="fill" className="text-accent text-3xl shrink-0" />
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">
-            Cast: <span className="text-brand-500">{castInfo?.name || slug}</span>
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">
+            Pemeran: <span className="text-accent">{castInfo?.name || slug}</span>
           </h1>
-          <p className="text-sm text-stone-400 mt-1">Daftar anime dengan cast {castInfo?.name || slug}</p>
+          <p className="text-sm text-muted mt-1">Daftar anime yang dibintangi oleh {castInfo?.name || slug}</p>
         </div>
       </div>
 
@@ -66,20 +66,33 @@ export function CastContent({ slug: providedSlug }: { slug?: string }) {
           </div>
           {pagination && pagination.totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-12 mb-8">
-              <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={!pagination.hasPrev}
+                aria-label="Halaman sebelumnya"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              >
                 <CaretLeft weight="bold" size={16} />
               </button>
-              <div className="text-sm font-medium text-stone-400">
-                Halaman <span className="text-stone-100">{pagination.page}</span> dari <span className="text-stone-100">{pagination.totalPages}</span>
+              <div className="text-sm font-medium text-muted num">
+                Halaman <span className="text-ink font-semibold">{pagination.page}</span> dari{" "}
+                <span className="text-ink font-semibold">{pagination.totalPages}</span>
               </div>
-              <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={!pagination.hasNext}
+                aria-label="Halaman berikutnya"
+                className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              >
                 <CaretRight weight="bold" size={16} />
               </button>
             </div>
           )}
         </>
       ) : (
-        <div className="text-center py-20 text-stone-500">Tidak ada anime ditemukan untuk cast ini.</div>
+        <div className="text-center py-20 text-muted border border-dashed border-rule rounded-xl">
+          Tidak ada anime ditemukan untuk pemeran ini.
+        </div>
       )}
     </main>
   );

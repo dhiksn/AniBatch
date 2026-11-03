@@ -13,7 +13,7 @@ export function PopularContent() {
   const params = useParams();
   const router = useRouter();
   const pageParam = params.page as string;
-  const page = parseInt(pageParam || '1', 10) || 1;
+  const page = parseInt(pageParam || "1", 10) || 1;
   
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<any>(null);
@@ -39,17 +39,17 @@ export function PopularContent() {
   useEffect(() => { load(page); }, [page]);
 
   const handlePageChange = (newPage: number) => {
-    router.push(newPage > 1 ? `/popular/page/${newPage}` : '/popular');
+    router.push(newPage > 1 ? `/popular/page/${newPage}` : "/popular");
   };
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-          <Fire weight="fill" className="text-brand-500 text-3xl shrink-0" />
+        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+          <Fire weight="fill" className="text-accent text-3xl shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Anime Populer</h1>
-            <p className="text-sm text-stone-400 mt-1">Daftar anime paling populer sepanjang masa</p>
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">Anime populer</h1>
+            <p className="text-sm text-muted mt-1">Daftar anime paling populer sepanjang masa</p>
           </div>
         </div>
 
@@ -62,13 +62,24 @@ export function PopularContent() {
             </div>
             {pagination && (
               <div className="flex justify-center items-center gap-4 mt-12 mb-8">
-                <button onClick={() => handlePageChange(page - 1)} disabled={!pagination.hasPrev} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={!pagination.hasPrev}
+                  aria-label="Halaman sebelumnya"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                >
                   <CaretLeft weight="bold" size={16} />
                 </button>
-                <div className="text-sm font-medium text-stone-400">
-                  Halaman <span className="text-stone-100">{pagination.page}</span> dari <span className="text-stone-100">{pagination.totalPages}</span>
+                <div className="text-sm font-medium text-muted num">
+                  Halaman <span className="text-ink font-semibold">{pagination.page}</span> dari{" "}
+                  <span className="text-ink font-semibold">{pagination.totalPages}</span>
                 </div>
-                <button onClick={() => handlePageChange(page + 1)} disabled={!pagination.hasNext} className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 hover:bg-stone-800 hover:text-brand-500 transition-colors">
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={!pagination.hasNext}
+                  aria-label="Halaman berikutnya"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                >
                   <CaretRight weight="bold" size={16} />
                 </button>
               </div>

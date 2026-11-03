@@ -28,23 +28,29 @@ function PopularWidget() {
     }).catch(console.error);
   }, []);
 
+  const tabLabels: Record<"weekly" | "monthly" | "alltime", string> = {
+    weekly: "Mingguan",
+    monthly: "Bulanan",
+    alltime: "Sepanjang masa",
+  };
+
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
-        <Fire weight="fill" className="text-brand-500 text-lg" />
-        <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Popular</h3>
+        <Fire weight="fill" className="text-accent text-lg" />
+        <h3 className="font-serif text-base font-medium text-ink">Anime populer</h3>
       </div>
       
-      <div className="flex gap-1 border-b border-stone-800/60 mb-4">
+      <div className="flex gap-1 border-b border-rule mb-4">
         {(["weekly", "monthly", "alltime"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-3 py-2.5 sm:py-1.5 text-xs font-medium capitalize transition-colors border-b-2 -mb-[1px] ${
-              tab === t ? "border-brand-500 text-brand-500" : "border-transparent text-stone-400 hover:text-stone-200"
+            className={`px-3 py-2 text-xs font-medium transition-colors border-b-2 -mb-[1px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
+              tab === t ? "border-accent text-accent" : "border-transparent text-muted hover:text-ink"
             }`}
           >
-            {t}
+            {tabLabels[t]}
           </button>
         ))}
       </div>
@@ -53,27 +59,35 @@ function PopularWidget() {
         {loading ? (
           [...Array(5)].map((_, i) => (
             <div key={i} className="flex gap-3 animate-pulse">
-              <div className="w-6 h-6 bg-stone-800 rounded" />
-              <div className="w-12 h-16 bg-stone-800 rounded flex-shrink-0" />
+              <div className="w-6 h-6 bg-paper-3 rounded" />
+              <div className="w-12 h-16 bg-paper-3 rounded flex-shrink-0" />
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-3 bg-stone-800 rounded w-3/4" />
-                <div className="h-2 bg-stone-800 rounded w-1/2" />
+                <div className="h-3 bg-paper-3 rounded w-3/4" />
+                <div className="h-2 bg-paper-3 rounded w-1/2" />
               </div>
             </div>
           ))
         ) : (
           data?.[tab]?.map((anime: any, i: number) => (
-            <Link href={`/anime/${anime.slug}`} key={anime.slug} className="group flex gap-3 items-center py-0.5">
-              <div className={`w-6 text-center font-black text-sm ${i === 0 ? "text-yellow-500" : i === 1 ? "text-stone-300" : i === 2 ? "text-amber-600" : "text-stone-700"}`}>
+            <Link
+              href={`/anime/${anime.slug}`}
+              key={anime.slug}
+              className="group flex gap-3 items-center py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-md"
+            >
+              <div className={`w-6 text-center font-serif text-sm num ${i === 0 ? "text-accent font-bold" : i === 1 ? "text-ink font-semibold" : i === 2 ? "text-muted font-medium" : "text-muted/60"}`}>
                 {anime.rank}
               </div>
-              <img src={proxyImg(anime.thumbnail)} alt={anime.title} className="w-12 h-16 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
+              <img
+                src={proxyImg(anime.thumbnail)}
+                alt={anime.title}
+                className="w-12 h-16 object-cover rounded bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
+              />
               <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-semibold text-stone-200 line-clamp-2 group-hover:text-brand-500 transition-colors">
+                <h4 className="text-xs font-medium text-ink line-clamp-2 group-hover:text-accent transition-colors">
                   {anime.title}
                 </h4>
                 {anime.score && (
-                  <div className="text-[10px] text-yellow-500 mt-1">★ {anime.score}</div>
+                  <div className="text-[11px] text-accent mt-1 num">★ {anime.score}</div>
                 )}
               </div>
             </Link>
@@ -90,7 +104,7 @@ function TodayScheduleWidget() {
 
   useEffect(() => {
     fetchApi<any>("/schedule").then((res) => {
-      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jum\'at','Sabtu'];
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
       const today = days[new Date().getDay()];
       const dayData = res.data.find((d: any) => d.day === today);
       setTodayData(dayData?.animes.slice(0, 6) || []);
@@ -99,41 +113,52 @@ function TodayScheduleWidget() {
   }, []);
 
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
-        <Clock weight="fill" className="text-brand-500 text-lg" />
-        <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Today's Schedule</h3>
+        <Clock weight="fill" className="text-accent text-lg" />
+        <h3 className="font-serif text-base font-medium text-ink">Jadwal hari ini</h3>
       </div>
       
       <div className="flex flex-col gap-3">
         {loading ? (
           [...Array(3)].map((_, i) => (
             <div key={i} className="flex gap-3 animate-pulse">
-              <div className="w-10 h-14 bg-stone-800 rounded flex-shrink-0" />
+              <div className="w-10 h-14 bg-paper-3 rounded flex-shrink-0" />
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-3 bg-stone-800 rounded w-full" />
-                <div className="h-2 bg-stone-800 rounded w-1/3" />
+                <div className="h-3 bg-paper-3 rounded w-full" />
+                <div className="h-2 bg-paper-3 rounded w-1/3" />
               </div>
             </div>
           ))
         ) : todayData.length > 0 ? (
           todayData.map((anime: any) => (
-            <Link href={`/anime/${anime.slug}`} key={anime.slug} className="group flex gap-3 items-center">
-              <img src={proxyImg(anime.thumbnail)} alt={anime.title} className="w-10 h-14 object-cover rounded-md bg-stone-800 group-hover:opacity-80 transition-opacity" />
+            <Link
+              href={`/anime/${anime.slug}`}
+              key={anime.slug}
+              className="group flex gap-3 items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded-md"
+            >
+              <img
+                src={proxyImg(anime.thumbnail)}
+                alt={anime.title}
+                className="w-10 h-14 object-cover rounded bg-paper-3 border border-rule group-hover:opacity-85 transition-opacity"
+              />
               <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-medium text-stone-200 line-clamp-2 group-hover:text-brand-500 transition-colors">
+                <h4 className="text-xs font-medium text-ink line-clamp-2 group-hover:text-accent transition-colors">
                   {anime.title}
                 </h4>
-                <div className="text-[10px] text-stone-500 mt-1">{anime.episodeLabel || anime.type || 'N/A'}</div>
+                <div className="text-[11px] text-muted mt-1">{anime.episodeLabel || anime.type || "N/A"}</div>
               </div>
             </Link>
           ))
         ) : (
-          <div className="text-xs text-stone-500 text-center py-4">No schedule today</div>
+          <div className="text-xs text-muted text-center py-4">Belum ada jadwal tayang hari ini</div>
         )}
       </div>
-      <Link href="/schedule" className="block text-center text-xs text-brand-500 hover:text-brand-400 mt-4 py-2 transition-colors">
-        View full schedule &rarr;
+      <Link
+        href="/schedule"
+        className="block text-center text-xs font-medium text-accent hover:underline mt-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded"
+      >
+        Lihat jadwal rilis lengkap
       </Link>
     </div>
   );
@@ -151,16 +176,16 @@ function SeasonsWidget() {
   }, []);
 
   return (
-    <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5">
+    <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
-        <CalendarBlank weight="fill" className="text-brand-500 text-lg" />
-        <h3 className="text-sm font-bold text-stone-100 tracking-wide uppercase">Seasons</h3>
+        <CalendarBlank weight="fill" className="text-accent text-lg" />
+        <h3 className="font-serif text-base font-medium text-ink">Arsip musim</h3>
       </div>
       
       <div className="flex flex-col gap-2 max-h-72 overflow-y-auto overscroll-contain pr-1">
         {loading ? (
           [...Array(6)].map((_, i) => (
-            <div key={i} className="h-8 bg-stone-800 rounded animate-pulse w-full" />
+            <div key={i} className="h-8 bg-paper-3 rounded animate-pulse w-full" />
           ))
         ) : seasons.length > 0 ? (
           <div className="grid grid-cols-2 gap-2">
@@ -168,17 +193,17 @@ function SeasonsWidget() {
               <Link 
                 href={`/season/${season.slug}`} 
                 key={season.slug} 
-                className="group flex justify-between items-center gap-2 px-3 py-2.5 sm:py-2 bg-stone-900 rounded-lg hover:bg-stone-800 transition-colors border border-stone-800"
+                className="group flex justify-between items-center gap-2 px-3 py-2 bg-paper rounded-lg hover:bg-paper-3 transition-colors border border-rule focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
               >
-                <span className="text-xs font-medium text-stone-300 group-hover:text-brand-500 transition-colors line-clamp-1">{season.label}</span>
+                <span className="text-xs font-medium text-ink-2 group-hover:text-accent transition-colors line-clamp-1">{season.label}</span>
                 {season.count > 0 && (
-                  <span className="text-[10px] text-stone-500 bg-stone-950 px-1.5 py-0.5 rounded">{season.count}</span>
+                  <span className="text-[10px] text-muted bg-paper-3 px-1.5 py-0.5 rounded num">{season.count}</span>
                 )}
               </Link>
             ))}
           </div>
         ) : (
-          <div className="text-xs text-stone-500 text-center py-4">No seasons found</div>
+          <div className="text-xs text-muted text-center py-4">Data musim tidak ditemukan</div>
         )}
       </div>
     </div>

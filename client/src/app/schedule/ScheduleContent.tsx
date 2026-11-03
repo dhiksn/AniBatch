@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchApi } from "@/lib/api";
 import { CalendarBlank } from "@phosphor-icons/react";
-import Link from "next/link";
 import { AnimeCard } from "@/components/ui/AnimeCard";
 
 export function ScheduleContent() {
@@ -28,7 +27,7 @@ export function ScheduleContent() {
     });
   }, []);
 
-  // Pastikan tab hari aktif (mis. Sabtu) terlihat di layar sempit
+  // Pastikan tab hari aktif terlihat di layar sempit
   useEffect(() => {
     const el = tabsRef.current?.querySelector<HTMLElement>('[data-active="true"]');
     el?.scrollIntoView({ inline: "center", block: "nearest" });
@@ -38,11 +37,11 @@ export function ScheduleContent() {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-3 mb-6 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-        <CalendarBlank weight="fill" className="text-brand-500 text-3xl shrink-0" />
+      <div className="flex items-center gap-3 mb-6 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+        <CalendarBlank weight="fill" className="text-accent text-3xl shrink-0" />
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Jadwal Rilis</h1>
-          <p className="text-sm text-stone-400 mt-1">Jadwal update anime terbaru setiap hari</p>
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">Jadwal rilis</h1>
+          <p className="text-sm text-muted mt-1">Jadwal update anime terbaru setiap hari</p>
         </div>
       </div>
 
@@ -50,12 +49,12 @@ export function ScheduleContent() {
         <>
           <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
             {[...Array(7)].map((_, i) => (
-              <div key={i} className="h-10 w-24 shrink-0 bg-stone-900/40 border border-stone-800/50 rounded-xl animate-pulse" />
+              <div key={i} className="h-10 w-24 shrink-0 bg-paper-2 border border-rule rounded-lg animate-pulse" />
             ))}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="aspect-[2/3] bg-stone-900/40 border border-stone-800/50 rounded-xl animate-pulse" />
+              <div key={i} className="aspect-[2/3] bg-paper-2 border border-rule rounded-xl animate-pulse" />
             ))}
           </div>
         </>
@@ -71,17 +70,17 @@ export function ScheduleContent() {
                   key={dayObj.day}
                   data-active={isActive}
                   onClick={() => setActiveDay(dayObj.day)}
-                  className={`relative shrink-0 px-4 py-2.5 sm:py-2 rounded-xl text-sm font-bold uppercase tracking-wide border transition-colors ${
+                  className={`relative shrink-0 px-4 py-2 rounded-full text-sm font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
                     isActive
-                      ? "bg-brand-500 text-stone-950 border-brand-500"
-                      : "bg-stone-900/40 text-stone-400 border-stone-800/50 hover:text-stone-200 hover:border-stone-700"
+                      ? "bg-accent text-accent-ink border-accent"
+                      : "bg-paper-2 text-muted border-rule hover:text-ink hover:border-muted"
                   }`}
                 >
                   {dayObj.day}
                   {isToday && (
                     <span
-                      className={`absolute top-0 -right-0.5 w-2.5 h-2.5 rounded-full ${
-                        isActive ? "bg-stone-950" : "bg-yellow-400"
+                      className={`absolute top-0.5 right-1 w-2 h-2 rounded-full ${
+                        isActive ? "bg-accent-ink" : "bg-accent"
                       }`}
                     />
                   )}
@@ -91,20 +90,20 @@ export function ScheduleContent() {
           </div>
 
           {/* Active day content */}
-          <section className="border rounded-2xl overflow-hidden bg-stone-900/40 border-stone-800/50">
-            <div className="border-b border-stone-800/50 px-4 sm:px-6 py-3 flex items-center justify-between bg-brand-500/10">
+          <section className="border rounded-xl overflow-hidden bg-paper-2 border-rule">
+            <div className="border-b border-rule px-4 sm:px-6 py-3.5 flex items-center justify-between bg-paper">
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-brand-500 uppercase tracking-wider">
+                <h2 className="font-serif text-lg font-medium text-ink">
                   {activeDayObj?.day}
                 </h2>
                 {activeDay === today && (
-                  <span className="bg-yellow-400 text-stone-900 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wide">
+                  <span className="bg-accent text-accent-ink text-[11px] font-medium px-2 py-0.5 rounded-full">
                     Hari ini
                   </span>
                 )}
               </div>
-              <span className="text-xs font-medium text-brand-500/60">
-                {activeDayObj?.animes.length ?? 0} Anime
+              <span className="text-xs font-medium text-muted num">
+                {activeDayObj?.animes.length ?? 0} anime
               </span>
             </div>
 
@@ -115,7 +114,7 @@ export function ScheduleContent() {
                 ))}
               </div>
             ) : (
-              <div className="p-6 text-sm text-stone-500 italic text-center">
+              <div className="p-6 text-sm text-muted italic text-center">
                 Libur, tidak ada anime hari ini.
               </div>
             )}

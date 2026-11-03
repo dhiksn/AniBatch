@@ -1,27 +1,52 @@
-@import "tailwindcss";
+/* Hallmark · shape: Workbench · genre: atmospheric · theme: Kiln · redesign: full
+ * hero: Stage · nav: edge-aligned · footer: mast · imagery: none · signature: ember-catalog-wells · kiln: ember
+ * axes: dark/high-contrast-serif/warm · posture: full-palette · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: H, refined hero typography hierarchy */
 
-@theme {
-  --color-brand-50: #fff7ed;
-  --color-brand-100: #ffedd5;
-  --color-brand-200: #fed7aa;
-  --color-brand-300: #fdba74;
-  --color-brand-400: #fb923c;
-  --color-brand-500: #f97316;
-  --color-brand-600: #ea580c;
-  --color-brand-700: #c2410c;
-  --color-brand-800: #9a3412;
-  --color-brand-900: #7c2d12;
-  --color-brand-950: #431407;
-  
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./base.css" layer(base);
+
+@theme static {
+  --color-paper: oklch(13% 0.012 40);
+  --color-paper-2: oklch(17.5% 0.016 40);
+  --color-paper-3: oklch(22% 0.018 40);
+  --color-ink: oklch(94% 0.02 80);
+  --color-ink-2: oklch(84% 0.025 70);
+  --color-muted: oklch(72% 0.03 60);
+  --color-rule: oklch(96% 0.01 80 / 0.12);
+  --color-accent: oklch(70% 0.2 45);
+  --color-accent-ink: oklch(14% 0.02 40);
+  --color-focus: oklch(76% 0.19 56);
+  --color-error: oklch(72% 0.15 27);
+  --color-success: oklch(76% 0.13 150);
+
+  --heat-0: oklch(12% 0.012 40);
+  --heat-1: oklch(22% 0.07 22);
+  --heat-2: oklch(40% 0.16 27);
+  --heat-3: oklch(60% 0.21 36);
+  --heat-4: oklch(76% 0.19 56);
+  --heat-5: oklch(89% 0.14 78);
+  --heat-6: oklch(98% 0.04 95);
+
+  --font-display: "Boska", "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-geist-sans), "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+
+  --radius-card: 20px;
+  --radius-well: 12px;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
 }
 
 :root {
-  /* Dark mode locked */
-  --background: var(--color-stone-950);
-  --foreground: var(--color-stone-200);
-  --nav-h: 64px; /* Navbar height for sticky positioning */
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --nav-h: 64px;
+}
+
+html, body {
+  overflow-x: clip;
 }
 
 html {
@@ -29,26 +54,27 @@ html {
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for a premium feel */
+/* Custom scrollbar matching Kiln palette */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-stone-950);
+  background: var(--color-paper);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-stone-800);
+  background: var(--color-paper-3);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-stone-700);
+  background: var(--color-muted);
 }
 
 a,
@@ -57,7 +83,7 @@ button,
   touch-action: manipulation;
 }
 
-/* iOS Safari zoom otomatis ke input yang font-nya < 16px */
+/* Input font size for mobile zoom prevention */
 @media (max-width: 767px) {
   input,
   select,
@@ -67,6 +93,10 @@ button,
 }
 
 @layer utilities {
+  .nowrap,
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

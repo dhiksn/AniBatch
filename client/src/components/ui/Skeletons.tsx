@@ -13,10 +13,10 @@ export function CardGridSkeleton({ count = 12 }: { count?: number }) {
 export function CardSkeleton() {
   return (
     <div className="flex flex-col gap-3 animate-pulse">
-      <div className="aspect-[2/3] w-full bg-stone-900 rounded-xl border border-stone-800/50" />
+      <div className="aspect-[2/3] w-full bg-paper-2 rounded-xl border border-rule" />
       <div className="space-y-2">
-        <div className="h-4 bg-stone-800 rounded w-full" />
-        <div className="h-4 bg-stone-800 rounded w-2/3" />
+        <div className="h-4 bg-paper-3 rounded w-full" />
+        <div className="h-4 bg-paper-3 rounded w-2/3" />
       </div>
     </div>
   );
@@ -24,13 +24,13 @@ export function CardSkeleton() {
 
 export function HeroSkeleton() {
   return (
-    <div className="w-full bg-stone-900/40 border border-stone-800/50 rounded-2xl p-6 sm:p-10 animate-pulse">
+    <div className="w-full bg-paper-2 border border-rule rounded-xl p-6 sm:p-10 animate-pulse">
       <div className="max-w-2xl space-y-4">
-        <div className="h-8 bg-stone-800 rounded w-1/3" />
-        <div className="h-12 bg-stone-800 rounded w-3/4" />
-        <div className="h-4 bg-stone-800 rounded w-full mt-4" />
-        <div className="h-4 bg-stone-800 rounded w-5/6" />
-        <div className="h-10 bg-stone-800 rounded w-32 mt-6" />
+        <div className="h-8 bg-paper-3 rounded w-1/3" />
+        <div className="h-12 bg-paper-3 rounded w-3/4" />
+        <div className="h-4 bg-paper-3 rounded w-full mt-4" />
+        <div className="h-4 bg-paper-3 rounded w-5/6" />
+        <div className="h-10 bg-paper-3 rounded w-32 mt-6" />
       </div>
     </div>
   );

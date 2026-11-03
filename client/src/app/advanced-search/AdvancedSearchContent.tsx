@@ -10,13 +10,13 @@ import { MagnifyingGlass, CaretLeft, CaretRight, CaretDown, X, Check } from "@ph
 
 /* ── option sets ── */
 const STATUS_OPTIONS = [
-  { value: "", label: "Semua Status" },
+  { value: "", label: "Semua status" },
   { value: "ongoing", label: "Ongoing" },
   { value: "completed", label: "Completed" },
   { value: "upcoming", label: "Upcoming" },
 ];
 const TYPE_OPTIONS = [
-  { value: "", label: "Semua Tipe" },
+  { value: "", label: "Semua tipe" },
   { value: "tv", label: "TV" },
   { value: "movie", label: "Movie" },
   { value: "bd", label: "BD" },
@@ -26,13 +26,13 @@ const TYPE_OPTIONS = [
   { value: "series", label: "Series" },
 ];
 const ORDER_OPTIONS = [
-  { value: "", label: "Default" },
+  { value: "", label: "Urutan bawaan" },
   { value: "title", label: "Judul A-Z" },
   { value: "titlereverse", label: "Judul Z-A" },
-  { value: "update", label: "Terbaru Update" },
-  { value: "added", label: "Terbaru Ditambah" },
-  { value: "popular", label: "Terpopuler" },
-  { value: "rating", label: "Rating Tertinggi" },
+  { value: "update", label: "Pembaruan terbaru" },
+  { value: "added", label: "Terbaru ditambah" },
+  { value: "popular", label: "Paling populer" },
+  { value: "rating", label: "Rating tertinggi" },
 ];
 
 /* ── single-select dropdown ── */
@@ -52,10 +52,10 @@ function Select({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium border transition-colors ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
           value
-            ? "bg-brand-500/10 border-brand-500/40 text-brand-400"
-            : "bg-stone-900 border-stone-800 text-stone-300 hover:border-stone-700"
+            ? "bg-accent/15 border-accent/40 text-accent"
+            : "bg-paper-3 border-rule text-ink-2 hover:border-muted"
         }`}
       >
         {current.label}
@@ -63,16 +63,16 @@ function Select({
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-[70] bg-stone-950/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
-          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-stone-900 border-t border-stone-800 rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:overflow-hidden sm:max-h-none sm:min-w-[150px]">
+          <div className="fixed inset-0 z-[70] bg-black/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:overflow-hidden sm:max-h-none sm:min-w-[160px]">
             {options.map((o) => (
               <button
                 key={o.value}
                 onClick={() => { onChange(o.value); setOpen(false); }}
-                className={`w-full text-left px-5 sm:px-4 py-3.5 sm:py-2 text-sm sm:text-xs transition-colors ${
+                className={`w-full text-left px-5 sm:px-4 py-3 sm:py-2 text-sm sm:text-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
                   o.value === value
-                    ? "text-brand-500 bg-brand-500/10 font-semibold"
-                    : "text-stone-300 hover:bg-stone-800"
+                    ? "text-accent bg-paper-3 font-semibold"
+                    : "text-ink-2 hover:bg-paper"
                 }`}
               >
                 {o.label}
@@ -104,10 +104,10 @@ function MultiSelect({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium border transition-colors ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
           count > 0
-            ? "bg-brand-500/10 border-brand-500/40 text-brand-400"
-            : "bg-stone-900 border-stone-800 text-stone-300 hover:border-stone-700"
+            ? "bg-accent/15 border-accent/40 text-accent"
+            : "bg-paper-3 border-rule text-ink-2 hover:border-muted"
         }`}
       >
         {label}{count > 0 ? ` (${count})` : ""}
@@ -115,16 +115,16 @@ function MultiSelect({
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-[70] bg-stone-950/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
-          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-stone-900 border-t border-stone-800 rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:min-w-[180px] sm:max-h-64">
+          <div className="fixed inset-0 z-[70] bg-black/60 sm:z-10 sm:bg-transparent" onClick={() => setOpen(false)} />
+          <div className="fixed inset-x-0 bottom-0 z-[80] max-h-[70dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] bg-paper-2 border-t border-rule rounded-t-2xl shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:mt-1 sm:z-20 sm:pb-0 sm:border sm:rounded-xl sm:shadow-xl sm:min-w-[190px] sm:max-h-64">
             {options.map((o) => {
               const active = selected.has(o.value);
               return (
                 <button
                   key={o.value}
                   onClick={() => onToggle(o.value)}
-                  className={`w-full text-left px-5 sm:px-4 py-3.5 sm:py-2 text-sm sm:text-xs transition-colors flex items-center justify-between gap-2 ${
-                    active ? "text-brand-500 bg-brand-500/10" : "text-stone-300 hover:bg-stone-800"
+                  className={`w-full text-left px-5 sm:px-4 py-3 sm:py-2 text-sm sm:text-xs transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus ${
+                    active ? "text-accent bg-paper-3 font-semibold" : "text-ink-2 hover:bg-paper"
                   }`}
                 >
                   {o.label}
@@ -156,10 +156,8 @@ export function AdvancedSearchContent() {
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // id request terakhir — respons dari request lama diabaikan
   const reqId = useRef(0);
 
-  // Load genre & season options once
   useEffect(() => {
     fetchApi<any>("/genre").then((res) =>
       setGenreOptions(res.data.map((g: any) => ({ value: g.slug, label: g.name })))
@@ -192,7 +190,7 @@ export function AdvancedSearchContent() {
     setLoading(true);
     fetchApi<any>(`/advanced-search?${qs}`)
       .then((res) => {
-        if (id !== reqId.current) return; // abaikan respons usang
+        if (id !== reqId.current) return;
         setData(res.data ?? []);
         setPagination(res.pagination ?? null);
         setLoading(false);
@@ -210,7 +208,6 @@ export function AdvancedSearchContent() {
     fetchSearch(pg, status, type, order, title, genres, seasons, true);
   }
 
-  // Re-init setiap kali user navigasi ke halaman ini (pathname change ke /advanced-search)
   useEffect(() => {
     if (!pathname.startsWith("/advanced-search")) return;
     const sp = new URLSearchParams(window.location.search);
@@ -234,7 +231,6 @@ export function AdvancedSearchContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  /* ── handler filter: set state + langsung search (tanpa effect) ── */
   function changeStatus(v: string) {
     setStatus(v);
     fetchSearch(1, v, type, order, title, genres, seasons);
@@ -278,12 +274,12 @@ export function AdvancedSearchContent() {
       <main className="w-full lg:flex-1 min-w-0">
 
         {/* Filter bar */}
-        <div className="bg-stone-900/40 border border-stone-800/50 rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8">
+        <div className="bg-paper-2 border border-rule rounded-xl p-4 sm:p-5 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <MagnifyingGlass weight="bold" className="text-brand-500 text-3xl shrink-0" />
+            <MagnifyingGlass weight="bold" className="text-accent text-2xl shrink-0" />
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Advanced Search</h1>
-              <p className="text-sm text-stone-400 mt-1">Cari anime dengan filter status, tipe, genre, dan musim</p>
+              <h1 className="font-serif text-2xl font-medium text-ink tracking-tight break-words">Pencarian lanjutan</h1>
+              <p className="text-sm text-muted mt-1">Cari anime dengan filter status, tipe, genre, dan musim</p>
             </div>
           </div>
 
@@ -302,7 +298,7 @@ export function AdvancedSearchContent() {
             )}
             {seasonOptions.length > 0 && (
               <MultiSelect
-                label="Season"
+                label="Musim"
                 selected={seasons}
                 options={seasonOptions}
                 onToggle={toggleSeason}
@@ -312,7 +308,7 @@ export function AdvancedSearchContent() {
             {hasFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-300 border border-stone-800 hover:border-stone-700 transition-colors"
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium text-muted hover:text-ink border border-rule hover:border-muted transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
               >
                 <X size={11} weight="bold" /> Reset
               </button>
@@ -320,7 +316,7 @@ export function AdvancedSearchContent() {
 
             <button
               onClick={() => doSearch(1)}
-              className="ml-auto flex items-center justify-center gap-2 px-5 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-brand-500 hover:bg-brand-400 text-stone-50 transition-colors"
+              className="ml-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium bg-accent text-accent-ink hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <MagnifyingGlass weight="bold" size={13} /> Cari
             </button>
@@ -343,18 +339,20 @@ export function AdvancedSearchContent() {
                 <button
                   onClick={() => doSearch(page - 1)}
                   disabled={!pagination.hasPrev}
-                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  aria-label="Halaman sebelumnya"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretLeft weight="bold" size={16} />
                 </button>
-                <div className="text-sm font-medium text-stone-400">
-                  Halaman <span className="text-stone-100">{pagination.page}</span> dari{" "}
-                  <span className="text-stone-100">{pagination.totalPages}</span>
+                <div className="text-sm font-medium text-muted num">
+                  Halaman <span className="text-ink font-semibold">{pagination.page}</span> dari{" "}
+                  <span className="text-ink font-semibold">{pagination.totalPages}</span>
                 </div>
                 <button
                   onClick={() => doSearch(page + 1)}
                   disabled={!pagination.hasNext}
-                  className="w-11 h-11 sm:w-10 sm:h-10 shrink-0 flex items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-800 hover:text-brand-500 transition-colors"
+                  aria-label="Halaman berikutnya"
+                  className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-paper-2 border border-rule text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   <CaretRight weight="bold" size={16} />
                 </button>
@@ -362,7 +360,7 @@ export function AdvancedSearchContent() {
             )}
           </>
         ) : !loading ? (
-          <div className="text-center py-20 text-stone-500 border border-dashed border-stone-800 rounded-2xl">
+          <div className="text-center py-20 text-muted border border-dashed border-rule rounded-xl">
             Tidak ada hasil ditemukan. Coba ubah filter atau kata kunci.
           </div>
         ) : null}

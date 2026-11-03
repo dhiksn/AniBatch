@@ -36,11 +36,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // viewportFit "cover" + env(safe-area-inset-*) di globals.css menangani notch / home indicator iOS.
-  // maximumScale sengaja dihapus agar pengguna tetap bisa zoom (aksesibilitas);
-  // zoom otomatis iOS saat fokus input dicegah lewat font-size 16px di globals.css.
   viewportFit: "cover",
-  themeColor: "#0c0a09",
+  themeColor: "#1d1917",
 };
 
 export default function RootLayout({
@@ -53,7 +50,13 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-dvh flex flex-col">
+      <head>
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=boska@500,600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-dvh flex flex-col bg-paper text-ink overflow-x-clip">
         <Navbar />
         <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 pt-4 sm:pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           {children}

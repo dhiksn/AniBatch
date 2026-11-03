@@ -26,27 +26,30 @@ export function GenreListContent() {
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0">
-        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-          <Tag weight="fill" className="text-brand-500 text-3xl shrink-0" />
+        <div className="flex items-center gap-3 mb-6 sm:mb-8 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+          <Tag weight="fill" className="text-accent text-3xl shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Daftar Genre</h1>
-            <p className="text-sm text-stone-400 mt-1">Jelajahi anime berdasarkan genre</p>
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">Daftar genre</h1>
+            <p className="text-sm text-muted mt-1">Jelajahi anime berdasarkan kategori dan genre</p>
           </div>
         </div>
 
         {loading ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2.5">
             {[...Array(30)].map((_, i) => (
-              <div key={i} className="h-10 w-24 bg-stone-900 rounded-full animate-pulse border border-stone-800/50" />
+              <div key={i} className="h-9 w-24 bg-paper-2 rounded-full animate-pulse border border-rule" />
             ))}
           </div>
         ) : error ? (
           <ErrorState message={error} onRetry={load} />
         ) : (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2.5">
             {data.map((genre: any, i: number) => (
-              <motion.div key={genre.slug} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.01 }}>
-                <Link href={`/genre/${genre.slug}`} className="block bg-stone-900/50 border border-stone-800/80 hover:bg-brand-500 hover:border-brand-500 hover:text-stone-50 px-5 py-2 rounded-full text-sm font-medium text-stone-300 transition-colors">
+              <motion.div key={genre.slug} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.01, duration: 0.2 }}>
+                <Link
+                  href={`/genre/${genre.slug}`}
+                  className="block bg-paper-2 border border-rule hover:border-accent hover:text-accent px-4 py-2 rounded-full text-xs font-medium text-ink-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+                >
                   {genre.name}
                 </Link>
               </motion.div>

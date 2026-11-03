@@ -40,7 +40,6 @@ export function AnimeListContent() {
   function scrollToLetter(letter: string) {
     const el = sectionRefs.current[letter];
     if (!el) return;
-    // tinggi navbar (+ safe area) dibaca dari scroll-padding-top, plus tinggi bar huruf yang sticky
     const navH = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 64;
     const offset = navH + (letterBarRef.current?.offsetHeight ?? 60) + 8;
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
@@ -48,20 +47,24 @@ export function AnimeListContent() {
 
   return (
     <main className="w-full">
-      <div className="flex items-center gap-3 mb-6 bg-stone-900/40 p-4 sm:p-6 rounded-2xl border border-stone-800/50">
-        <ListBullets weight="fill" className="text-brand-500 text-3xl shrink-0" />
+      <div className="flex items-center gap-3 mb-6 bg-paper-2 p-4 sm:p-6 rounded-xl border border-rule">
+        <ListBullets weight="fill" className="text-accent text-3xl shrink-0" />
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-black text-stone-100 tracking-tight break-words">Daftar Anime</h1>
-          <p className="text-sm text-stone-400 mt-1">Semua anime diurutkan berdasarkan huruf</p>
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink tracking-tight break-words">Daftar anime</h1>
+          <p className="text-sm text-muted mt-1">Semua anime diurutkan berdasarkan abjad A-Z</p>
         </div>
       </div>
 
       <div
         ref={letterBarRef}
-        className="flex flex-nowrap overflow-x-auto hide-scrollbar sm:flex-wrap sm:justify-center gap-1.5 mb-6 sm:mb-8 sticky top-[var(--nav-h)] z-10 bg-stone-950/90 backdrop-blur py-3 -mx-4 px-4 sm:mx-0 sm:px-0"
+        className="flex flex-nowrap overflow-x-auto hide-scrollbar sm:flex-wrap sm:justify-center gap-1.5 mb-6 sm:mb-8 sticky top-[var(--nav-h)] z-10 bg-paper/95 py-3 -mx-4 px-4 sm:mx-0 sm:px-0 border-b border-rule"
       >
         {LETTERS.map((l) => (
-          <button key={l} onClick={() => scrollToLetter(l)} className="w-10 h-10 sm:w-9 sm:h-9 shrink-0 rounded-lg text-sm font-bold bg-stone-900 border border-stone-800 text-stone-400 hover:border-brand-500 hover:text-brand-500 transition-colors">
+          <button
+            key={l}
+            onClick={() => scrollToLetter(l)}
+            className="w-10 h-10 sm:w-9 sm:h-9 shrink-0 rounded-lg text-xs font-semibold bg-paper-2 border border-rule text-muted hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus"
+          >
             {l}
           </button>
         ))}
@@ -69,7 +72,7 @@ export function AnimeListContent() {
 
       {loading ? (
         <div className="flex flex-col gap-6">
-          {[...Array(5)].map((_, i) => <div key={i} className="h-32 bg-stone-900/40 rounded-2xl animate-pulse border border-stone-800/50" />)}
+          {[...Array(5)].map((_, i) => <div key={i} className="h-32 bg-paper-2 rounded-xl animate-pulse border border-rule" />)}
         </div>
       ) : error ? (
         <ErrorState message={error} onRetry={load} />
@@ -77,12 +80,16 @@ export function AnimeListContent() {
         <div className="flex flex-col gap-10">
           {groups.map((group) => (
             <div key={group.letter} ref={(el) => { sectionRefs.current[group.letter] = el; }}>
-              <div className="text-base font-black text-stone-300 mb-3 pb-2 border-b border-stone-700">{group.letter}</div>
+              <div className="font-serif text-xl font-medium text-ink mb-3 pb-2 border-b border-rule">{group.letter}</div>
               <div className="columns-1 sm:columns-2 gap-x-10">
                 {group.animes.map((anime: any) => (
-                  <Link key={anime.slug} href={`/anime/${anime.slug}`} className="flex items-start gap-2 py-2 sm:py-1 text-sm text-stone-400 transition-colors group break-inside-avoid">
-                    <span className="text-stone-600 shrink-0 mt-0.5">•</span>
-                    <span className="leading-snug group-hover:text-brand-500 transition-colors">{anime.title}</span>
+                  <Link
+                    key={anime.slug}
+                    href={`/anime/${anime.slug}`}
+                    className="flex items-start gap-2 py-2 sm:py-1 text-sm text-ink-2 transition-colors group break-inside-avoid focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus rounded"
+                  >
+                    <span className="text-muted shrink-0 mt-0.5">•</span>
+                    <span className="leading-snug group-hover:text-accent transition-colors">{anime.title}</span>
                   </Link>
                 ))}
               </div>
