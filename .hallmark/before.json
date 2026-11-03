@@ -1,0 +1,458 @@
+{
+ "v": 1,
+ "at": "2026-11-03T04:53:47.593Z",
+ "scope": "page",
+ "summary": {
+  "fails": 4,
+  "reflex": 3,
+  "warns": 3
+ },
+ "files": {
+  "client\\src\\app\\advanced-search\\AdvancedSearchContent.tsx": {
+   "handlers": [
+    "onChange={changeOrder}",
+    "onChange={changeStatus}",
+    "onChange={changeType}",
+    "onClick={() => doSearch(1)}",
+    "onClick={() => doSearch(page + 1)}",
+    "onClick={() => doSearch(page - 1)}",
+    "onClick={() => onToggle(o.value)}",
+    "onClick={() => setOpen(!open)}",
+    "onClick={() => setOpen(false)}",
+    "onClick={() => { onChange(o.value); setOpen(false); }}",
+    "onClick={clearFilters}",
+    "onToggle={toggleGenre}",
+    "onToggle={toggleSeason}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\advanced-search\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\anime\\[slug]\\AnimeDetailContent.tsx": {
+   "handlers": [
+    "onClick={() => setIsExpanded(!isExpanded)}",
+    "onClick={() => setOpenIndex(isOpen ? null : i)}"
+   ],
+   "links": [
+    "{`/cast/${c.slug}`}",
+    "{`/genre/${g.slug}`}",
+    "{`/season/${data.season.toLowerCase().replace(/\\s+/g, \"-\")}`}",
+    "{m.url}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\anime\\[slug]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\anime-list\\AnimeListContent.tsx": {
+   "handlers": [
+    "onClick={() => scrollToLetter(l)}",
+    "onRetry={load}"
+   ],
+   "links": [
+    "{`/anime/${anime.slug}`}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\anime-list\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\HomePageContent.tsx": {
+   "handlers": [
+    "onClick={() => loadLatestPage(currentPage + 1)}",
+    "onClick={() => loadLatestPage(currentPage - 1)}"
+   ],
+   "links": [
+    "/advanced-search?status=completed&order=update",
+    "/advanced-search?type[]=movie&order=update"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [
+    "sec-latest"
+   ],
+   "scripts": []
+  },
+  "client\\src\\app\\layout.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\not-found.tsx": {
+   "handlers": [],
+   "links": [
+    "/"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\cast\\[slug]\\CastContent.tsx": {
+   "handlers": [
+    "onClick={() => handlePageChange(page + 1)}",
+    "onClick={() => handlePageChange(page - 1)}",
+    "onRetry={() => load(page)}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\cast\\[slug]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\cast\\[slug]\\page\\[page]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\genre\\[slug]\\GenreDetailContent.tsx": {
+   "handlers": [
+    "onClick={() => handlePageChange(page + 1)}",
+    "onClick={() => handlePageChange(page - 1)}",
+    "onRetry={() => load(page)}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\genre\\[slug]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\genre\\[slug]\\page\\[page]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\genre-list\\GenreListContent.tsx": {
+   "handlers": [
+    "onRetry={load}"
+   ],
+   "links": [
+    "{`/genre/${genre.slug}`}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\genre-list\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\page\\[page]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\popular\\page\\[page]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\popular\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\popular\\PopularContent.tsx": {
+   "handlers": [
+    "onClick={() => handlePageChange(page + 1)}",
+    "onClick={() => handlePageChange(page - 1)}",
+    "onRetry={() => load(page)}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\schedule\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\schedule\\ScheduleContent.tsx": {
+   "handlers": [
+    "onClick={() => setActiveDay(dayObj.day)}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\search\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\search\\SearchContent.tsx": {
+   "handlers": [
+    "onClick={() => handlePageChange(page + 1)}",
+    "onClick={() => handlePageChange(page - 1)}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\search\\[q]\\page\\[page]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\season\\[slug]\\page.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\app\\season\\[slug]\\SeasonContent.tsx": {
+   "handlers": [
+    "onRetry={load}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\components\\layout\\Navbar.tsx": {
+   "handlers": [
+    "onChange={e => { setQuery(e.target.value); setActiveIdx(-1); }}",
+    "onClick={() => setMenuOpen(true)}",
+    "onClick={() => setSearchOpen(true)}",
+    "onClick={() => { router.push(`/anime/${anime.slug}`); onClose(); }}",
+    "onClick={() => { setQuery(\"\"); setResults([]); inputRef.current?.focus(); }}",
+    "onClick={e => { if (e.target === e.currentTarget) onClose(); }}",
+    "onClick={goSearch}",
+    "onClick={onClose}",
+    "onClose={() => setMenuOpen(false)}",
+    "onClose={() => setSearchOpen(false)}",
+    "onSubmit={e => { e.preventDefault(); goSearch(); }}"
+   ],
+   "links": [
+    "/",
+    "{href}",
+    "{item.href}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\components\\layout\\Sidebar.tsx": {
+   "handlers": [
+    "onClick={() => setTab(t)}"
+   ],
+   "links": [
+    "/schedule",
+    "{`/anime/${anime.slug}`}",
+    "{`/season/${season.slug}`}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\components\\ui\\AnimeCard.tsx": {
+   "handlers": [],
+   "links": [
+    "{`/anime/${anime.slug}`}"
+   ],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\components\\ui\\ErrorState.tsx": {
+   "handlers": [
+    "onClick={onRetry}"
+   ],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  },
+  "client\\src\\components\\ui\\Skeletons.tsx": {
+   "handlers": [],
+   "links": [],
+   "fields": [],
+   "hooks": [],
+   "ids": [],
+   "scripts": []
+  }
+ },
+ "wiring": {
+  "handlers": [
+   "onChange={changeOrder}",
+   "onChange={changeStatus}",
+   "onChange={changeType}",
+   "onChange={e => { setQuery(e.target.value); setActiveIdx(-1); }}",
+   "onClick={() => doSearch(1)}",
+   "onClick={() => doSearch(page + 1)}",
+   "onClick={() => doSearch(page - 1)}",
+   "onClick={() => handlePageChange(page + 1)}",
+   "onClick={() => handlePageChange(page - 1)}",
+   "onClick={() => loadLatestPage(currentPage + 1)}",
+   "onClick={() => loadLatestPage(currentPage - 1)}",
+   "onClick={() => onToggle(o.value)}",
+   "onClick={() => scrollToLetter(l)}",
+   "onClick={() => setActiveDay(dayObj.day)}",
+   "onClick={() => setIsExpanded(!isExpanded)}",
+   "onClick={() => setMenuOpen(true)}",
+   "onClick={() => setOpen(!open)}",
+   "onClick={() => setOpen(false)}",
+   "onClick={() => setOpenIndex(isOpen ? null : i)}",
+   "onClick={() => setSearchOpen(true)}",
+   "onClick={() => setTab(t)}",
+   "onClick={() => { onChange(o.value); setOpen(false); }}",
+   "onClick={() => { router.push(`/anime/${anime.slug}`); onClose(); }}",
+   "onClick={() => { setQuery(\"\"); setResults([]); inputRef.current?.focus(); }}",
+   "onClick={clearFilters}",
+   "onClick={e => { if (e.target === e.currentTarget) onClose(); }}",
+   "onClick={goSearch}",
+   "onClick={onClose}",
+   "onClick={onRetry}",
+   "onClose={() => setMenuOpen(false)}",
+   "onClose={() => setSearchOpen(false)}",
+   "onRetry={() => load(page)}",
+   "onRetry={load}",
+   "onSubmit={e => { e.preventDefault(); goSearch(); }}",
+   "onToggle={toggleGenre}",
+   "onToggle={toggleSeason}"
+  ],
+  "links": [
+   "/",
+   "/advanced-search?status=completed&order=update",
+   "/advanced-search?type[]=movie&order=update",
+   "/schedule",
+   "{`/anime/${anime.slug}`}",
+   "{`/cast/${c.slug}`}",
+   "{`/genre/${g.slug}`}",
+   "{`/genre/${genre.slug}`}",
+   "{`/season/${data.season.toLowerCase().replace(/\\s+/g, \"-\")}`}",
+   "{`/season/${season.slug}`}",
+   "{href}",
+   "{item.href}",
+   "{m.url}"
+  ],
+  "fields": [],
+  "hooks": [],
+  "ids": [
+   "sec-latest"
+  ]
+ },
+ "scripts": {},
+ "pages": {
+  "http://localhost:3000/": {
+   "links": [
+    "/",
+    "/anime-list",
+    "/genre-list",
+    "/popular",
+    "/advanced-search",
+    "/schedule"
+   ],
+   "fields": [],
+   "actions": [],
+   "forms": [],
+   "hooked": [],
+   "headings": [
+    "lagi hangat",
+    "rilisan terbaru",
+    "anime populer",
+    "jadwal hari ini",
+    "arsip musim"
+   ],
+   "figures": [],
+   "images": [],
+   "controls": 6,
+   "words": 32
+  }
+ }
+}

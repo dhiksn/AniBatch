@@ -51,14 +51,25 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
       <main className="w-full lg:flex-1 min-w-0 flex flex-col gap-8">
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-paper-2 border border-rule rounded-xl p-4 sm:p-8">
-          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.25 }} className="w-40 sm:w-48 md:w-56 mx-auto md:mx-0 shrink-0">
+        <div className="relative overflow-hidden flex flex-col md:flex-row gap-6 md:gap-8 bg-paper-2 border border-rule rounded-xl p-4 sm:p-8">
+          {/* Ambient backdrop poster */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <img
+              src={proxyImg(data.thumbnail)}
+              alt=""
+              className="w-full h-full object-cover opacity-15 filter blur-2xl scale-110"
+              aria-hidden="true"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-paper-2 via-paper-2/90 to-transparent" />
+          </div>
+
+          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.25 }} className="relative z-10 w-40 sm:w-48 md:w-56 mx-auto md:mx-0 shrink-0">
             <div className="aspect-[2/3] w-full bg-paper-3 rounded-xl overflow-hidden border border-rule shadow-md">
               <img src={proxyImg(data.thumbnail)} alt={data.title} className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
-          <div className="flex-1 min-w-0 flex flex-col gap-5">
+          <div className="relative z-10 flex-1 min-w-0 flex flex-col gap-5">
             <div>
               <h1 className="font-serif text-2xl sm:text-4xl font-medium tracking-tight text-ink break-words text-center md:text-left">
                 {data.title}
