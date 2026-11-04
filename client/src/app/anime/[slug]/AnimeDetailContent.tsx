@@ -71,11 +71,26 @@ export function AnimeDetailContent({ slug }: { slug: string }) {
 
           <div className="relative z-10 flex-1 min-w-0 flex flex-col gap-5">
             <div>
-              <h1 className="font-serif text-2xl sm:text-4xl tracking-tight text-ink break-words text-center md:text-left">
-                {data.title}
-              </h1>
+              {(() => {
+                // Pisahkan "Episode (XX) Sub Indo" atau "Batch Sub Indo" dari judul
+                const epMatch = data.title.match(/^(.*?)\s+((?:Episode\s*\(?\d+\)?|Batch)(?:\s+Sub\s+Indo)?)\s*$/i);
+                const cleanTitle = epMatch ? epMatch[1].trim() : data.title;
+                const epLabel   = epMatch ? epMatch[2].trim() : null;
+                return (
+                  <>
+                    <h1 className="font-serif text-2xl sm:text-4xl tracking-tight text-ink text-center md:text-left line-clamp-3">
+                      {cleanTitle}
+                    </h1>
+                    {epLabel && (
+                      <div className="mt-1.5 text-sm font-medium text-accent text-center md:text-left">
+                        {epLabel}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
               {data.alternativeTitle && (
-                <div className="text-sm font-normal text-muted mt-1 break-words text-center md:text-left">
+                <div className="text-sm font-normal text-muted mt-1 break-words text-center md:text-left line-clamp-2">
                   {data.alternativeTitle}
                 </div>
               )}
