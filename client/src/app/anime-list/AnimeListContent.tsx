@@ -6,7 +6,7 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { ListBullets } from "@phosphor-icons/react";
 import Link from "next/link";
 
-const LETTERS = ["#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+const LETTERS = ["#","0-9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
 export function AnimeListContent() {
   const [groups, setGroups] = useState<{ letter: string; animes: any[] }[]>([]);
@@ -22,7 +22,7 @@ export function AnimeListContent() {
       .then((res) => {
         const merged: Record<string, any[]> = {};
         for (const group of (res.data ?? [])) {
-          const key = group.letter.toUpperCase();
+          const key = group.letter;
           if (!merged[key]) merged[key] = [];
           merged[key].push(...(group.animes ?? []));
         }

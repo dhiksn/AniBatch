@@ -3,23 +3,25 @@ const { sendSuccess, sendError } = require('../utils/response');
 
 // GET /api/list
 // GET /api/list?letter=A
+// GET /api/list?letter=0-9   (numeric titles)
+// GET /api/list?letter=%23   (# — symbol/special titles)
 async function list(req, res) {
   const { letter } = req.query;
 
-  // Validate letter param if provided
   if (letter !== undefined) {
-    if (typeof letter !== 'string' || !/^[a-zA-Z0-9#]$/.test(letter)) {
+    // Accept: single letter A-Z, '#', or the string '0-9'
+    if (typeof letter !== 'string' || !/^([a-zA-Z#]|0-9)$/.test(letter)) {
       return sendError(
         res,
         400,
         'BAD_REQUEST',
-        'Parameter "letter" harus berupa satu huruf (A-Z), angka (0-9), atau "#"'
+        'Parameter "letter" harus berupa satu huruf (A-Z), "0-9", atau "#"'
       );
     }
   }
 
   try {
-    const data = await getAnimeList(letter ? letter.toUpperCase() : null);
+    const data = await getAnimeList(letter || null);
     return sendSuccess(res, data);
   } catch (err) {
     const statusCode = err.statusCode || 500;

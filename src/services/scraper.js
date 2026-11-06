@@ -317,47 +317,60 @@ async function getAnimeList(letter = null) {
   const cached = cache.get(key);
   if (cached !== undefined) return cached;
 
-  const html = await fetchPage('/daftar-anime/');
-
   const cheerio = require('cheerio');
-  const $ = cheerio.load(html);
-
-  // Structure: .soralist > .blix (one per letter group)
-  //   .blix > span > a[name="A"]  — letter anchor
-  //   .blix > ul > li > a.series  — anime link
   const groups = [];
 
-  $('.soralist .blix').each((_, blixEl) => {
-    const $blix = $(blixEl);
+  if (letter) {
+    // '#' → ?show=.  |  '0-9' → ?show=0-9  |  letter → ?show=A etc
+    const showParam = letter === '#' ? '.' : letter === '0-9' ? '0-9' : letter.toUpperCase();
+    const html = await fetchPage(`/az-lists/?show=${encodeURIComponent(showParam)}`);
+    const $ = cheerio.load(html);
 
-    // Letter label from anchor name attribute
-    const letterLabel = $blix.find('span a[name]').first().attr('name') || '';
-    // Normalise: skip nav-only anchors that have no list items
     const items = [];
-
-    $blix.find('ul li a.series').each((__, aEl) => {
-      const title = $(aEl).text().trim();
-      const href  = resolveUrl($(aEl).attr('href') || '');
-      const slug  = urlToSlug(href);
-      if (title && slug) items.push({ title, slug, url: href });
+    $('article.bs').each((_, el) => {
+      const item = parseAnimeCard($, el);
+      if (item.title && item.slug) items.push({ title: item.title, slug: item.slug, url: item.url });
     });
 
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      $('ul.anime-list li a, .az-list li a, .soralist li a.series').each((_, el) => {
+        const title = $(el).text().trim();
+        const href  = resolveUrl($(el).attr('href') || '');
+        const slug  = urlToSlug(href);
+        if (title && slug) items.push({ title, slug, url: href });
+      });
+    }
 
-    // Filter by letter if requested
-    const groupLetter = letterLabel.toUpperCase();
-    if (letter && groupLetter !== letter.toUpperCase()) return;
-
-    groups.push({ letter: groupLetter || '#', animes: items });
-  });
-
-  // Only cache "all" for longer; letter-filtered results are cheap to derive
-  if (!letter) {
-    cache.set(key, groups, TTL.genre); // 30 min — list rarely changes
+    if (items.length > 0) {
+      groups.push({ letter: letter, animes: items });
+    }
   } else {
-    cache.set(key, groups, TTL.genre);
+    // Fetch semua: '#' → show=.  |  '0-9' → show=0-9  |  A-Z → show=A etc
+    const letters = ['#','0-9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    for (const l of letters) {
+      try {
+        const showParam = l === '#' ? '.' : l === '0-9' ? '0-9' : l;
+        const html = await fetchPage(`/az-lists/?show=${encodeURIComponent(showParam)}`);
+        const $ = cheerio.load(html);
+        const items = [];
+        $('article.bs').each((_, el) => {
+          const item = parseAnimeCard($, el);
+          if (item.title && item.slug) items.push({ title: item.title, slug: item.slug, url: item.url });
+        });
+        if (items.length === 0) {
+          $('ul.anime-list li a, .az-list li a, .soralist li a.series').each((_, el) => {
+            const title = $(el).text().trim();
+            const href  = resolveUrl($(el).attr('href') || '');
+            const slug  = urlToSlug(href);
+            if (title && slug) items.push({ title, slug, url: href });
+          });
+        }
+        if (items.length > 0) groups.push({ letter: l, animes: items });
+      } catch (_) {}
+    }
   }
 
+  cache.set(key, groups, TTL.genre); // 30 min
   return groups;
 }
 
