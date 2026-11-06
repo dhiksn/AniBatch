@@ -7,7 +7,7 @@ import { ListBullets } from "@phosphor-icons/react";
 import Link from "next/link";
 
 const LETTERS = ["#","0-9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-
+   
 export function AnimeListContent() {
   const [groups, setGroups] = useState<{ letter: string; animes: any[] }[]>([]);
   const [loading, setLoading] = useState(true);
