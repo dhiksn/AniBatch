@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003/api';
 
 export async function fetchApi<T>(
   endpoint: string,
