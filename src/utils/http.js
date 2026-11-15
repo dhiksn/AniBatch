@@ -36,7 +36,7 @@ function sleep(ms) {
 }
 
 /**
- * Call Boterdrop /clearance endpoint and wait for result.
+ * Call Boterdrop /clearance endpoint (async task queue) and wait for result.
  * Returns { cf_clearance, user_agent } or throws.
  */
 async function solveCfChallenge() {
@@ -58,39 +58,73 @@ async function solveCfChallenge() {
   console.log('[CF Solver] Cloudflare challenge detected — requesting clearance...');
 
   try {
-    const solverUrl = `${CF_SOLVER_URL}/clearance?url=${encodeURIComponent(BASE_URL)}&timeout=60`;
-    const lib = solverUrl.startsWith('https') ? https : http;
+    const lib = CF_SOLVER_URL.startsWith('https') ? https : http;
 
-    const result = await new Promise((resolve, reject) => {
-      const req = lib.get(solverUrl, { timeout: 90000 }, (res) => {
+    // Step 1: submit task
+    const taskUrl = `${CF_SOLVER_URL}/clearance?url=${encodeURIComponent(BASE_URL)}&timeout=60`;
+    const taskBody = await new Promise((resolve, reject) => {
+      const req = lib.get(taskUrl, { timeout: 10000 }, (res) => {
         const chunks = [];
         res.on('data', c => chunks.push(c));
         res.on('end', () => {
-          try {
-            const body = JSON.parse(Buffer.concat(chunks).toString());
-            resolve(body);
-          } catch (e) {
-            reject(new Error('Invalid JSON from CF solver'));
-          }
+          try { resolve(JSON.parse(Buffer.concat(chunks).toString())); }
+          catch (e) { reject(new Error('Invalid JSON from CF solver')); }
         });
       });
       req.on('error', reject);
-      req.on('timeout', () => { req.destroy(); reject(new Error('CF solver timeout')); });
+      req.on('timeout', () => { req.destroy(); reject(new Error('CF solver task submission timeout')); });
     });
 
-    if (!result.cf_clearance) {
-      throw new Error(`CF solver failed: ${JSON.stringify(result)}`);
+    if (!taskBody.task_id) {
+      throw new Error(`CF solver did not return task_id: ${JSON.stringify(taskBody)}`);
     }
 
-    cfClearance = result.cf_clearance;
-    cfUserAgent = result.user_agent || cfUserAgent;
-    console.log(`[CF Solver] Got cf_clearance: ${cfClearance.slice(0, 20)}...`);
+    console.log(`[CF Solver] Task submitted: ${taskBody.task_id}`);
 
-    // Notify queued waiters
-    cfSolveQueue.forEach(({ resolve }) => resolve({ cf_clearance: cfClearance, user_agent: cfUserAgent }));
-    cfSolveQueue = [];
+    // Step 2: poll /result until success or error (max 90s)
+    const maxWait = 90000;
+    const pollInterval = 2000;
+    const start = Date.now();
 
-    return { cf_clearance: cfClearance, user_agent: cfUserAgent };
+    while (Date.now() - start < maxWait) {
+      await sleep(pollInterval);
+
+      const resultUrl = `${CF_SOLVER_URL}/result?id=${taskBody.task_id}`;
+      const result = await new Promise((resolve, reject) => {
+        const req = lib.get(resultUrl, { timeout: 10000 }, (res) => {
+          const chunks = [];
+          res.on('data', c => chunks.push(c));
+          res.on('end', () => {
+            try { resolve({ status: res.statusCode, body: JSON.parse(Buffer.concat(chunks).toString()) }); }
+            catch (e) { reject(new Error('Invalid JSON from CF solver result')); }
+          });
+        });
+        req.on('error', reject);
+        req.on('timeout', () => { req.destroy(); reject(new Error('CF solver poll timeout')); });
+      });
+
+      // 202 = still processing
+      if (result.status === 202) {
+        console.log('[CF Solver] Still processing...');
+        continue;
+      }
+
+      // 200 = done
+      if (result.status === 200 && result.body.cf_clearance) {
+        cfClearance = result.body.cf_clearance;
+        cfUserAgent = result.body.user_agent || cfUserAgent;
+        console.log(`[CF Solver] Got cf_clearance: ${cfClearance.slice(0, 20)}...`);
+
+        cfSolveQueue.forEach(({ resolve }) => resolve({ cf_clearance: cfClearance, user_agent: cfUserAgent }));
+        cfSolveQueue = [];
+        return { cf_clearance: cfClearance, user_agent: cfUserAgent };
+      }
+
+      // Error or unexpected
+      throw new Error(`CF solver failed (${result.status}): ${JSON.stringify(result.body)}`);
+    }
+
+    throw new Error('CF solver timed out after 90s');
   } catch (err) {
     cfSolveQueue.forEach(({ reject }) => reject(err));
     cfSolveQueue = [];
